@@ -1,9 +1,9 @@
 <?php
-
 declare(strict_types=1);
 
 namespace ProcessWire;
 
+use Exception;
 use FrontendContact\ContactForm as ContactForm;
 
 /**
@@ -24,109 +24,77 @@ use FrontendContact\ContactForm as ContactForm;
  * Classes list:
  * - FrontendContact extends WireData
  */
-
 class FrontendContact extends WireData implements Module, ConfigurableModule
 {
-    protected $moduleConfig = [];
-// The array that holds the module config values
-    protected $frontendForms;
-// The FrontendForms module object
-
-  /**
-   * Array that holds all module info data
-   */
-    public static function getModuleInfo(): array
-    {
-
-        return [
-        'title' => 'FrontendContact',
-        'summary' => 'Simple contact form for ProcessWire using the FrontendForms module.',
-        'author' => "Jürgen Kern",
-        'href' => 'https://github.com/juergenweb/FrontendContact',
-        'version' => '1.0.0',
-        'singular' => true,
-        'autoload' => true,
-        'requires' => ['PHP>=7.2.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.0.0']
-        ];
-    }
-
+    protected $moduleConfig = []; // The array that holds the module config values
+    protected $frontendForms; // The FrontendForms module object
 
     public function __construct()
     {
 
-      // set default data for module configuration
-        $this->moduleConfig = array_merge($this->getDefaultData(), wire('modules')->getConfig($this->className()));
-// create a property of each configuration value
+        // set default data for module configuration
+        $this->moduleConfig = array_merge($this->getDefaultData(), $this->wire('modules')->getConfig($this->className()));
+        // create a property of each configuration value
         foreach ($this->moduleConfig as $key => $value) {
             $this->$key = $value;
         }
 
-      //require_once(wire('config')->paths->FrontendForms . 'Formelements'.DIRECTORY_SEPARATOR.'Form.php');
-        require_once('ContactForm.php');
-// include the ContactForm class
-
-      // grab FrontendForms module
+        $this->wire('classLoader')->addNamespace('FrontendContact', __DIR__);
+        // grab FrontendForms module
         $this->frontendForms = wire('modules')->get('FrontendForms');
     }
 
-
-  /**
-   * Default configuration of the module
-   * @return array
-   */
+    /**
+     * Default configuration of the module
+     * @return array
+     */
     public static function getDefaultData(): array
     {
 
         return [
-        'input_show_dataprivacy' => true, // show data privacy checkbox
-        'input_show_sendCopy' => false, // show send copy to me checkbox
-        'input_default_to' => '', // you can enter a default to email address where the mail should be sent to
-        'input_defaultField_to' => '', // id of the email field which contains the email address
-        'input_emailTemplate' => 'inherit',
+            'input_show_dataprivacy' => true, // show data privacy checkbox
+            'input_show_sendCopy' => false, // show send copy to me checkbox
+            'input_default_to' => '', // you can enter a default to email address where the mail should be sent to
+            'input_defaultField_to' => '', // id of the email field which contains the email address
+            'input_emailTemplate' => 'inherit',
         ];
     }
 
-  /**
-   * Grab the email field if set, query the value from the database and save it to the module configuration
-   */
-    protected function getValueFromEmailField()
+    /**
+     * Array that holds all module info data
+     * @return array
+     */
+    public static function getModuleInfo(): array
     {
 
-      // get email value from selected field if selected
-        if ($this->input_defaultField_to) {
-            $field =  $this->wire('fields')->get($this->input_defaultField_to);
-            $data = $this->wire('modules')->getConfig($this->getModuleInfo()['title']);
-            $query = $this->wire('database')->prepare('SELECT data FROM ' . $field->getTable() . ' LIMIT 1');
-            $query->execute();
-            $result = $query->fetchAll();
-            if ($result) {
-                while ($row = $result) {
-                    $email = $row[0]['data'];
-                    if ($email) {
-                            return $email;
-                    }
-                }
-            }
-        }
+        return [
+            'title' => 'FrontendContact',
+            'summary' => 'Simple contact form for ProcessWire using the FrontendForms module.',
+            'author' => "Jürgen Kern",
+            'href' => 'https://github.com/juergenweb/FrontendContact',
+            'version' => '1.0.0',
+            'singular' => true,
+            'autoload' => true,
+            'requires' => ['PHP>=7.2.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.0.5']
+        ];
     }
 
-  /**
-   * Create settings for the module
-   * @param InputfieldWrapper $inputfields
-   *
-   */
-    public function getModuleConfigInputfields(InputfieldWrapper $inputfields)
+    /**
+     * Create settings for the module
+     * @param InputfieldWrapper $inputfields
+     * @return void
+     * @throws WireException
+     * @throws WirePermissionException
+     */
+    public function getModuleConfigInputfields(InputfieldWrapper $inputfields): void
     {
-
-
-      // enter the email address from where the emails should be sent (fe. noreply@mycompany.com)
         $show_dataPrivacy = $this->wire()->modules->get('InputfieldCheckbox');
         $show_dataPrivacy->attr('name', 'input_show_dataprivacy');
         $show_dataPrivacy->attr('checked', $this->input_show_dataprivacy == '1' ? 'checked' : '');
         $show_dataPrivacy->label = $this->_('Show the accept data privacy checkbox');
         $show_dataPrivacy->description = $this->_('If the box is checked, a checkbox inside the contact form will be displayed for the user to accept the data privacy.');
         $inputfields->add($show_dataPrivacy);
-// enter the email address from where the emails should be sent (fe. noreply@mycompany.com)
+
         $show_sendCopy = $this->wire()->modules->get('InputfieldCheckbox');
         $show_sendCopy->attr('name', 'input_show_sendCopy');
         $show_sendCopy->attr('checked', $this->input_show_sendCopy == '1' ? 'checked' : '');
@@ -136,23 +104,23 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $emailFieldset = $this->wire('modules')->get('InputfieldFieldset');
         $emailFieldset->label = $this->_('Default email configuration');
         $emailFieldset->description = $this->_('Optionally you can set a default email address where the emails should be sent to. You have 2 possibilities: * Enter the email as text or * Select a field which contains the email address. If you do not set a default email address you have to set it manually to the WireMail object as described in the docs.');
-// enter the email address from where the emails should be sent (fe. noreply@mycompany.com)
+
         $email = $this->wire()->modules->get('InputfieldEmail');
         $email->label = $this->_('Default email address as text');
         $email->attr('name', 'input_default_to');
         $email->attr('value', $this->input_default_to);
         $email->description = $this->_('Enter a default email address as text (fe office@myemail.com)');
         $emailFieldset->add($email);
-// enter the email address from where the emails should be sent (fe. noreply@mycompany.com)
+
         $emailField = $this->wire()->modules->get('InputfieldSelect');
         $emailField->label = $this->_('Default email address from field');
         $emailField->attr('name', 'input_defaultField_to');
-// create options
+
         $emailFields = $this->wire('fields')->find('type=FieldtypeEmail, name!=email');
         $fields = [];
-//check if imprint module is installed
+        //check if imprint module is installed
         if ($this->wire('modules')->isInstalled('FieldtypeImprint')) {
-// get all fields of this fieldtype
+            // get all fields of this fieldtype
             $imprintfield = $this->wire('fields')->find('type=FieldtypeImprint')->first();
             if ($imprintfield->name) {
                 $fields[$imprintfield->id] = $imprintfield->name;
@@ -160,7 +128,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         }
         $templates = [];
         foreach ($emailFields as $field) {
-        // check if this field is included inside a template
+            // check if this field is included inside a template
             foreach ($this->wire('templates') as $t) {
                 if ($t->hasField($field->name)) {
                     $templates[] = $field->name;
@@ -180,7 +148,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
             }
             $notes .= $this->_('Only fields of the type "FieldtypeEmail" can be selected. If this field has more than one value, only the first value will be taken.');
             if (!$this->getValueFromEmailField()) {
-    // grab email address from email field
+                // grab email address from email field
                 if ($this->input_defaultField_to) {
                     $notes .= ' **' . $this->_('Please note: This field has no value at the moment. Please go to the corresponding page and enter a value.') . '**';
                     if ($this->input_default_to) {
@@ -188,7 +156,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
                     }
                 }
             } else {
-    // get the first value of the field
+                // get the first value of the field
                 $notes .= ' ' . sprintf($this->_('Current value: %s.'), '**' . $this->getValueFromEmailField() . '**');
             }
             $emailField->notes = $notes;
@@ -198,17 +166,17 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         }
         $emailFieldset->add($emailField);
         $inputfields->add($emailFieldset);
-// select an email template or not
+        // select an email template or not
         if ($this->frontendForms->getEmailTemplates()) {
             $emailTemplate = $this->wire()->modules->get('InputfieldSelect');
             $emailTemplate->label = $this->_('Select an email template');
             $emailTemplate->attr('name', 'input_emailTemplate');
-  // create options
+            // create options
             $templates = [];
             $templates['inherit'] = $this->_('inherit from FrontendForms settings');
             $templates['none'] = $this->_('no HTML template (plain text only)');
             foreach ($this->frontendForms->getEmailTemplates() as $template) {
-                    $templates[$template] = ucfirst($template);
+                $templates[$template] = ucfirst($template);
             }
             $emailTemplate->addOptions($templates);
             $emailTemplate->attr('value', $this->input_emailTemplate);
@@ -219,25 +187,59 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         }
     }
 
-
-  /**
-   * Create and return the form class
-   */
-    public function getForm()
+    /**
+     * Grab the email field if set, query the value from the database and save it to the module configuration
+     * @return string|null
+     * @throws WireException
+     * @throws WirePermissionException
+     */
+    protected function getValueFromEmailField(): ?string
     {
-        return new ContactForm();
+
+        // get email value from selected field if selected
+        if ($this->input_defaultField_to) {
+            $field = $this->wire('fields')->get($this->input_defaultField_to);
+            $query = $this->wire('database')->prepare('SELECT data FROM ' . $field->getTable() . ' LIMIT 1');
+            $query->execute();
+            $result = $query->fetchAll();
+            if ($result) {
+                while ($row = $result) {
+                    $email = $row[0]['data'];
+                    if ($email) {
+                        return $email;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
-  /**
-   * Render the form
-   */
-    public function render()
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function __toString(): string
+    {
+        return $this->render();
+    }
+
+    /**
+     * Render the form
+     * @return string
+     * @throws Exception
+     */
+    public function render(): string
     {
         return $this->getForm()->render();
     }
 
-    public function __toString()
+    /**
+     * Create and return the form class
+     * @return ContactForm
+     */
+    public function getForm(): ContactForm
     {
-        return $this->render();
+        return new ContactForm();
     }
+
 }

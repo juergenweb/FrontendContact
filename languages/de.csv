@@ -1,4 +1,8 @@
 en,de,description,file,hash
+"Unknown sender","Unbekannter Absender",,site/modules/FrontendContact/ContactForm.php,3dd1ef95c6c158e3d5bd8d3953494691
+"No subject","Kein Betreff",,site/modules/FrontendContact/ContactForm.php,c11d98ec387f76305cfd8929fbeac42a
+"No email","Keine E-Mail Adresse",,site/modules/FrontendContact/ContactForm.php,fb858e41832555f3bac6a405682843c3
+"No message","Keine Nachricht",,site/modules/FrontendContact/ContactForm.php,7cb9a154f101c674c945f88dad5c5e28
 Sender,Absender,,site/modules/FrontendContact/ContactForm.php,8aace3ec18d83874d22850b7eee93c7d
 "A new message via contact form","Eine neue Nachricht über das Kontaktformular",,site/modules/FrontendContact/ContactForm.php,4758f7b6eca42e3f45ef7fde662fc3a0
 en,de,description,file,hash
@@ -8,18 +12,30 @@ en,de,description,file,hash
 "If the box is checked, a checkbox inside the contact form will be displayed so that the user can choose to get a copy of the message into his mail account.","Wenn Sie diese Box markieren, dann wird eine Checkbox im Kontaktformular angezeigt, welche der Sender anklicken kann, um eine Kopie seiner Nachricht auch an sich selbst zu senden.",,site/modules/FrontendContact/FrontendContact.module,77e1fbfaf357fe8bb957203a1af579de
 "Default email configuration","Standard E-Mail Konfiguration",,site/modules/FrontendContact/FrontendContact.module,7507729fd86157f8c6c06b36b11c9b92
 "Optionally you can set a default email address where the emails should be sent to. You have 2 possibilities: * Enter the email as text or * Select a field which contains the email address. If you do not set a default email address you have to set it manually to the WireMail object as described in the docs.","Optional können Sie eine Standard E-Mail Adresse eingeben, zu welcher die E-Mails gesendet werden sollen. Sie haben 2 Möglichkeiten: * Geben Sie die E-Mail Adresse als Text ein oder * wählen Sie ein Feld aus, welches die E-Mail Adresse enthält. Wenn Sie keine Standard E-Mail Adresse angeben, dann müssen Sie die Adresse manuell zum WireMail Object hinzufügen, wie in den Docs beschrieben.",,site/modules/FrontendContact/FrontendContact.module,5fd5a5f00474bb77e747901d95195557
+"Required fields",Pflichtfelder,,site/modules/FrontendContact/FrontendContact.module,70397c4b252a5168c5ec003931cea215
+"Please select which fields should be required.","Bitte wählen Sie aus, welche Felder Pflichtfelder sein sollen.",,site/modules/FrontendContact/FrontendContact.module,7d210bba5e7dcb689338042516575c6a
+Gender,Anrede,,site/modules/FrontendContact/FrontendContact.module,019ec3132cdf8ee0f2e2a75cf5d3e459
+Name,Vorname,,site/modules/FrontendContact/FrontendContact.module,49ee3087348e8d44e1feda1917443987
+Surname,Nachname,,site/modules/FrontendContact/FrontendContact.module,8e55577a8ed3b20bff65d23c000280d4
+Email,E-Mail,,site/modules/FrontendContact/FrontendContact.module,ce8ae9da5b7cd6c3df2929543a9af92d
+Subject,Betreff,,site/modules/FrontendContact/FrontendContact.module,c7892ebbb139886662c6f2fc8c450710
+Message,Nachricht,,site/modules/FrontendContact/FrontendContact.module,4c2a8fe7eaf24721cc7a9f0175115bd4
 "Default email address as text","Standard E-Mail Adresse als Text",,site/modules/FrontendContact/FrontendContact.module,1b9b268ea00afc39d37e33d105c4a2f9
 "Enter a default email address as text (fe office@myemail.com)","Geben sie eine Standard E-Mail Adresse als Text ein (z.B. office@myemail.com)",,site/modules/FrontendContact/FrontendContact.module,d56904d2d0c9ae7bf06cb0c2c73fbd85
 "Default email address from field","Standard E-Mail Adresse von einem Feld",,site/modules/FrontendContact/FrontendContact.module,3c76d6e31a98d339d12c825437c5bca8
-"Select a field which contains the email address, where the mails should be sent to if you want.","Wählen Sie ein Feld aus, welches die E-Mail Adresse enthält, zu der die E-Mails gesendet werden sollen.",,site/modules/FrontendContact/FrontendContact.module,b0533064d340a5b28be51f962f0c150d
+"Select a field which contains the email address, where the mails should be sent to if you want. The value of the previous field will be overwritten with the value of this field.","Wählen Sie ein Feld aus, welches die E-Mail Adresse enthält, zu der die E-Mails gesendet werden sollen. Der Wert dieses Feldes überschreibt die Standard-Email-Adresse des vorangegangenen Feldes.",,site/modules/FrontendContact/FrontendContact.module,927e1ab2fbfc5478c79b9460a3bfc3d7
 "This field overwrites the previous field value %s.","Dieses Feld überschreibt den Wert des vorigen Feldes %s.",,site/modules/FrontendContact/FrontendContact.module,0cec388e09ed274c20e1e79013a83839
 "Only fields of the type ""FieldtypeEmail"" can be selected. If this field has more than one value, only the first value will be taken.","Nur Felder vom Typ FieldtypeEmail können ausgewählt werden. Wenn dieses Feld mehr als einen Eintrag enthält, dann wird der erste Eintrag genommen.",,site/modules/FrontendContact/FrontendContact.module,5d946cd97223799d50b9531f8e16294f
-"Please note: This field has no value at the moment. Please go to the corresponding page and enter a value.","Bitte beachten Sie: Diese Feld enthält momentan noch keinen Wert. Bitte gehen Sie zur entsprechenden Seite und geben Sie dort einen Wert ein.",,site/modules/FrontendContact/FrontendContact.module,1452dfcdd34700f6f9b8c4288e574fc6
-"Otherwise the value (%s) of the previous text field will be used instead as fallback.","Andererseits wird der Wert (%s) vom vorherigen Textfeld verwendet.",,site/modules/FrontendContact/FrontendContact.module,019e8d66af18abe5802342d75f3d56b0
-"Current value: %s.","Aktueller Wert: %s.",,site/modules/FrontendContact/FrontendContact.module,79db84d3ff0ded7bfe913f455abfddcf
+"This field is empty and does not contain an email value!! You can use this field, but you have to add a value to this field. Otherwise you will get an error on the Frontend.","Dieses Feld ist leer und beinhaltet keine E-Mail Adresse!! Sie können dieses Feld nutzen, aber Sie müssen einen Wert in dieses Feld eintragen. Ansonsten bekommen Sie eine Fehlermeldung im Frontend.",,site/modules/FrontendContact/FrontendContact.module,4ab5690e1fcf1dbac6ae1547322d51e5
+"Current value: %s","Aktueller Wert: %s",,site/modules/FrontendContact/FrontendContact.module,3c969a23a06faacad77a9607feee6654
 "At the moment there are no selectable fields available. You have to create a field of the type Email first and add it to a template if you want to use this option.","Im Moment gibt es noch keine Felder zum Auswählen. Sie müssen zuerst ein Feld vom Typ Email erstellen und zu einem Template hinzufügen, wenn Sie diese Option nützen wollen.",,site/modules/FrontendContact/FrontendContact.module,0b55da97fe62f1c2acc4901b9cea6776
+"Use gender options from a ProcessWire field","Anrede Optionen von einem ProcessWire-Feld übernehmen",,site/modules/FrontendContact/FrontendContact.module,6bebf1051cf71e65c1cd5f84b1ae55ef
+"Select a field which contains the genders options that should be used in this contact form.","Bitte wählen Sie ein ProcessWire-Feld aus, von dem Sie die Optionen für die Anrede übernehmen möchten.",,site/modules/FrontendContact/FrontendContact.module,3b446a2880aa7049a030f7a8ba8389a4
+"Only fields of the type ""FieldtypeOptions"" can be selected.","Es können nur Felder vom Typ ""FieldtypeOptions"" ausgewählt werden.",,site/modules/FrontendContact/FrontendContact.module,26a79303fe8116149521f667abf9ac7b
+"At the moment there are no selectable fields available. So the default gender options will be used instead.","Im Moment gibt es noch keine auswählbaren Felder. Es werden daher die Standard-Optionen für die Anrede verwendet.",,site/modules/FrontendContact/FrontendContact.module,8636aa40f80e48d276ff06f64cc500c2
 "Select an email template","Ein E-Mail Template auswählen",,site/modules/FrontendContact/FrontendContact.module,391b1c0e2e6a571d16ee13451bfe5740
 "inherit from FrontendForms settings","von den FrontendForms Einstellungen erben",,site/modules/FrontendContact/FrontendContact.module,78325c4af90ffc228c3798aa64c67ad1
 "no HTML template (plain text only)","kein HTML Template (nur reiner Text)",,site/modules/FrontendContact/FrontendContact.module,768e9766bf4b93f28bb332609b8e7429
 "Select if you want to use a HTML template for the emails.","Bitte wählen Sie aus, ob Sie ein HTML Template für die E-Mails verwenden wollen.",,site/modules/FrontendContact/FrontendContact.module,7aab33ddcda6341e8d9483b90b419d17
 "Inherit from FrontendForms will take the setting from this module.","Bei Vererbung von FrontendForms werden die Einstellungen von diesem Modul herangezogen.",,site/modules/FrontendContact/FrontendContact.module,0a6eca4828ea7f3fa67e27f3e5920330
+

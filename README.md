@@ -10,6 +10,9 @@ After you have installed the module (you need to install the FrontendForms modul
 * Show a "accept data privacy" checkbox on the form
 * Show a "send a copy to of my message to me" checkbox on the form
 * Textfield to enter the recipient email address
+* Multiple checkboxes to select which fields should be required
+* Select field to use the email of a ProcessWire field
+* Select field to use the options of a ProcessWire field as options of the gender field
 * Choose a mail template for your email
 
 ## Default settings of the form

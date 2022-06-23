@@ -108,6 +108,39 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     }
 
     /**
+     * Method for hooking before or after page ready
+     * @return void
+     */
+    public function init(): void
+    {
+        //$this->addHookAfter('Modules::saveConfig', $this, 'checkValueOfPWEmailField');
+        $this->addHookAfter('InputfieldSelect::processInput', $this, 'checkValueOfPWEmailField');
+    }
+
+    /**
+     * Method to show a warning if the PW field for the email address of the recipient contains no value
+     * @param $event
+     * @return void
+     */
+    protected function checkValueOfPWEmailField($event): void
+    {
+        $field = $event->object;
+        if($field->name === 'input_gender'){
+            if($field->value){
+                $warningText = '';
+                if(!($this->wire('fields')->get($field->value)->value))
+                    $warningText .= $this->_('The ProcessWire field you have chosen for the recipient email has no value at the moment. If you want to use this field, please go to the page, where this field is included and enter an email value there.');
+                // check if the text field has a value
+                if($this->input_default_to)
+                    $warningText .= sprintf($this->_('Otherwise this email will be used: %s'), $this->input_default_to);
+                $this->warning($warningText);
+            }
+
+        }
+
+    }
+
+    /**
      * Create settings for the module in the backend
      * @param InputfieldWrapper $inputfields
      * @throws WireException

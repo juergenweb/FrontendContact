@@ -87,7 +87,7 @@ As mentioned above you can overwrite the default settings. The code below demons
 ```php
 $form = $modules->get('FrontendContact')->getForm();
 $form->setAttribute('id', 'contactform-2'); // add a new id to the form -> necessary if you have 2 forms on the same page
-$form->to('juergen.kern@linznet.at'); // set or owerwrite the recipient email address
+$form->to('myemail@office.at'); // set or owerwrite the recipient email address
 $form->setMaxAttempts(10); // overwrite max attempts
 $form->setMinTime(10); // overwrite min time
 $form->setMaxTime(1000); // overwrite max time

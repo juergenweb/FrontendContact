@@ -275,7 +275,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
         $formfieldsFieldset = $this->wire('modules')->get('InputfieldFieldset');
         $formfieldsFieldset->label = $this->_('Select and configure the fields of the contact-form');
-        $formfieldsFieldset->description = $this->_('Select the fields, which should be included in the form. 2 fields of the form (email, message) are mandatory and therefore always present and not configurable.');
+        $formfieldsFieldset->description = $this->_('Select the fields, which should be included in the form. Only to mention: 2 fields of the form (email, message) are mandatory and therefore always present and not configurable.');
         $formfieldsFieldset->collapsed = true;
 
         /** Gender **/
@@ -600,7 +600,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
         $text = '<h3>' . $this->_('Easiest integration') . '</h3>';
         $text .= '<p>' . $this->_('Put this code inside your template, where the form should be displayed.') . '</p>';
-        $text .= '<pre><code>echo $modules->get(\'FrontendContact\');</code></pre>';
+        $text .= '<pre><code>echo $modules->get(\'FrontendContact\')->getForm()->render();</code></pre>';
         $text .= '<p>' . $this->_('In this case the, the form uses the global settings of the configuration in the backend.');
         $text .= '<h3>' . $this->_('Advanced integration with changed settings') . '</h3>';
         $text .= '<p>' . $this->_('If you want the form to be displayed differently from the global settings or you want to change some parameters, you have to do it like the way below.') . '</p>';

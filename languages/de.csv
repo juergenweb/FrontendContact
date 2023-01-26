@@ -38,4 +38,3 @@ Message,Nachricht,,site/modules/FrontendContact/FrontendContact.module,4c2a8fe7e
 "no HTML template (plain text only)","kein HTML Template (nur reiner Text)",,site/modules/FrontendContact/FrontendContact.module,768e9766bf4b93f28bb332609b8e7429
 "Select if you want to use a HTML template for the emails.","Bitte wählen Sie aus, ob Sie ein HTML Template für die E-Mails verwenden wollen.",,site/modules/FrontendContact/FrontendContact.module,7aab33ddcda6341e8d9483b90b419d17
 "Inherit from FrontendForms will take the setting from this module.","Bei Vererbung von FrontendForms werden die Einstellungen von diesem Modul herangezogen.",,site/modules/FrontendContact/FrontendContact.module,0a6eca4828ea7f3fa67e27f3e5920330
-

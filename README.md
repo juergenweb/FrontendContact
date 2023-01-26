@@ -1,26 +1,30 @@
 # FrontendContact
-A module for ProcessWire for outputting a simple contact form using the FrontendForms module.
-You can use as much forms as you want on the same page, but you have to set a different ids for each form.
-Please note: You have to install the FrontendForms module first, because this module relies on it
+A module for ProcessWire for outputting a simple contact form on your site based on the FrontendForms module.
+You can run as many forms as you want on the same page. There is no limitation, because each contact form will get
+a unique ID automatically.
+Please note: You have to install the FrontendForms module first, because this module relies on it.
+So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.
+This module is not necessary to create a contact form - you can do it all on your own by using the FrontendForms module
+only, but it will be a useful addition in order to keep your templates clean from code and BTW it saves you a lot of work.
+
 To prevent problems with other modules or classes this module runs in its own namespace "FrontendContact".
 
 ## Configurations
-After you have installed the module (you need to install the FrontendForms module first), you can do some configuration settings in the backend.
+After you have installed the module, you can make some configuration settings in the backend if needed.
 
-* Show a "accept data privacy" checkbox on the form
-* Show a "send a copy to of my message to me" checkbox on the form
-* Textfield to enter the recipient email address
-* Multiple checkboxes to select which fields should be required
-* Select field to use the email of a ProcessWire field
-* Select field to use the options of a ProcessWire field as options of the gender field
-* Choose a mail template for your email
+* Show or hide the following fields: gender, name, surname, subject, privacy, send copy (email and message fields are
+mandatory and therefore permanent).
+* Set the status of the following fields to required or not: gender, name, surname, subject (send copy field is always
+optional and privacy field is always required. Therefore, for both fields the status cannot be changed).
+* Set a global email address or not. You can enter an email by text, or you can choose a PW field, which holds the value.
+* Choose a mail template for your email or send it as plain text (none, template_1, template_2,...).
+* Set a global minimum time before a form is allowed to be submitted (spam protection):
 
-## Default settings of the form
-By default the form has the following settings:
+## Default settings of the form that cannot be changed inside the module config
+By default, the form has the following settings:
 
-* Number of MaxAttempts: 5
-* Minimal time for filling out the form: 3 seconds
-* Maximal time for filling out the form: 3600 seconds
+* Number of MaxAttempts: This value will be taken from the FrontendForms module global configuration settings
+* Maximal time for filling out the form: This value will be taken from the FrontendForms module global configuration settings
 
 Each of the settings can be overwritten if necessary.
 
@@ -43,7 +47,7 @@ If not, you have to enter the recipient email address manually (see the code bel
 
 // render the form
 $form = $modules->get('FrontendContact')->getForm(); // this loads the form object for further manipulation
-$form->to('office@myemail.com'); // set or owerwrite the recipient email address
+$form->to('office@myemail.com'); // set or overwrite the recipient email address
 echo $form->render();
 ```
 
@@ -61,42 +65,58 @@ This method is the same method as the WireMail to() method. You can enter a reci
 If you have entered a default recipient on the configuration, this method will overwrite this recipient.
 
 ```php
-$form->to('office@myemail.com'); // set or owerwrite the recipient email address
+$form->to('office@myemail.com'); // set or overwrite the recipient email address
 ```
-#### showDataPrivacyCheckbox() method
-This method let you enable/disable the displaying of the "I accept the data privacy" checkbox on the form. As value inside the parenthesis you have to enter a boolean value (true or false).
-This will overwrite the module configuration in the backend.
-Default value is true.
+#### Show or hide fields methods
+With these methods you can overwrite the global settings and show or hide a form field on the form.
+The name of the method is always prefix show with the name of the form field class.
+As the parameter you have to set true or false.
+TRUE: The form field will be displayed on the form
+FALSE: The form field will not be included in the form
+
+BTW: You do not have to enter the value false inside the parenthesis - you can leave them empty
 
 ```php
-$form->showDataPrivacyCheckbox(false); // false = disable, true = enable
+$form->showGender(true); // gender field will be included
+$form->showName(true); // name field will be included
+$form->showSurname(true); // surname field will be included
+$form->showSubject(false); // subject field will not be included
+$form->showPrivacy(); // privacy field will not be included
+$form->showSendCopy(false); // send copy field will not be included
 ```
 
-#### showCopyCheckbox() method
-This method let you enable/disable the displaying of the "Send a copy of my message to me" checkbox on the form. As value inside the parenthesis you have to enter a boolean value (true or false).
-This will overwrite the module configuration in the backend.
-Default value is false
+#### Set fields to required or not methods
+You can change the required status of each of the following fields on per form base.
 
 ```php
-$form->showCopyCheckbox(false); // false = disable, true = enable
+$form->requiredGender(true); // gender field will be required
+$form->requiredName(false); // name field will not be required
+$form->requiredSurname(); // surname field will not be required
+$form->requiredSubject(true); // subject field will be required
 ```
 
-## Overwriting default settings
-As mentioned above you can overwrite the default settings. The code below demonstrates this:
+#### Get fields for further customization methods
+Each field can be customized. You have to use the methods from the FrontendForms module. You will find more information
+inside the readme file of the FrontendForms module - so take a look there.
+To grab each form field object you have to use the following methods.
 
 ```php
-$form = $modules->get('FrontendContact')->getForm();
-$form->setAttribute('id', 'contactform-2'); // add a new id to the form -> necessary if you have 2 forms on the same page
-$form->to('myemail@office.at'); // set or owerwrite the recipient email address
-$form->setMaxAttempts(10); // overwrite max attempts
-$form->setMinTime(10); // overwrite min time
-$form->setMaxTime(1000); // overwrite max time
-$form->showCopyCheckbox(true); // enable the displaying of the copy checkbox
-$form->showDataPrivacyCheckbox(false); // disable the displaying of the data privacy checkbox
-$form->setSuccessMsg('Thank you so much'); // show an alternative success message.
-echo $form->render();
+$form->getGender(); // returns the gender field object
+$form->getName(); // returns the name field object
+$form->getSurname(); // returns the surname field object
+$form->getEmail(); // returns the email field object
+$form->getSubject(); // returns the subject field object
+$form->getMessage(); // returns the message field object
+$form->getPrivacy(); // returns the privacy field object
+$form->getSendCopy(); // returns the copy sending field object
+$form->getButton(); // returns the button field object
 ```
+## Rendering and overwriting forms on your site
+As mentioned above you can overwrite the default settings. 
+To get examples on how to overwrite or output the form on your site, please take a look at the examples folder.
+There you will find some real lives examples.
 
-
-## Multilanguage
-The module will be shipped with the German translations (default is English).
+## Multi-language
+The module will be shipped with the German translation file (default is English).
+If you want to provide a language file for another language, please send it to me over GitHub and I will include it
+in the module for other users.

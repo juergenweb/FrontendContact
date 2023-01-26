@@ -102,7 +102,8 @@ class ContactForm extends Form
         // set the path to the body template
         $this->bodyTemplatesPath = $this->bodyTemplatesDirPath.$this->bodyTemplate;
 
-        $this->setBodyTemplates();
+        //find all body templates and create an numeric array of file names as values
+        $this->setBodyTemplates($this->bodyTemplatesDirPath);
 
         // add default settings from this module to the form
         $this->setMinTime($this->input_minTime); // min time
@@ -128,11 +129,13 @@ class ContactForm extends Form
 
     }
 
+
     /**
      * Set the body template to the placeholder variable [[BODY]]
-     * If an invalid body template name was added, the default body template will be used
+     * If an invalid body template name was added, the default body template will be used instead
      * @param WireMail $mail
      * @return void
+     * @throws WireException
      */
     protected function includeBodyTemplate(WireMail $mail): void
     {
@@ -436,12 +439,5 @@ class ContactForm extends Form
         }
         return parent::render();
     }
-
-    public function __toString()
-    {
-        return $this->render();
-    }
-
-
 
 }

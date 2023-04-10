@@ -22,19 +22,18 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     // properties of the module configuration
     protected string|int|null $input_gender_show = 1;
     protected string|int|null $input_gender_required = 1;
-    protected string $input_gender_userfield = 'none';
+    protected string|null $input_gender_userfield_mapped = 'none';
     protected string|int|null $input_name_show = 1;
     protected string|int|null $input_name_required = 1;
-    protected string $input_name_userfield = 'none';
+    protected string|null $input_name_userfield_mapped = 'none';
     protected string|int|null $input_surname_show = 1;
     protected string|int|null $input_surname_required = 1;
-    protected string $input_surname_userfield = 'none';
+    protected string|null $input_surname_userfield_mapped = 'none';
     protected string|int|null $input_subject_show = 1;
     protected string|int|null $input_subject_required = 1;
     protected string|int|null $input_privacy_show = 1;
     protected string|int|null $input_sendCopy_show = 0;
     protected string $input_emailtype = 'none';
-    protected string $input_bodytemplate = 'default.html';
     protected string $input_default_to = '';
     protected string $input_defaultPWField_to = 'none';
     protected string $input_emailTemplate = 'inherit';
@@ -56,6 +55,8 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         'SendCopy',
         'Button'
     ];
+
+    protected array $mapped_fields = [];
 
     // the fields that are always present
     public static array $permanentFields = ['Email', 'Message', 'Button'];
@@ -113,10 +114,10 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
             'summary' => 'Simple configurable contact form for ProcessWire based on the FrontendForms module.',
             'author' => "Jürgen Kern",
             'href' => 'https://github.com/juergenweb/FrontendContact',
-            'version' => '1.0.1',
+            'version' => '1.0.0',
             'singular' => true,
             'autoload' => true,
-            'requires' => ['PHP>=8.1.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.9']
+            'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.25']
         ];
     }
 
@@ -192,19 +193,18 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         return [
             'input_gender_show' => 1,
             'input_gender_required' => 1,
-            'input_gender_userfield' => 'none',
+            'input_gender_userfield_mapped' => 'none',
             'input_name_show' => 1,
             'input_name_required' => 1,
-            'input_name_userfield' => 'none',
+            'input_name_userfield_mapped' => 'none',
             'input_surname_show' => 1,
             'input_surname_required' => 1,
-            'input_surname_userfield' => 'none',
+            'input_surname_userfield_mapped' => 'none',
             'input_subject_show' => 1,
             'input_subject_required' => 1,
             'input_privacy_show' => 1,
             'input_sendCopy_show' => 0,
             'input_emailtype' => 'none',
-            'input_bodytemplate' => 'default.html',
             'input_default_to' => '',
             'input_defaultPWField_to' => 'none',
             'input_emailTemplate' => 'inherit',
@@ -213,23 +213,25 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     }
 
     /**
-     * Get all fields inside the user template
-     * @return array
+     * Get all fields inside the user template which can be selected to map form fields
+     * Please note: Only userfields which are editable by the user will be taken into account
+     * @return array - key: field id, value: field name
      * @throws WireException
      * @throws WirePermissionException
      */
     private function getUserFields(): array
     {
-        // get all fields from the user template and create array of field names
+        // get array of all editable user template fields
+        $fields = $this->wire('modules')->get('ProcessProfile');
+        $all_userfields = $fields->data['profileFields'];
+        // ignore these fields from the user template
         $ignoreFields = ['pass', 'roles', 'language', 'admin_theme', 'tfa_type'];
-        $usertemplate = $this->wire('pages')->get('template=user');
-        $userfields = $usertemplate->getFields();
+        $userfields = array_diff($all_userfields,$ignoreFields);
         $linkFields = [];
         $linkFields['none'] = $this->_('none');
-        foreach ($userfields as $field) {
-            if (!in_array($field->name, $ignoreFields)) {
+        foreach ($userfields as $fieldname){
+                $field = $this->wire('fields')->get($fieldname);
                 $linkFields[$field->id] = $field->name;
-            }
         }
         return $linkFields;
     }
@@ -245,7 +247,6 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $field = $event->object;
         $fields = [
             'input_emailtype' => ['$form->to("office@myemail.com");'],
-            'input_bodytemplate' => ['$form->getMail()->bodyTemplate("default.html"); // set the template file that should be used'],
             'input_privacy_show' => ['$form->showPrivacy(false); // true, false'],
             'input_sendCopy_show' => ['$form->showSendCopy(false); // true, false'],
             'input_gender_show' => ['$form->showGender(false); // true, false'],
@@ -304,10 +305,10 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         // map userfield
         $gender_userfield = $this->wire()->modules->get('InputfieldSelect');
         $gender_userfield->label = $this->_('Select the userfield');
-        $gender_userfield->attr('name', 'input_gender_userfield');
+        $gender_userfield->attr('name', 'input_gender_userfield_mapped');
         $gender_userfield->addOptions($this->getUserfieldsOfType('FieldtypeOptions'));
         $gender_userfield->defaultValue = 'none';
-        $gender_userfield->attr('value', $this->input_gender_userfield);
+        $gender_userfield->attr('value', $this->input_gender_userfield_mapped);
         $gender_userfield->description = $this->uservalue_desc;
         $gender_userfield->notes = sprintf($this->_('Only fields of the type "%s" can be selected.'),
             'FieldtypeOptions');
@@ -344,10 +345,10 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         // map userfield
         $name_userfield = $this->wire()->modules->get('InputfieldSelect');
         $name_userfield->label = $this->_('Select the userfield');
-        $name_userfield->attr('name', 'input_name_userfield');
+        $name_userfield->attr('name', 'input_name_userfield_mapped');
         $name_userfield->addOptions($this->getUserfieldsOfType('FieldtypeText'));
         $name_userfield->defaultValue = 'none';
-        $name_userfield->attr('value', $this->input_name_userfield);
+        $name_userfield->attr('value', $this->input_name_userfield_mapped);
         $name_userfield->description = $this->uservalue_desc;
         $name_userfield->notes = sprintf($this->_('Only fields of the type "%s" can be selected.'), 'FieldtypeText');
         $name_userfield->showIf = 'input_name_show=1';
@@ -383,10 +384,10 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         // map userfield
         $surname_userfield = $this->wire()->modules->get('InputfieldSelect');
         $surname_userfield->label = $this->_('Select the userfield');
-        $surname_userfield->attr('name', 'input_surname_userfield');
+        $surname_userfield->attr('name', 'input_surname_userfield_mapped');
         $surname_userfield->addOptions($this->getUserfieldsOfType('FieldtypeText'));
         $surname_userfield->defaultValue = 'none';
-        $surname_userfield->attr('value', $this->input_surname_userfield);
+        $surname_userfield->attr('value', $this->input_surname_userfield_mapped);
         $surname_userfield->description = $this->uservalue_desc;
         $surname_userfield->notes = sprintf($this->_('Only fields of the type "%s" can be selected.'), 'FieldtypeText');
         $surname_userfield->showIf = 'input_surname_show=1';
@@ -560,22 +561,6 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
             $emailFieldset->add($emailTemplate);
         }
 
-        $bodyTemplate = $this->wire()->modules->get('InputfieldSelect');
-        $bodyTemplate->label = $this->_('Template for the mail body');
-        $bodyTemplate->description = $this->_('Select a HTML template for rendering the body (content) of the contact form. The mail body template contains all the data submitted by the form.');
-        $bodyTemplate->attr('name', 'input_bodytemplate');
-        $templates = [];
-        foreach ($this->wire('files')->find($this->wire('config')->paths->$this . 'body',
-            ['extensions' => 'html']) as $file) {
-            $info = pathinfo($file);
-            $templates[$info['basename']] = $info['basename'];
-        }
-        $bodyTemplate->addOptions($templates);
-        $bodyTemplate->required = 1;
-        $bodyTemplate->attr('value', $this->input_bodytemplate);
-        $bodyTemplate->notes = $this->_('If you want to use your own template, add it to the body folder inside this module. Take the default.html as an example.');
-        $emailFieldset->add($bodyTemplate);
-
         $inputfields->add($emailFieldset);
 
         // add min time in seconds
@@ -665,8 +650,8 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
                     while ($row = $result) {
                         $email = $row[0]['data'];
                         if ($email) {
-                            return $email;
-                        } // return the email value from the field
+                            return $email; // return the email value from the field
+                        }
                     }
                 }
             }
@@ -681,6 +666,16 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     public function getForm(): ContactForm
     {
         return new ContactForm();
+    }
+
+    /**
+     * Render the form on the frontend
+     * @return string
+     * @throws WireException
+     */
+    public function render(): string
+    {
+        return $this->getForm()->render();
     }
 
     /**

@@ -17,7 +17,7 @@ namespace ProcessWire;
  * This will output the contact form according to your settings in the module config
  */
 
-echo $modules->get('FrontendContact');
+echo $modules->get('FrontendContact')->render();
 
 
 /**

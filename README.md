@@ -5,9 +5,10 @@
 > ⚠ This module is very Alpha stage - so be aware of using it on live sites!
 
 A configurable module for ProcessWire for outputting a simple contact form on your site based on the FrontendForms module.
-You can run as many forms as you want on the same page, but you have to add an individual CSS ID to each form.
+
 Please note: You have to install the FrontendForms module first, because this module relies on it.
 So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.
+
 This module is not necessary to create a contact form - you can do it all on your own by using the FrontendForms module
 only, but it will be a useful addition in order to keep your templates clean from code and BTW it saves you a lot of work.
 
@@ -21,6 +22,7 @@ To prevent problems with other modules or classes this module runs in its own na
 ## Highlights
 - Fast and easy integration of a contact form to at template by using only one line of code
 - Select the fields that should be displayed
+- Run as many forms on a page as you want
 - Usage of all the benefits of [FrontendForms](https://github.com/juergenweb/FrontendForms#highlights) (fe. CAPTCHA, various security settings,...)
 - Mutli-language
 

@@ -1,7 +1,6 @@
 # FrontendContact
-A module for ProcessWire for outputting a simple contact form on your site based on the FrontendForms module.
-You can run as many forms as you want on the same page. There is no limitation, because each contact form will get
-a unique ID automatically.
+A configurable module for ProcessWire for outputting a simple contact form on your site based on the FrontendForms module.
+You can run as many forms as you want on the same page, but you have to add an individual CSS ID to each form.
 Please note: You have to install the FrontendForms module first, because this module relies on it.
 So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.
 This module is not necessary to create a contact form - you can do it all on your own by using the FrontendForms module

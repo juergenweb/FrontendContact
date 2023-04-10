@@ -10,9 +10,9 @@ Please note: You have to install the FrontendForms module first, because this mo
 So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.
 
 This module is not necessary to create a contact form - you can do it all on your own by using the FrontendForms module
-only, but it will be a useful addition in order to keep your templates clean from code and BTW it saves you a lot of work.
+only, but it will be a useful addition in order to keep your templates clean from a lot of code and BTW it saves you a lot of work.
 
-To prevent problems with other modules or classes this module runs in its own namespace "FrontendContact".
+Just to mention: To prevent problems with other modules or classes this module runs in its own namespace "FrontendContact".
 
 ## Requirements
 - ProcessWire 3.0.195 or newer

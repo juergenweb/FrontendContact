@@ -1,4 +1,9 @@
 # FrontendContact
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![ProcessWire 3](https://img.shields.io/badge/ProcessWire-3.x-orange.svg)](https://github.com/processwire/processwire)
+
+> ⚠ This module is very Alpha stage - so be aware of using it on live sites!
+
 A configurable module for ProcessWire for outputting a simple contact form on your site based on the FrontendForms module.
 You can run as many forms as you want on the same page, but you have to add an individual CSS ID to each form.
 Please note: You have to install the FrontendForms module first, because this module relies on it.
@@ -8,8 +13,19 @@ only, but it will be a useful addition in order to keep your templates clean fro
 
 To prevent problems with other modules or classes this module runs in its own namespace "FrontendContact".
 
+## Requirements
+- ProcessWire 3.0.195 or newer
+- PHP 8.0 or newer
+- FrontendForms 2.1.25 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
+
+## Highlights
+- Fast and easy integration of a contact form to at template by using only one line of code
+- Select the fields that should be displayed
+- Usage of all the benefits of [FrontendForms](https://github.com/juergenweb/FrontendForms#highlights) (fe. CAPTCHA, various security settings,...)
+- Mutli-language
+
 ## Configurations
-After you have installed the module, you can make some configuration settings in the backend if needed.
+After you have installed the module, you have to enter a default email address where the mails should be sent to. All other configuration options are optional.
 
 * Show or hide the following fields: gender, name, surname, subject, privacy, send copy (email and message fields are
 mandatory and therefore permanent).

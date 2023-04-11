@@ -19,7 +19,7 @@ $cf = $modules->get('FrontendContact')->getForm(); // grab the contact form obje
 // Please take a look at the docs of the FrontendForms module on how to create a new element
 $tel = new \FrontendForms\InputText('telephone');
 $tel->setLabel('Telephone number');
-$tel->setRule('number');
+$tel->setRule('numeric');
 $tel->setRule('required');
 
 /*

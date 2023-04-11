@@ -56,4 +56,4 @@ $cf->addAfter($tel, $cf->getEmail());
 */
 
 // at the last step, output the form
-$content .= $cf->render();
+echo $cf->render();

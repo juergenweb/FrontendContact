@@ -20,19 +20,19 @@ Just to mention: To prevent problems with other modules or classes this module r
 - FrontendForms 2.1.25 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
 
 ## Highlights
-- Fast and easy integration of a contact form to at template by using only one line of code
-- Select the fields that should be displayed
-- Extend the default form with additional fields, if needed
-- Run as many forms on a page as you want
-- Possibility to upload multiple files, which can be sent as attachments
+- Fast and easy integration of a contact form inside a template by using only one line of code
+- Select the fields which should be displayed inside the form 
+- Beside the default fields you will be able to extend the form with additional fields
+- Run as many forms on one page as you want
+- Possibility offer file upload to upload multiple files, which can be sent as attachments
 - Usage of all the benefits of [FrontendForms](https://github.com/juergenweb/FrontendForms#highlights) (fe. CAPTCHA, various security settings,...)
 - Mutli-language
 
 ## Configurations
-After you have installed the module, you have to enter a default email address where the mails should be sent to. All other configuration options are optional.
+After you have installed the module, you have to set the default email address where the mails should be sent to. This email address can be entered manually or you choose a ProcessWire field, which contains the email address. All other configuration options are optional.
 
-* Show or hide the following fields: gender, name, surname, subject, privacy, send copy (email and message fields are
-mandatory and therefore permanent).
+* Show or hide the following fields: gender, name, surname, subject, file upload, privacy and send copy (email and message field are
+mandatory and therefore permanent and not selectable whether to be shown or not).
 * Set the status of the following fields to required or not: gender, name, surname, subject (send copy field is always
 optional and privacy field is always required. Therefore, for both fields the status cannot be changed).
 * Set a global email address or not. You can enter an email by text, or you can choose a PW field, which holds the value.

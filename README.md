@@ -36,12 +36,12 @@ Just to mention: To prevent problems with other modules or classes this module r
 After you have installed the module, you have to set the default email address where the mails should be sent to. This email address can be entered manually or you choose a ProcessWire field, which contains the email address. All other configuration options are optional.
 
 * Show or hide the following fields: gender, name, surname, subject, file upload, privacy and send copy (email and message field are
-mandatory and therefore permanent and not selectable whether to be shown or not).
+mandatory and therefore permanent and not selectable whether to be shown or not)
 * Set the status of the following fields to required or not: gender, name, surname, subject (send copy field is always
-optional and privacy field is always required. Therefore, for both fields the status cannot be changed).
-* Set a global email address or not. You can enter an email by text, or you can choose a PW field, which holds the value.
-* Choose a mail template for your email or send it as plain text (none, template_1, template_2,...).
-* Set a global minimum time before a form is allowed to be submitted (spam protection):
+optional and privacy field is always required. Therefore, for both fields the status cannot be changed)
+* Set a global email address or not. You can enter an email by text, or you can choose a PW field, which holds the value
+* Choose a mail template for your email or send it as plain text (none, template_1, template_2,...)
+* Set a global minimum time before a form is allowed to be submitted (spam protection)
 
 ## Default settings of the form that cannot be changed inside the module config
 By default, the form has the following settings:
@@ -53,21 +53,20 @@ Each of the settings can be overwritten if necessary.
 
 ### Usage on the frontend
 
-Create or select a page (fe. contact page) where you want to include your contact form and add the following code to the template.
+Enter the following code inside a template, where you want to include your contact form.
 
 ```php
 
 // render the form
-echo $modules->get('FrontendContact');
+echo $modules->get('FrontendContact')->render();
 
 ```
 
 This is all you have to do, if you do not want to modify some values.
-Please note: The code above works only if you have entered a default email address inside the module configuration settings in the backend.
-If not, you have to enter the recipient email address manually (see the code below)
+
+If you want to send the messages to a different email address as set in the module configuration, you can set the recipient manually.
 
 ```php
-
 // render the form
 $form = $modules->get('FrontendContact')->getForm(); // this loads the form object for further manipulation
 $form->to('office@myemail.com'); // set or overwrite the recipient email address
@@ -76,22 +75,23 @@ echo $form->render();
 
 If you want to change parameters or values of the form (fe success message, recipient, time measurement settings,....), you have to call the getForm() method first to get the form object.
 This object can be manipulated as described in the FrontendForms docs.
+You will find an example inside the example folder or at the bottom of the module configuration in the backend.
 At the end you have to use the render() method to render the form markup.
 
 ### Special contact form methods
 
 #### getForm() method
-This method returns the form object and is needed to manipulate values of the form.
+This method returns the form object and this method is needed to manipulate values of the form.
 
 #### to() method
 This method is the same method as the WireMail to() method. You can enter a recipient for your contact form.
-If you have entered a default recipient on the configuration, this method will overwrite this recipient.
+If you have entered a default recipient inside the configuration, this method will overwrite this recipient.
 
 ```php
 $form->to('office@myemail.com'); // set or overwrite the recipient email address
 ```
 #### Show or hide fields methods
-With these methods you can overwrite the global settings and show or hide a form field on the form.
+With these methods you can overwrite the global settings to show or hide a form field on the form.
 The name of the method is always prefix show with the name of the form field class.
 As the parameter you have to set true or false.
 TRUE: The form field will be displayed on the form
@@ -106,9 +106,10 @@ $form->showSurname(true); // surname field will be included
 $form->showSubject(false); // subject field will not be included
 $form->showPrivacy(); // privacy field will not be included
 $form->showSendCopy(false); // send copy field will not be included
+$form->showFileUploadMultiple(false); // file upload field will not be included
 ```
 
-#### Set fields to required or not methods
+#### Set fields to required or not
 You can change the required status of each of the following fields on per form base.
 
 ```php
@@ -119,30 +120,19 @@ $form->requiredSubject(true); // subject field will be required
 ```
 
 #### Get fields for further customization methods
-Each field can be customized. You have to use the methods from the FrontendForms module. You will find more information
-inside the readme file of the FrontendForms module - so take a look there.
-To grab each form field object you have to use the following methods.
+Each field can be customized. You have to use the methods from the FrontendForms module. You will find more information inside the readme file of the FrontendForms module - so take a look there.
+To grab each form field object you have to use the FrontendForms method getElementByName(). Take a look at the source code to get the name of the field you want to change.
 
 ```php
-$form->getGender(); // returns the gender field object
-$form->getName(); // returns the name field object
-$form->getSurname(); // returns the surname field object
-$form->getEmail(); // returns the email field object
-$form->getSubject(); // returns the subject field object
-$form->getMessage(); // returns the message field object
-$form->getFileUploadMultiple(); // returns the file upload field object
-$form->getPrivacy(); // returns the privacy field object
-$form->getSendCopy(); // returns the copy sending field object
-$form->getButton(); // returns the button field object
+$form->getElementByName('contact-form-gender'); // returns the gender field object
 ```
 
-## Extend the form with additional input fields
-The default form contains pre-defined input fields, which should be enough in most cases. But sometimes you will need to add an additional input field or you want to add a fieldset, at text or whatever to the form.
+## Extending the form with additional input fields
+The default form contains pre-defined input fields, which should be enough in most cases. But sometimes you will need to add an additional input field or you want to add a fieldset, a text or whatever to the form.
 For this scenario, you will be able to extend the form with new elements and you can set the position of these elements inside the form via 2 methods: addBefore() 
 and addAfter(). 
 Both methods are from the FrontendForms module and will be used to add a new element at a new position inside the form.  You will find a detailed information about these 2 methods in the docs of the FrontendForms module. 
 To demonstrate how it works, I have included an example on how to add a new input field inside the examples folder: So please take a look at the [addingnewfield.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingnewfield.php) and study the example on how to extend the form with new elements.
-
 
 ## Rendering and overwriting forms on your site
 As mentioned above you can overwrite the default settings. 

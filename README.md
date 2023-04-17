@@ -142,6 +142,7 @@ Both methods are from the FrontendForms module and will be used to add a new ele
 To demonstrate how it works, I have included an example on how to add a new input field inside the examples folder: So please take a look at the [addingnewfield.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingnewfield.php) and study the example on how to extend the form with new elements.
 
 ## Multi-language
+This module is ready for usage in multi-language site.
 The module will be shipped with the German translation file (default is English).
 If you want to provide a language file for another language, please send it to me over GitHub and I will include it
 in the module for other users.

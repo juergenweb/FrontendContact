@@ -24,6 +24,7 @@ Just to mention: To prevent problems with other modules or classes this module r
 - Select the fields that should be displayed
 - Extend the default form with additional fields, if needed
 - Run as many forms on a page as you want
+- Possibility to upload multiple files, which can be sent as attachments
 - Usage of all the benefits of [FrontendForms](https://github.com/juergenweb/FrontendForms#highlights) (fe. CAPTCHA, various security settings,...)
 - Mutli-language
 
@@ -125,6 +126,7 @@ $form->getSurname(); // returns the surname field object
 $form->getEmail(); // returns the email field object
 $form->getSubject(); // returns the subject field object
 $form->getMessage(); // returns the message field object
+$form->getFileUploadMultiple(); // returns the file upload field object
 $form->getPrivacy(); // returns the privacy field object
 $form->getSendCopy(); // returns the copy sending field object
 $form->getButton(); // returns the button field object

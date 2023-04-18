@@ -187,9 +187,9 @@ class ContactForm extends Form
                 if ($v != 'none') {
                     // get the user field
                     $field = $this->wire('fields')->get($this->frontendcontact_config[$k]);
+
                     // extract the name of the field
                     $name = explode('_', $k)[1];
-                    $method = 'get' . ucfirst($name);
                     $stored_name = 'stored_' . $name;
                     // get the type of the input field (SelectOptions, InputText,...)
                     $type = $field->getFieldtype();
@@ -198,19 +198,23 @@ class ContactForm extends Form
                         case('FieldtypeText'):
                             $this->{$stored_name} = $this->user->{$field->name};
                             if ($this->{$stored_name}) { // only if a value is stored inside the database
-                                $this->$method()->setAttribute('disabled');
-                                $this->$method()->removeRule('required'); // not necessary anymore
-                                $this->$method()->setAttribute('value', $this->{$stored_name});
+                                $formfield = $this->getFormElementByName($name);
+                                $formfield->setAttribute('disabled');
+                                $formfield->removeRule('required'); // not necessary anymore
+                                $formfield->setAttribute('value', $this->{$stored_name});
                             }
                             break;
                         case('FieldtypeOptions'):
                             $userField = $this->user->{$field->name};
                             $this->{$stored_name} = $userField->title;
                             if ($this->{$stored_name}) { // only if a value is stored inside the database
-                                $this->$method()->setDefaultValue($userField->title)->setAttribute('disabled');
+                                $formfield = $this->getFormElementByName($name);
+                                $formfield->setAttribute('value', $userField->title);
+                                $formfield->setAttribute('disabled');
                             }
                             break;
                     }
+
                 }
 
             }
@@ -419,7 +423,13 @@ class ContactForm extends Form
         $sender = implode(' ', [$data[$this->getID() . '-gender'], $data[$this->getID() . '-name'], $data[$this->getID() . '-surname']]);
         $this->mail->from($data[$this->getID() . '-email'], $sender);
         $this->mail->subject($data[$this->getID() . '-subject']);
-        $this->mail->bodyHTML('[[ALLVALUES]]');
+        // use HTML mail template or not
+        if($this->input_emailTemplate != 'none'){
+            $this->mail->bodyHTML('[[ALLVALUES]]');
+        } else {
+            $this->mail->body('[[ALLVALUES]]');
+        }
+
         $this->mail->sendAttachments($this); // for sending attachments
 
         if (!$this->mail->send()) {

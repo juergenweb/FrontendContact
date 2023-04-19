@@ -67,6 +67,8 @@ echo $modules->get('FrontendContact')->render();
 
 ```
 
+This will output the complete contact form using the settings of the module configuration - a simple one-liner!
+
 If you want to change some parameters of the global settings (fe changing of the receiver address, hide a certain field,...), you have to grab the form object first, manipulate all the parameters or elements and render it at the end.
 Just take a look of the following example to change the receiver address. You will find much more examples inside the examples folder or inside the module configuration page of this module.
 

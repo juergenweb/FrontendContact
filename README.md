@@ -152,7 +152,7 @@ In this case a new telephone field was added after the email field.
 
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/newfield.png?raw=true)
 
-The next example is about how to add additional elements to form. In this case 2 fieldsets and 1 additional text. You will find this examples inside the [addingfieldsetandtext.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingfieldsetandtext.php) inside the examples folder. 
+The next example is about how to add additional elements to form. In this case 2 fieldsets and 1 additional text above the name field. You will find this examples inside the [addingfieldsetandtext.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingfieldsetandtext.php) inside the examples folder. 
 
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/customized-form.png?raw=true)
 

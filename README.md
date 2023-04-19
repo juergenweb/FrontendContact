@@ -6,28 +6,26 @@
 
 A configurable module for ProcessWire for outputting a simple contact form on your site based on the FrontendForms module.
 
+Please note: You have to install the FrontendForms module first, because this module relies on it.
+So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.
+
 ## Intentions for creating this module
 A contact form is something you will need on almost every website. Sometimes you will need more than one (fe if you have a staff member page, and you will offer a contact form for each staff member).
 
 With the FrontendForms module, which is the base for this module, you will be able to create contact forms in an easy way by your own - there is nothing wrong with it.
 
-My idea was to create a one-line code to implement a contact form easily. I do not want to write all the code every time, but the module should be flexible, so that the form could be adapted and enhanced to my needs. 
-So this module should save a lot of time, it keeps templates clean from a lot of code and it offers a lot of customization possibilities. 
-
-Please note: You have to install the FrontendForms module first, because this module relies on it.
-So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.
-
-Just to mention: To prevent problems with other modules or classes this module runs in its own namespace "FrontendContact".
+My intention to develop a contact form module was prevent the manual creation everytime you need and contact form, to save a lot of time and to keep the template clean from a lot of code. But one goal was to keep the module very flexible, so that the form could be adapted, customized and enhanced to my needs. 
+The main goal was to add a complete contactform with only one short line of code and this is possible with this module.
 
 ## Requirements
 - ProcessWire 3.0.195 or newer
 - PHP 8.0 or newer
-- FrontendForms 2.1.25 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
+- FrontendForms 2.1.29 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
 
 ## Highlights
 - Fast and easy integration of a contact form inside a template by using only one line of code
-- Select the fields which should be displayed inside the form 
-- Beside the default fields you will be able to extend the form with additional fields
+- Show/hide certain fields of the form depending on your preferences and needs
+- Beside the default fields you will be able to extend the form with additional fields if needed
 - Highly customizable (change order of fields, add custom CSS classes,...)
 - Run as many forms on one page as you want
 - Possibility to offer file upload to upload multiple files, which can be sent as attachments
@@ -39,6 +37,7 @@ Just to mention: To prevent problems with other modules or classes this module r
 * [Integrations of forms on the frontend](#integrations-of-forms-on-the-frontend)
 * [Special contact form methods](#special-contact-form-methods)
 * [Extending the form with additional inputfields](#extending-the-form-with-additional-input-fields)
+* [Run multiple forms on one page]()
 * [Multilanguage](#multi-language)
 
 
@@ -148,6 +147,16 @@ For this scenario, you will be able to extend the form with new elements and you
 and addAfter(). 
 Both methods are from the FrontendForms module and will be used to add a new element at a new position inside the form or to move an existing form element to a new position. You will find a detailed information about these 2 methods in the docs of the FrontendForms module. 
 To demonstrate how it works, I have included an example on how to add a new input field inside the examples folder: So please take a look at the [addingnewfield.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingnewfield.php) and study the example on how to extend the form with new elements.
+
+## Run multiple forms on one page
+The only thing you have to take care of is that you have to add an unique ID to each form. This is necessary for the form validation because it needs to determine which form has been validated. BTW it would not be valid too to use the same id for 2 elements ;-).
+
+```php
+// render form 1
+echo $modules->get('FrontendContact')->getForm('form1')->render();
+echo $modules->get('FrontendContact')->getForm('form2')->render();
+```
+As you can see, you have to enter the id as parameter of the getForm() method of each form.
 
 ## Multi-language
 This module is ready for usage in multi-language site.

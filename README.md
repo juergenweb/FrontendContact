@@ -52,7 +52,7 @@ optional and privacy field is always required. Therefore, for both fields the st
 * **`Set a global receiver email address`** You can enter an email by text, or you can choose a PW field, which holds the value
 * Choose a mail template for your email or send it as plain text (none, template_1, template_2,...)
 * **`Set a global minimum form submission time`** Set a global minimum time before a form is allowed to be submitted (spam protection)
-* * **`Select email template`** You can select if you want to send an HTML or a plain text email.
+* **`Select email template`** You can select if you want to send an HTML or a plain text email.
 
 Each global configuration setting can be overwritten on per form base.
 

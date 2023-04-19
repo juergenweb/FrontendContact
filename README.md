@@ -56,6 +56,8 @@ optional and privacy field is always required. Therefore, for both fields the st
 
 Each global configuration setting can be overwritten on per form base.
 
+![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/configuration.png?raw=true)
+
 ### Integrations of forms on the frontend
 
 If you want to use the global settings of the module configuration, enter the following code inside a template, where you want to include your contact form.

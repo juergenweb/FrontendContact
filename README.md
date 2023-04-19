@@ -35,26 +35,26 @@ Just to mention: To prevent problems with other modules or classes this module r
 
 ## Table of contents
 * [Configuration](#configurations)
+* [Integrations of forms on the frontend](#integrations-of-forms-on-the-frontend)
+* [Special contact form methods](#special-contact-form-methods)
+* [Extending the form with additional inputfields](#extending-the-form-with-additional-input-fields)
+* [Multilanguage](#multi-language)
 
 
 ## Configurations
 After you have installed the module, you have to set the default email address where the mails should be sent to. This email address can be entered manually or you choose a ProcessWire field, which contains the email address. All other configuration options are optional.
 
-* Show or hide the following fields: gender, name, surname, subject, file upload, privacy and send copy (email and message field are
+* **`Show or hide the following fields`** gender, name, surname, subject, file upload, privacy and send copy (email and message field are
 mandatory and therefore permanent and not selectable whether to be shown or not)
-* Set the status of the following fields to required or not: gender, name, surname, subject (send copy field is always
+* **`Map the following fields to fields inside the user template`** email, gender, name, surname. If a user is logged in, than the value of the appropriate mapped field of the user template will be set as value on the frontend
+* **`Change required status of following fields`** gender, name, surname, subject (send copy field is always
 optional and privacy field is always required. Therefore, for both fields the status cannot be changed)
-* Set a global email address or not. You can enter an email by text, or you can choose a PW field, which holds the value
+* **`Set a global receiver email address`** You can enter an email by text, or you can choose a PW field, which holds the value
 * Choose a mail template for your email or send it as plain text (none, template_1, template_2,...)
-* Set a global minimum time before a form is allowed to be submitted (spam protection)
+* **`Set a global minimum form submission time`** Set a global minimum time before a form is allowed to be submitted (spam protection)
+* * **`Select email template`** You can select if you want to send an HTML or a plain text email.
 
-## Default settings of the form that cannot be changed inside the module config
-By default, the form has the following settings:
-
-* Number of MaxAttempts: This value will be taken from the FrontendForms module global configuration settings
-* Maximal time for filling out the form: This value will be taken from the FrontendForms module global configuration settings
-
-Each of the settings can be overwritten if necessary.
+Each global configuration setting can be overwritten on per form base.
 
 ### Integrations of forms on the frontend
 

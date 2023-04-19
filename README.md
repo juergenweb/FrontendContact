@@ -33,6 +33,10 @@ Just to mention: To prevent problems with other modules or classes this module r
 - Usage of all the benefits of [FrontendForms](https://github.com/juergenweb/FrontendForms#highlights) (fe. CAPTCHA, various security settings,...)
 - Mutli-language
 
+## Table of contents
+* [Configuration](#configurations)
+
+
 ## Configurations
 After you have installed the module, you have to set the default email address where the mails should be sent to. This email address can be entered manually or you choose a ProcessWire field, which contains the email address. All other configuration options are optional.
 
@@ -52,9 +56,9 @@ By default, the form has the following settings:
 
 Each of the settings can be overwritten if necessary.
 
-### Usage on the frontend
+### Integrations of forms on the frontend
 
-Enter the following code inside a template, where you want to include your contact form.
+If you want to use the global settings of the module configuration, enter the following code inside a template, where you want to include your contact form.
 
 ```php
 
@@ -63,9 +67,9 @@ echo $modules->get('FrontendContact')->render();
 
 ```
 
-This is all you have to do, if you do not want to modify some values.
+If you want to change some parameters of the global settings (fe changing of the receiver address, hide a certain field,...), you have to grab the form object first, manipulate all the parameters or elements and render it at the end.
+Just take a look of the following example to change the receiver address. You will find much more examples inside the examples folder or inside the module configuration page of this module.
 
-If you want to send the messages to a different email address as set in the module configuration, you can set the recipient manually.
 
 ```php
 // render the form
@@ -74,12 +78,8 @@ $form->to('office@myemail.com'); // set or overwrite the recipient email address
 echo $form->render();
 ```
 
-If you want to change parameters or values of the form (fe success message, recipient, time measurement settings,....), you have to call the getForm() method first to get the form object.
-This object can be manipulated as described in the FrontendForms docs.
-You will find an example inside the example folder or at the bottom of the module configuration in the backend.
-At the end you have to use the render() method to render the form markup.
-
 ### Special contact form methods
+Beside the methods of the FrontendForms module, I have added some extra methods for this module to make it much more confortable to manipulate the form.
 
 #### getForm() method
 This method returns the form object and this method is needed to manipulate values of the form.
@@ -121,7 +121,7 @@ $form->requiredSubject(true); // subject field will be required
 ```
 
 #### Get fields for further customization methods
-Each field can be customized. You have to use the methods from the FrontendForms module. You will find more information inside the readme file of the FrontendForms module - so take a look there.
+Each field can be customized further individually. You have to use the methods from the FrontendForms module. You will find more information inside the readme file of the FrontendForms module - so take a look there.
 To grab each form field object you have to use the FrontendForms method getElementByName(). Take a look at the source code to get the name of the field you want to change.
 
 ```php

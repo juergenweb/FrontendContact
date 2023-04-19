@@ -33,5 +33,5 @@ $form1->to('webdesign@linznet.at'); // send the message to this email addy
 $form1->disableCaptcha(); // remove the CAPTCHA
 $form1->showName(false); // do not show the name field -> you can also write empty parenthesis like $form1->showName() - it is the same
 $form1->showSurname(); // do not show the surname field
-$form1->getSubject()->setAttribute('class', 'myclass'); // add a custom class to the subject form field
+$form1->getElementByName('email')->setAttribute('class', 'myclass'); // add a custom class to the subject form field
 echo $form1->render(); // output the form

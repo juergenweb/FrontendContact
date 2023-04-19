@@ -120,9 +120,14 @@ $form->requiredSurname(); // surname field will not be required
 $form->requiredSubject(true); // subject field will be required
 ```
 
+*Just to mention:* If an user is logged in and you have mapped some user fields to form fields and these fields contain a value, than the required status of these fields will be removed in any way.
+In other words: You can set or remove the required status of these fields manually, but it will not have an effect. Those fields will never be marked as required, because the values will be directly taken from the database and are always present. This is a little performance boost, because these fields do not need to be validated.
+
 #### Get fields for further customization methods
 Each field can be customized further individually. You have to use the methods from the FrontendForms module. You will find more information inside the readme file of the FrontendForms module - so take a look there.
 To grab each form field object you have to use the FrontendForms method getElementByName(). Take a look at the source code to get the name of the field you want to change.
+
+So please do not wonder, if your manual changing of the required status has no effect in this case. Please note: This will only happen if a user is logged in.
 
 ```php
 $genderfield = $form->getElementByName('contact-form-gender'); // returns the gender field object

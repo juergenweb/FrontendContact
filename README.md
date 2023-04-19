@@ -146,7 +146,11 @@ The default form contains pre-defined input fields, which should be enough in mo
 For this scenario, you will be able to extend the form with new elements and you can set the position of these elements inside the form via 2 methods: addBefore() 
 and addAfter(). 
 Both methods are from the FrontendForms module and will be used to add a new element at a new position inside the form or to move an existing form element to a new position. You will find a detailed information about these 2 methods in the docs of the FrontendForms module. 
-To demonstrate how it works, I have included an example on how to add a new input field inside the examples folder: So please take a look at the [addingnewfield.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingnewfield.php) and study the example on how to extend the form with new elements.
+To demonstrate how it works, I have included an example on how to add a new input field inside the examples folder: So please take a look at the [addingnewfield.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingnewfield.php) and study the example on how to extend the form with new elements. 
+
+In this case a new telephone field was added after the email field.
+
+![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/newfield.png?raw=true)
 
 The next example is about how to add additional elements to form. In this case 2 fieldsets and 1 additional text. You will find this examples inside the [addingfieldsetandtext.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingfieldsetandtext.php) inside the examples folder. 
 

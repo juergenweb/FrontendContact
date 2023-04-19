@@ -148,6 +148,8 @@ and addAfter().
 Both methods are from the FrontendForms module and will be used to add a new element at a new position inside the form or to move an existing form element to a new position. You will find a detailed information about these 2 methods in the docs of the FrontendForms module. 
 To demonstrate how it works, I have included an example on how to add a new input field inside the examples folder: So please take a look at the [addingnewfield.php](https://github.com/juergenweb/FrontendContact/blob/main/examples/addingnewfield.php) and study the example on how to extend the form with new elements.
 
+![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/customized-form.png?raw=true)
+
 ## Run multiple forms on one page
 The only thing you have to take care of is that you have to add an unique ID to each form. This is necessary for the form validation because it needs to determine which form has been submitted and should be validated. BTW it would also not be valid to use the same id for 2 elements ;-).
 

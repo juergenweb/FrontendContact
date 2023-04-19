@@ -58,6 +58,8 @@ Each global configuration setting can be overwritten on per form base.
 
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/configuration.png?raw=true)
 
+The image shows the configuration screen with the tab of the name field open. As you can see, you can add or remove a field from the form by checking the box. The same procedure can be done for the required status and if an appropriate field exists inside the user template you can map this field to the form field, so that the value will be used if a user is logged in.
+
 ### Integrations of forms on the frontend
 
 If you want to use the global settings of the module configuration, enter the following code inside a template, where you want to include your contact form.

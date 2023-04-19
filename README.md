@@ -164,8 +164,13 @@ The next example is about how to add additional elements to form. In this case 2
 The only thing you have to take care of is that you have to add an unique ID to each form. This is necessary for the form validation because it needs to determine which form has been submitted and should be validated. BTW it would also not be valid to use the same id for 2 elements ;-).
 
 ```php
-echo $modules->get('FrontendContact')->getForm('form1')->render(); // render form 1
-echo $modules->get('FrontendContact')->getForm('form2')->render(); // render form 2
+$form1 = $modules->get('FrontendContact')->getForm('form1'); // add id inside the getForm() method
+$form1->to('myemail@email.com'); // add a receiver email address for form 1
+echo $form1->render();
+
+$form2 = $modules->get('FrontendContact')->getForm('form2'); // add id inside the getForm() method
+$form2->to('myotheremail@email.com'); // add a receiver email address for form 2
+echo $form2->render();
 ```
 As you can see, you have to enter the id as parameter of the getForm() method of each form. If you do not enter the id, each form will have the default id "contact-form" which will be added by default if no id was set.
 

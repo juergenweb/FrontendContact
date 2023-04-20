@@ -116,7 +116,9 @@ $form->subject('New custom subject for my contact form');
 #### Show or hide fields methods
 With these methods you can overwrite the global settings to show or hide a form field on the form.
 As the parameter you have to set true or false.
+
 TRUE: The form field will be displayed on the form
+
 FALSE: The form field will not be included in the form
 
 BTW: You do not have to enter the value false inside the parenthesis - you can leave them empty

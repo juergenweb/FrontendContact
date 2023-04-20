@@ -17,6 +17,7 @@ With the FrontendForms module, which is the base for this module, you will be ab
 My intention to develop a contact form module was prevent the manual creation everytime you need and contact form, to save a lot of time and to keep the template clean from a lot of code. But one goal was to keep the module very flexible, so that the form could be adapted, customized and enhanced to my needs. 
 The main goal was to add a complete contactform with only one short line of code and this is possible with this module.
 
+
 ## Requirements
 - ProcessWire 3.0.195 or newer
 - PHP 8.0 or newer
@@ -30,7 +31,7 @@ The main goal was to add a complete contactform with only one short line of code
 - Run as many forms on one page as you want
 - Possibility to offer file upload to upload multiple files, which can be sent as attachments
 - Usage of all the benefits of [FrontendForms](https://github.com/juergenweb/FrontendForms#highlights) (fe. CAPTCHA, various security settings,...)
-- Mutli-language
+- Multi-language
 
 ## Table of contents
 * [Configuration](#configurations)
@@ -46,13 +47,12 @@ After you have installed the module, you have to set the default email address w
 
 * **`Show or hide the following fields`** gender, name, surname, subject, file upload, privacy and send copy (email and message field are
 mandatory and therefore permanent and not selectable whether to be shown or not)
-* **`Map the following fields to fields inside the user template`** email, gender, name, surname. If a user is logged in, than the value of the appropriate mapped field of the user template will be set as value on the frontend
-* **`Change required status of following fields`** gender, name, surname, subject (send copy field is always
+* **`Map the following fields to fields inside the user template`** email, gender, name, surname. If you have fields inside your user template which corresponds to fields inside the contact form, you can link them. This could be fe name, surname or email field. If a user is logged in, than the value of the appropriate mapped field of the user template will be set as value for that input field on the frontend
+* **`Set the following fields to required or not`** gender, name, surname, subject (send copy field is always
 optional and privacy field is always required. Therefore, for both fields the status cannot be changed)
-* **`Set a global receiver email address`** You can enter an email by text, or you can choose a PW field, which holds the value
-* Choose a mail template for your email or send it as plain text (none, template_1, template_2,...)
+* **`Set a global receiver email address`** You can enter an email by text, or you can choose a PW field, which contains the value
 * **`Set a global minimum form submission time`** Set a global minimum time before a form is allowed to be submitted (spam protection)
-* **`Select email template`** You can select if you want to send an HTML or a plain text email.
+* **`Select email template`** Choose a HTML mail template for your email or send it as plain text
 
 Each global configuration setting can be overwritten on per form base.
 
@@ -98,6 +98,14 @@ If you have entered a default recipient inside the configuration, this method wi
 $form->to('office@myemail.com'); // set or overwrite the recipient email address
 ```
 
+If you enter multiple recipients, the mail will be send to each of them.
+
+```php
+$form->to('recipient1@myemail.com'); 
+$form->to('recipient2@myemail.com'); 
+$form->to('recipient3@myemail.com'); 
+```
+
 #### subject() method
 This method is the same method as the WireMail subject() method. You can enter a fixed subject for your contact form.
 This can be useful, if you disable the subject field on the form and you will display a custom subject message instead.
@@ -107,7 +115,6 @@ $form->subject('New custom subject for my contact form'); // set or overwrite th
 ```
 #### Show or hide fields methods
 With these methods you can overwrite the global settings to show or hide a form field on the form.
-The name of the method is always prefix show with the name of the form field class.
 As the parameter you have to set true or false.
 TRUE: The form field will be displayed on the form
 FALSE: The form field will not be included in the form
@@ -134,8 +141,32 @@ $form->requiredSurname(); // surname field will not be required
 $form->requiredSubject(true); // subject field will be required
 ```
 
-*Just to mention:* If an user is logged in and you have mapped some user fields to form fields and these fields contain a value, than the required status of these fields will be removed in any way.
-In other words: You can set or remove the required status of these fields manually, but it will not have an effect. Those fields will never be marked as required, because the values will be directly taken from the database and are always present. This is a little performance boost, because these fields do not need to be validated.
+#### Change the position of a specific field inside the form
+I have set the order of the default fields inside the form according to my preferences. Maybe you disagree with me and you want to change the position of a field to be on another place. 
+
+For this reason you can use the addBefore() and addAfter() method. This means that you can position a specific field before or after another field (reference field).
+
+Example: You want to position the name field after the surname field.
+
+Default order: 
+* name field
+* surname field
+
+Preferred order:
+* surname field
+* name field
+
+```php
+//In this case you have to grab the name field object and the surname field object 
+$name_field = $form->getFormElementByName('contact-form-name); // the name field object
+$surname_field = $form->getFormElementByName('contact-form-surname); // the name field object
+
+// to get the name attribute of a field, please take a look inside the sourcecode and copy the name attribute of the field
+// now lets add the name field after the surname field
+$form->addAfter($name_field, $surname_field); 
+```
+
+Thats all! The name field has changed its position and will be after the the surname field. You can do this with other fields too if needed.
 
 #### Get fields for further customization methods
 Each field can be customized further individually. You have to use the methods from the FrontendForms module. You will find more information inside the readme file of the FrontendForms module - so take a look there.

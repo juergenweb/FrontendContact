@@ -33,19 +33,26 @@ In this case the telephone input field will be added after the email field.
 
 // the first parameter is the newly created input field
 // the second parameter is the form element object, after which the new field should be inserted.
-$cf->addAfter($tel, $cf->getEmail());
+$cf->addAfter($tel, $cf->getFormElementByName('email'));
 
 /*
  * If you want to add this field before or after another field, you have to use another field object instead
- * of the email. To grab a certain field object, you have to use the name attribute of this field with the getElementByName
- method from the FrontendForms module.
- * 
- * $genderfield = $cf->getElementsByName('contact-form-gender); // Returns the Gender object.
+ * of the email. You will get each pre-defined form element with the following syntax: get + name of the field()
+ * You will find a list of all methods afterwards:
  *
- * To find out the name of the field please take a look inside the source code
+ * $cf->getGender(); // Returns the Gender object.
+ * $cf->getName(); // Returns the Name object.
+ * $cf->getSurname(); // Returns the Surname object.
+ * $cf->getEmail(); // Returns the Email object.
+ * $cf->getSubject(); // Returns the Subject object.
+ * $cf->getMessage(); // Returns the Message object.
+ * $cf->getPrivacy(); // Returns the Privacy checkbox object.
+ * $cf->getSendCopy(); // Returns the Send a copy to me checkbox object.
+ * $cf->getButton(); // Returns the submit button object.
  *
- * fe $cf->addAfter($tel, $genderfield); or
- * $cf->addBefore($tel, $genderfield);
+ * So replace $cf->getEmail() with another form object from the list to insert the new input field on an other position.
+ * fe $cf->addAfter($tel, $cf->getSubject()); or
+ * $cf->addBefore($tel, $cf->getSubject());
 */
 
 // at the last step, output the form

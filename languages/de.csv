@@ -1,5 +1,5 @@
 en,de,description,file,hash
-"A new message via contact form","Eine neue Nachricht über das Kontaktformular",,site/modules/FrontendContact/ContactForm.php,4758f7b6eca42e3f45ef7fde662fc3a0
+"A new message via contact form","Eine neue Nachricht über das Kontaktformular","set default subject string",site/modules/FrontendContact/ContactForm.php,4758f7b6eca42e3f45ef7fde662fc3a0
 en,de,description,file,hash
 "The value of this user field will be used as the form value, if the user is logged in.","Der Wert dieses Benutzerfeldes wird als Formularwert verwendet, wenn der Benutzer eingeloggt ist.",,site/modules/FrontendContact/FrontendContact.module,2c56b06102bdeecd02cb9c0eb60ad68e
 "Mark this field as mandatory","Diese Feld als Pflichtfeld markieren",,site/modules/FrontendContact/FrontendContact.module,d88657aa263af3eec8ebd27063df0826
@@ -52,8 +52,7 @@ none,keines,"add empty option",site/modules/FrontendContact/FrontendContact.modu
 "In this case the, the form uses the global settings of the configuration in the backend.","In diesem Fall verwendet das Formular die globalen Einstellungen der Konfiguration im Backend.",,site/modules/FrontendContact/FrontendContact.module,3eb54c619a3ba10eccf743d5c2ed17b8
 "Advanced integration with changed settings","Erweiterte Integration mit geänderten Einstellungen",,site/modules/FrontendContact/FrontendContact.module,d96f982f39b682ec49a68e64c06271c4
 "If you want the form to be displayed differently from the global settings or you want to change some parameters, you have to do it like the way below.","Wenn Sie möchten, dass das Formular abweichend von den globalen Einstellungen angezeigt wird oder Sie einige Parameter ändern möchten, müssen Sie wie nachfolgend beschrieben vorgehen.",,site/modules/FrontendContact/FrontendContact.module,85198a3318560cd72357e5b4eed142a5
-"Add a new id to the form (necessary if you have 2 forms on the same page)","Fügen Sie dem Formular eine neue ID hinzu (notwendig, wenn Sie 2 Formulare auf derselben Seite haben)",,site/modules/FrontendContact/FrontendContact.module,d6087c63346eda1a0f218826bec088d8
-"Set or overwrite the recipient email address","Festlegen oder Überschreiben der Empfänger-E-Mail-Adresse",,site/modules/FrontendContact/FrontendContact.module,205701e7382c10940421542b6435f647
+"Overwrite the recipient email address or add more recipients","Überschreiben Sie die Empfängeradress oder fügen Sie weitere Empfänger hinzu",,site/modules/FrontendContact/FrontendContact.module,4486575452a4b7304315b37b12a10745
 "Overwrite the max attempts","Überschreiben Sie die maximalen Versuche",,site/modules/FrontendContact/FrontendContact.module,3fcad3b5510b9165bdc27112753f5e1f
 "Overwrite the min time for form submission","Überschreiben Sie die Mindestzeit für die Formularübermittlung",,site/modules/FrontendContact/FrontendContact.module,c3918ca5c17155b88a3eac3d3cb47465
 "Overwrite the max time for form submission","Überschreiben Sie die maximale Zeit für die Formularübermittlung",,site/modules/FrontendContact/FrontendContact.module,e7dd7541c4d73ddbc65943916bba00d5
@@ -62,4 +61,6 @@ none,keines,"add empty option",site/modules/FrontendContact/FrontendContact.modu
 "Show an alternative message after successful form submission","Anzeige einer alternativen Nachricht nach erfolgreicher Formularübermittlung",,site/modules/FrontendContact/FrontendContact.module,2a8a647991b8fd208b7c904ba2a62e81
 "Render the form","Ausgabe des Formulars",,site/modules/FrontendContact/FrontendContact.module,373c9ebf8cc7fc3e98159f964aa6b7d2
 "Some methods used in the example above are from the FrontendForms module and are explained in the %s of this module.","Einige der im obigen Beispiel verwendeten Methoden stammen aus dem Modul FrontendForms und werden in den %s zu diesem Modul erläutert.",,site/modules/FrontendContact/FrontendContact.module,f42c96435bca2eeca5dec2b9440f33bb
+"examples folder","examples Ordner",,site/modules/FrontendContact/FrontendContact.module,be472a74e2acc3a024841b1511e729aa
+"You will find more examples on GitHub inside the %s. Please study these examples on how to customize the contact form.","Weitere Beispiele finden Sie auf GitHub im %s. Bitte studieren Sie diese Beispiele, wie Sie das Kontaktformular anpassen können.",,site/modules/FrontendContact/FrontendContact.module,ff0644d502bf6cdc09a01552a6489936
 "Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.","Bitte geben Sie eine gültige E-Mail-Adresse ein oder wählen Sie ein PW-Feld, das die E-Mail-Adresse in den Standard-E-Mail-Einstellungen enthält.",,site/modules/FrontendContact/FrontendContact.module,2618d664f407397d4be07756ebd91887

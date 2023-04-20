@@ -49,6 +49,7 @@ class ContactForm extends Form
     protected string $stored_name = '';
     protected string $stored_surname = '';
     protected string $stored_email = '';
+    protected bool $custom_receiver = false;
 
     protected array $frontendcontact_config = [];
 
@@ -77,6 +78,7 @@ class ContactForm extends Form
     {
 
         parent::__construct($id);
+
 
         // get module configuration data from FrontendContact module and create properties of each setting
         foreach ($this->wire('modules')->getConfig('FrontendContact') as $key => $value) {
@@ -112,6 +114,8 @@ class ContactForm extends Form
         // map user data as value to the form fields if user is logged in
         $this->setUserDataToField();
 
+        $this->useSettingsOfFormFields();
+
     }
 
     /**
@@ -126,24 +130,55 @@ class ContactForm extends Form
     {
         if (in_array($func, $this->methodList)) {
             $startsWith = substr($func, 0, 3);
-            $param = (isset($params[0])) ?? 0;
+
+            $param = (!isset($params[0])) ? false : $params[0];
+
             switch ($startsWith) {
                 case('sho'):
                     $className = str_replace('show', '', $func);
                     $fieldName = $this->generateConfigFieldname($className, 'show');
-                    $this->{$fieldName} = (int)$param;
+                    $this->frontendcontact_config[$fieldName] = $param;
                     break;
                 case('req'):
                     $className = str_replace('required', '', $func);
                     $fieldName = $this->generateConfigFieldname($className, 'required');
-                    $this->{$fieldName} = (int)$params[0];
+                    $this->frontendcontact_config[$fieldName] = $param;
                     break;
-                case('get'):
-                    $propertyName = lcfirst(str_replace('get', '', $func));
-                    return $this->{$propertyName};
             }
+
         }
         return null;
+
+    }
+
+    /**
+     * Alias function for the WireMail function subject() to set the subject for the mail on per form base
+     * @param string $string
+     * @return void
+     */
+    public function subject(string $string):self
+    {
+        $m = $this->getMail();
+        $m->subject($string);
+        return $this;
+    }
+
+    /**
+     * Alias function for the WireMail function to() to set the receiver address for the mail on per form base
+     * @param string $email
+     * @return $this
+     * @throws WireException
+     */
+    public function to(string $email):self
+    {
+        $m = $this->getMail();
+        if ($this->wire('sanitizer')->email($email)) {
+            $m->to($email);
+            $this->custom_receiver = true;
+        } else {
+            throw new Exception("Email address for the recipient is not a valid email address.", 1);
+        }
+        return $this;
     }
 
     /**
@@ -151,7 +186,7 @@ class ContactForm extends Form
      * This is needed to change email templates on per WireMail base
      * @return WireMail
      */
-    public function getMail(): WireMail
+    public function getMail():WireMail
     {
         return $this->mail;
     }
@@ -162,7 +197,7 @@ class ContactForm extends Form
      * The appendix "_mapped" will be used to identify those fields
      * @return array
      */
-    protected function getMappedFields(): array
+    protected function getMappedFields():array
     {
         return array_filter($this->frontendcontact_config, function ($key) {
             return strpos($key, '_mapped');
@@ -176,7 +211,7 @@ class ContactForm extends Form
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function setUserDataToField(): void
+    protected function setUserDataToField():void
     {
 
         if ($this->user->isLoggedin()) {
@@ -199,9 +234,11 @@ class ContactForm extends Form
                             $this->{$stored_name} = $this->user->{$field->name};
                             if ($this->{$stored_name}) { // only if a value is stored inside the database
                                 $formfield = $this->getFormElementByName($name);
-                                $formfield->setAttribute('disabled');
-                                $formfield->removeRule('required'); // not necessary anymore
-                                $formfield->setAttribute('value', $this->{$stored_name});
+                                if ($formfield) {
+                                    $formfield->setAttribute('disabled');
+                                    $formfield->removeRule('required'); // not necessary anymore
+                                    $formfield->setAttribute('value', $this->{$stored_name});
+                                }
                             }
                             break;
                         case('FieldtypeOptions'):
@@ -209,8 +246,10 @@ class ContactForm extends Form
                             $this->{$stored_name} = $userField->title;
                             if ($this->{$stored_name}) { // only if a value is stored inside the database
                                 $formfield = $this->getFormElementByName($name);
-                                $formfield->setAttribute('value', $userField->title);
-                                $formfield->setAttribute('disabled');
+                                if ($formfield) {
+                                    $formfield->setAttribute('value', $userField->title);
+                                    $formfield->setAttribute('disabled');
+                                }
                             }
                             break;
                     }
@@ -232,9 +271,10 @@ class ContactForm extends Form
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function adaptGenderSelect(): void
+    protected function adaptGenderSelect():void
     {
-        if ($this->frontendcontact_config['input_gender_userfield_mapped'] != 'none') {
+
+        if (($this->frontendcontact_config['input_gender_show']) && ($this->frontendcontact_config['input_gender_userfield_mapped'] != 'none')) {
             // remove all options first
             $this->getFormelementByName('gender')->removeAllOptions();
             //grab all options in the page language
@@ -262,7 +302,7 @@ class ContactForm extends Form
      * @param string $suffix
      * @return string
      */
-    protected function generateConfigFieldname(string $className, string $suffix): string
+    protected function generateConfigFieldname(string $className, string $suffix):string
     {
         $className = lcfirst($className);
         $createName = ['input', $className, $suffix];
@@ -274,17 +314,20 @@ class ContactForm extends Form
      * Remove a field depending on settings and set a field to required or not
      * @return void
      */
-    protected function useSettingsOfFormFields(): void
+    protected function useSettingsOfFormFields():void
     {
         // remove permanent fields from the fields array
         $formFields = FrontendContact::$formFields;
-        $permanentFields = FrontendContact::$permanentFields;
-        $tempFields = array_diff($formFields, $permanentFields);
 
-        foreach ($tempFields as $temp) {
-            $fieldObjectName = strtolower($temp);
+        $this->frontendcontact_config['input_email_show'] = true;
+        $this->frontendcontact_config['input_message_show'] = true;
+        $this->frontendcontact_config['input_button_show'] = true;
+
+        // create new formElements array
+        $this->formElements = [];
+        foreach ($formFields as $position => $temp) {
+            $fieldObjectName = lcfirst($temp);
             $configFieldNameShow = $this->generateConfigFieldname($fieldObjectName, 'show');
-
             $configFieldNameRequired = $this->generateConfigFieldname($fieldObjectName, 'required');
 
             $field = $this->{lcfirst($temp)};
@@ -293,21 +336,35 @@ class ContactForm extends Form
             if (!$this->frontendcontact_config[$configFieldNameShow]) {
                 $this->remove($field);
             } else {
-
+                $this->formElements[] = $field;
                 //set required status to the field
+
                 if ($configFieldNameRequired != 'input_privacy_required') { // exclude privacy field
-                    if ((array_key_exists($configFieldNameRequired, $this->frontendcontact_config)) && ($this->frontendcontact_config[$configFieldNameRequired])) {
-
+                    if ((array_key_exists($configFieldNameRequired,
+                            $this->frontendcontact_config)) && ($this->frontendcontact_config[$configFieldNameRequired])) {
                         if (!$field->hasRule('required')) {
-
                             $field->setRule('required');
                         }
-
                     } else {
                         if ($temp != 'Privacy') // never remove required from privacy field !!
                         {
-                            $field->removeRule('required');
+                            if (!$field instanceof Button) {
+                                $field->removeRule('required');
+                            }
                         }
+                    }
+                }
+                // add the field to the form elements array if it is not there
+                if (!$this->getFormElementByName($field->getAttribute('name'))) {
+
+                    if ($position == 0) {
+                        $ref_name = strtolower($formFields[1]);
+                        $reference_field = $this->getFormElementByName($ref_name);
+                        $this->addBefore($field, $reference_field);
+                    } else {
+                        $ref_name = strtolower($temp);
+                        $reference_field = $this->getFormElementByName($ref_name);
+                        $this->addAfter($field, $reference_field);
                     }
                 }
 
@@ -322,7 +379,7 @@ class ContactForm extends Form
      * The placeholders can be used in templates
      * @return void
      */
-    protected function createAllFormFields(): void
+    protected function createAllFormFields():void
     {
 
         foreach (FrontendContact::$formFields as $className) {
@@ -350,7 +407,7 @@ class ContactForm extends Form
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function createDataPlaceholder(): array
+    protected function createDataPlaceholder():array
     {
 
         if ($this->user->isLoggedin()) {
@@ -375,7 +432,10 @@ class ContactForm extends Form
                         // set the placeholder value
                         $this->setMailPlaceholder($name . 'value', $stored_value);
                         $form_field_name = $this->getID() . '-' . $name;
-                        $stored_data[$form_field_name] = $stored_value;
+
+                        if ($this->getFormelementByName($form_field_name)) {
+                            $stored_data[$form_field_name] = $stored_value;
+                        }
                     }
                 }
             }
@@ -383,6 +443,7 @@ class ContactForm extends Form
 
         // merge form data with stored data
         $form_data = array_merge($stored_data, $this->getValues());
+
         // remove privacy and send copy values
         unset($form_data[$this->getID() . '-privacy']);
         unset($form_data[$this->getID() . '-sendcopy']);
@@ -407,7 +468,7 @@ class ContactForm extends Form
      * @throws WireException
      * @throws Exception
      */
-    public function sendEmail(): void
+    public function sendEmail():void
     {
 
         // create all placeholders including values stored inside the database
@@ -418,16 +479,52 @@ class ContactForm extends Form
             $this->mail->to($data[$this->getID() . '-email']);
         }
 
-        // send the mail via WireMail
-        $this->mail->to($this->receiverAddress);
-        $sender = implode(' ', [$data[$this->getID() . '-gender'], $data[$this->getID() . '-name'], $data[$this->getID() . '-surname']]);
-        $this->mail->from($data[$this->getID() . '-email'], $sender);
-        $this->mail->subject($data[$this->getID() . '-subject']);
-        // use HTML mail template or not
-        if($this->input_emailTemplate != 'none'){
-            $this->mail->bodyHTML('[[ALLVALUES]]');
+        // set the default receiver address if no custom receiver address is set
+        if (!$this->custom_receiver) {
+            $this->mail->to($this->receiverAddress);
+        }
+
+
+        //create sender string
+        $sender_values = [];
+        $name_values = [];
+        if (array_key_exists($this->getID() . '-gender', $data)) {
+            $sender_values['gender'] = $data[$this->getID() . '-gender'];
+        }
+        if (array_key_exists($this->getID() . '-name', $data)) {
+            $name_values[] = $sender_values['name'] = $data[$this->getID() . '-name'];
+        }
+        if (array_key_exists($this->getID() . '-surname', $data)) {
+            $name_values[] = $sender_values['surname'] = $data[$this->getID() . '-surname'];
+        }
+
+        if ($name_values) {
+            // at least name or surname is present, so use the name as sender
+            $sender = implode(' ', $sender_values);
         } else {
-            $this->mail->body('[[ALLVALUES]]');
+            // use email address instead of name as sender
+            $sender = $data[$this->getID() . '-email'];
+        }
+
+        $this->mail->from($data[$this->getID() . '-email'], $sender);
+
+        // create subject string
+        if (!$this->mail->subject) {
+            $this->mail->subject($this->_('A new message via contact form')); // set default subject string
+            if (array_key_exists($this->getID() . '-subject', $data)) {
+                $mail_subject = $data[$this->getID() . '-subject'];
+                if ($mail_subject) {
+                    $this->mail->subject($mail_subject);
+                }
+            }
+        }
+
+
+        // use HTML mail template or not
+        if ($this->input_emailTemplate != 'none') {
+            $this->mail->bodyHTML($this->getMailPlaceholder('allvalues'));
+        } else {
+            $this->mail->body($this->getMailPlaceholder('allvalues'));
         }
 
         $this->mail->sendAttachments($this); // for sending attachments
@@ -444,7 +541,7 @@ class ContactForm extends Form
      * @throws WireException
      * @throws Exception
      */
-    public function render(): string
+    public function render():string
     {
         // check if a receiver address is set
         if (!$this->receiverAddress) {
@@ -452,11 +549,11 @@ class ContactForm extends Form
         }
 
         $this->mail->sendAttachments($this);
-        $this->useSettingsOfFormFields();
 
         if ($this->___isValid()) {
             $this->sendEmail();
         }
+
         return parent::render();
     }
 

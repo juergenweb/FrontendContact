@@ -30,9 +30,9 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     protected string|null $input_surname_userfield_mapped = 'none';
     protected string|int|null $input_subject_show = 1;
     protected string|int|null $input_subject_required = 1;
-    protected string|int|null $input_fileuploadmultiple_show = 0;
+    protected string|int|null $input_fileUploadMultiple_show = 0;
     protected string|int|null $input_privacy_show = 1;
-    protected string|int|null $input_sendcopy_show = 0;
+    protected string|int|null $input_sendCopy_show = 0;
     protected string $input_emailtype = 'none';
     protected string $input_default_to = '';
     protected string $input_defaultPWField_to = 'none';
@@ -113,7 +113,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
             'version' => '1.0.0',
             'singular' => true,
             'autoload' => true,
-            'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.25']
+            'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.29']
         ];
     }
 
@@ -201,7 +201,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
             'input_surname_userfield_mapped' => 'none',
             'input_subject_show' => 1,
             'input_subject_required' => 1,
-            'input_fileuploadmultiple_show' => 0,
+            'input_fileUploadMultiple_show' => 0,
             'input_privacy_show' => 1,
             'input_sendCopy_show' => 0,
             'input_emailtype' => 'none',
@@ -248,12 +248,12 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $fields = [
             'input_emailtype' => ['$form->to("office@myemail.com");'],
             'input_privacy_show' => ['$form->showPrivacy(false); // true, false'],
-            'input_sendcopy_show' => ['$form->showSendCopy(false); // true, false'],
+            'input_sendCopy_show' => ['$form->showSendCopy(false); // true, false'],
             'input_gender_show' => ['$form->showGender(false); // true, false'],
             'input_name_show' => ['$form->showName(false); // true, false'],
             'input_surname_show' => ['$form->showSurname(false); // true, false'],
             'input_subject_show' => ['$form->showSubject(false); // true, false'],
-            'input_fileuploadmultiple_show' => ['$form->showFileUploadMultiple(false); // true, false'],
+            'input_fileUploadMultiple_show' => ['$form->showFileUploadMultiple(false); // true, false'],
             'input_gender_required' => ['$form->requiredGender(false); // true, false'],
             'input_name_required' => ['$form->requiredName(false); // true, false'],
             'input_surname_required' => ['$form->requiredSurname(false); // true, false'],
@@ -432,8 +432,8 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
         // Show or hide the subject field
         $fileupload_show = $this->wire()->modules->get('InputfieldCheckbox');
-        $fileupload_show->attr('name', 'input_fileuploadmultiple_show');
-        $fileupload_show->attr('checked', $this->input_fileuploadmultiple_show == '1' ? 'checked' : '');
+        $fileupload_show->attr('name', 'input_fileUploadMultiple_show');
+        $fileupload_show->attr('checked', $this->input_fileUploadMultiple_show == '1' ? 'checked' : '');
         $fileupload_show->label = $this->addToForm;
         $fileuploadFieldset->add($fileupload_show);
 
@@ -447,8 +447,8 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
         // Show or hide send copy checkbox on form
         $sendCopy_show = $this->wire()->modules->get('InputfieldCheckbox');
-        $sendCopy_show->attr('name', 'input_sendcopy_show');
-        $sendCopy_show->attr('checked', $this->input_sendcopy_show == '1' ? 'checked' : '');
+        $sendCopy_show->attr('name', 'input_sendCopy_show');
+        $sendCopy_show->attr('checked', $this->input_sendCopy_show == '1' ? 'checked' : '');
         $sendCopy_show->label = $this->addToForm;
         $sendCopy_show->description = $this->_('If the box is checked, a checkbox inside the contact form will be displayed so that the user can choose to get a copy of the message into his mail account.');
         $sendCopy_show->notes = $this->_('This field is always optional.');
@@ -608,8 +608,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $text .= '<p>' . $this->_('If you want the form to be displayed differently from the global settings or you want to change some parameters, you have to do it like the way below.') . '</p>';
         $text .= '<pre><code>';
         $text .= '$form = $modules->get(\'FrontendContact\')->getForm();<br>';
-        $text .= '$form->setAttribute(\'id\', \'contactform-2\'); // ' . $this->_('Add a new id to the form (necessary if you have 2 forms on the same page)') . '<br>';
-        $text .= '$form->to(\'myemail@office.at\');// ' . $this->_('Set or overwrite the recipient email address') . '<br>';
+        $text .= '$form->to(\'myemail@office.at\');// ' . $this->_('Overwrite the recipient email address or add more recipients') . '<br>';
         $text .= '$form->setMaxAttempts(10);// ' . $this->_('Overwrite the max attempts') . '<br>';
         $text .= '$form->setMinTime(10);// ' . $this->_('Overwrite the min time for form submission') . '<br>';
         $text .= '$form->setMaxTime(1000);// ' . $this->_('Overwrite the max time for form submission') . '<br>';
@@ -618,10 +617,10 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $text .= '$form->setSuccessMsg(\'Thank you so much\');// ' . $this->_('Show an alternative message after successful form submission') . '<br>';
         $text .= 'echo $form->render();// ' . $this->_('Render the form') . '<br>';
         $text .= '</code></pre>';
-
         $link = '<a href ="https://github.com/juergenweb/FrontendForms\" target="_blank">docs</a>';
         $text .= '<p>' . sprintf($this->_('Some methods used in the example above are from the FrontendForms module and are explained in the %s of this module.'), $link) . '</p>';
-
+        $githublink = '<a href ="https://github.com/juergenweb/FrontendContact/tree/main/examples" target="_blank">examples folder</a>';
+        $text .= '<p>' . sprintf($this->_('You will find more examples on GitHub inside the %s. Please study these examples on how to customize the contact form.'), $githublink) . '</p>';
         $description = $this->wire()->modules->get('InputfieldMarkup');
         $description->markupText = $text;
         $docFieldset->add($description);
@@ -661,9 +660,12 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * Create and return the form object on the frontend
      * @return ContactForm
      */
-    public function getForm(): ContactForm
+    public function getForm(string|null $id = null): ContactForm
     {
-        return new ContactForm();
+        if(is_null($id)) {
+            $id = 'contact-form';
+        }
+        return new ContactForm($id);
     }
 
 

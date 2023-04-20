@@ -319,9 +319,13 @@ class ContactForm extends Form
         // remove permanent fields from the fields array
         $formFields = FrontendContact::$formFields;
 
+        // set mandatory fields to show and to required
         $this->frontendcontact_config['input_email_show'] = true;
         $this->frontendcontact_config['input_message_show'] = true;
         $this->frontendcontact_config['input_button_show'] = true;
+        $this->frontendcontact_config['input_email_required'] = true;
+        $this->frontendcontact_config['input_message_required'] = true;
+
 
         // create new formElements array
         $this->formElements = [];

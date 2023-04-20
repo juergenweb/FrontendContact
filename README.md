@@ -203,7 +203,7 @@ The next example is about how to add additional elements to form. In this case 2
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/customized-form.png?raw=true)
 
 ## Run multiple forms on one page
-The only thing you have to take care of is that you have to add an unique ID to each form. This is necessary for the form validation because it needs to determine which form has been submitted and should be validated. BTW it would also not be valid HTML to use the same id for 2 elements ;-).
+You can run as many forms on one page as you need. The only thing you have to take care of is that you have to add an unique ID to each form. This is necessary for the form validation because it needs to determine which form has been submitted and should be validated. BTW it would also not be valid HTML to use the same id for 2 elements ;-).
 
 ```php
 $form1 = $modules->get('FrontendContact')->getForm('form1'); // add id inside the getForm() method

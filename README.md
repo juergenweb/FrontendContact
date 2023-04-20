@@ -97,6 +97,14 @@ If you have entered a default recipient inside the configuration, this method wi
 ```php
 $form->to('office@myemail.com'); // set or overwrite the recipient email address
 ```
+
+#### subject() method
+This method is the same method as the WireMail subject() method. You can enter a fixed subject for your contact form.
+This can be useful, if you disable the subject field on the form and you will display a custom subject message instead.
+
+```php
+$form->subject('New custom subject for my contact form'); // set or overwrite the recipient email address
+```
 #### Show or hide fields methods
 With these methods you can overwrite the global settings to show or hide a form field on the form.
 The name of the method is always prefix show with the name of the form field class.
@@ -161,18 +169,20 @@ The next example is about how to add additional elements to form. In this case 2
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/customized-form.png?raw=true)
 
 ## Run multiple forms on one page
-The only thing you have to take care of is that you have to add an unique ID to each form. This is necessary for the form validation because it needs to determine which form has been submitted and should be validated. BTW it would also not be valid to use the same id for 2 elements ;-).
+The only thing you have to take care of is that you have to add an unique ID to each form. This is necessary for the form validation because it needs to determine which form has been submitted and should be validated. BTW it would also not be valid HTML to use the same id for 2 elements ;-).
 
 ```php
 $form1 = $modules->get('FrontendContact')->getForm('form1'); // add id inside the getForm() method
-$form1->to('myemail@email.com'); // add a receiver email address for form 1
-echo $form1->render();
+$form1->to('juergen.kern@linznet.at'); // add a receiver email address for form 1
+//$form1->subject('Message via form 1'); // optional if you want to set a fixed subject
+$content .= $form1->render();
 
 $form2 = $modules->get('FrontendContact')->getForm('form2'); // add id inside the getForm() method
-$form2->to('myotheremail@email.com'); // add a receiver email address for form 2
-echo $form2->render();
+$form2->to('webdesign@linznet.at'); // add a receiver email address for form 2
+//$form2->subject('Message via form 2'); // optional if you want to set a fixed subject
+$content .= $form2->render();
 ```
-As you can see, you have to enter the id as parameter of the getForm() method of each form. If you do not enter the id, each form will have the default id "contact-form" which will be added by default if no id was set.
+As you can see, you have to enter the id as parameter of the getForm() method of each form. If you do not enter the id, each form will have the default id "contact-form" which will be added by default if no id was set. This should not be the case, because the validation would not work properly.
 
 ## Multi-language
 This module is ready for usage in multi-language site.

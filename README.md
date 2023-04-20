@@ -158,10 +158,10 @@ Preferred order:
 
 ```php
 //In this case you have to grab the name field object and the surname field object 
+// to get the name attribute of a field, please take a look inside the sourcecode, copy the name attribute of the field and add it inside the parenthesis of the getFormElementByName() method 
 $name_field = $form->getFormElementByName('contact-form-name); // the name field object
-$surname_field = $form->getFormElementByName('contact-form-surname); // the name field object
+$surname_field = $form->getFormElementByName('contact-form-surname); // the surname field object
 
-// to get the name attribute of a field, please take a look inside the sourcecode and copy the name attribute of the field
 // now lets add the name field after the surname field
 $form->addAfter($name_field, $surname_field); 
 ```

@@ -619,7 +619,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $text .= '</code></pre>';
         $link = '<a href ="https://github.com/juergenweb/FrontendForms\" target="_blank">docs</a>';
         $text .= '<p>' . sprintf($this->_('Some methods used in the example above are from the FrontendForms module and are explained in the %s of this module.'), $link) . '</p>';
-        $githublink = '<a href ="https://github.com/juergenweb/FrontendContact/tree/main/examples" target="_blank">examples folder</a>';
+        $githublink = '<a href ="https://github.com/juergenweb/FrontendContact/tree/main/examples" target="_blank">'.$this->_('examples folder').'</a>';
         $text .= '<p>' . sprintf($this->_('You will find more examples on GitHub inside the %s. Please study these examples on how to customize the contact form.'), $githublink) . '</p>';
         $description = $this->wire()->modules->get('InputfieldMarkup');
         $description->markupText = $text;

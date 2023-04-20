@@ -111,7 +111,7 @@ This method is the same method as the WireMail subject() method. You can enter a
 This can be useful, if you disable the subject field on the form and you will display a custom subject message instead.
 
 ```php
-$form->subject('New custom subject for my contact form'); // set or overwrite the recipient email address
+$form->subject('New custom subject for my contact form'); 
 ```
 #### Show or hide fields methods
 With these methods you can overwrite the global settings to show or hide a form field on the form.

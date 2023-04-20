@@ -225,3 +225,7 @@ This module is ready for usage in multi-language site.
 The module will be shipped with the German translation file (default is English).
 If you want to provide a language file for another language, please send it to me over GitHub and I will include it
 in the module for other users.
+
+## To-Do
+* More testing
+* Possibly adding new features

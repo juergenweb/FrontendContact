@@ -1,5 +1,6 @@
 en,de,description,file,hash
 "A new message via contact form","Eine neue Nachricht über das Kontaktformular","set default subject string",site/modules/FrontendContact/ContactForm.php,4758f7b6eca42e3f45ef7fde662fc3a0
+IP,=,,site/modules/FrontendContact/ContactForm.php,a12a3079e14ced46e69ba52b8a90b21a
 en,de,description,file,hash
 "The value of this user field will be used as the form value, if the user is logged in.","Der Wert dieses Benutzerfeldes wird als Formularwert verwendet, wenn der Benutzer eingeloggt ist.",,site/modules/FrontendContact/FrontendContact.module,2c56b06102bdeecd02cb9c0eb60ad68e
 "Mark this field as mandatory","Diese Feld als Pflichtfeld markieren",,site/modules/FrontendContact/FrontendContact.module,d88657aa263af3eec8ebd27063df0826

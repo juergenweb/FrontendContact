@@ -4,7 +4,7 @@
 
 > ⚠ This module is very Alpha stage - so be aware of using it on live sites!
 
-A configurable module for ProcessWire for outputting a simple contact form on your site based on the FrontendForms module.
+A configurable module for ProcessWire for outputting one or more contact forms on your site based on the FrontendForms module.
 
 Please note: You have to install the FrontendForms module first, because this module relies on it.
 So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.

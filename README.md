@@ -12,10 +12,10 @@ So go to https://github.com/juergenweb/FrontendForms first and install the Front
 ## Intentions for creating this module
 A contact form is something you will need on almost every website. Sometimes you will need more than one (fe if you have a staff member page, and you will offer a contact form for each staff member).
 
-With the FrontendForms module, which is the base for this module, you will be able to create contact forms in an easy way by your own - there is nothing wrong with it.
+With the FrontendForms module, which is the base for this module, you will be able to create contact forms in an easy way by your own - there is nothing wrong with it, but you have to write (or copy) the code always by your own to each template, whenever you need a form. It is an repetive kind of work, that I want to get rid of and to simplify this process.
 
-My intention to develop a contact form module was prevent the manual creation everytime you need and contact form, to save a lot of time and to keep the template clean from a lot of code. But one goal was to keep the module very flexible, so that the form could be adapted, customized and enhanced to my needs. 
-The main goal was to add a complete contactform with only one short line of code and this is possible with this module.
+My intention to develop such a contact form module was to prevent the manual creation/copy everytime you need and contact form, to save a lot of time and to keep the template clean from a lot of code. But one goal was to keep the module very flexible, so that the form could be adapted, customized and enhanced to my needs. 
+The main goal was to add a complete working contactform with only one short line of code and this is possible with this module.
 
 
 ## Requirements
@@ -32,6 +32,7 @@ The main goal was to add a complete contactform with only one short line of code
 - Possibility to offer file upload to upload multiple files, which can be sent as attachments
 - Usage of all the benefits of [FrontendForms](https://github.com/juergenweb/FrontendForms#highlights) (fe. CAPTCHA, various security settings,...)
 - Multi-language
+- IP of the sender will be send with the email too, so you can use it for IP-blocking if you will get a lot of spam from a certain IP
 
 ## Table of contents
 * [Configuration](#configurations)
@@ -41,9 +42,8 @@ The main goal was to add a complete contactform with only one short line of code
 * [Run multiple forms on one page](#run-multiple-forms-on-one-page)
 * [Multilanguage](#multi-language)
 
-
 ## Configurations
-After you have installed the module, you have to set the default email address where the mails should be sent to. This email address can be entered manually or you choose a ProcessWire field, which contains the email address. All other configuration options are optional.
+After you have installed the module, you have to set a default email address where the mails should be sent to. This email address can be entered manually or you can choose a ProcessWire field, which contains the email address. All other configuration options are optional.
 
 * **`Show or hide the following fields`** gender, name, surname, subject, file upload, privacy and send copy (email and message field are
 mandatory and therefore permanent and not selectable whether to be shown or not)

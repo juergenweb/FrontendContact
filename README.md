@@ -38,7 +38,7 @@ The main goal was to add a complete contactform with only one short line of code
 * [Integrations of forms on the frontend](#integrations-of-forms-on-the-frontend)
 * [Special contact form methods](#special-contact-form-methods)
 * [Extending the form with additional inputfields](#extending-the-form-with-additional-input-fields-or-other-elements)
-* [Run multiple forms on one page]()
+* [Run multiple forms on one page](#run-multiple-forms-on-one-page)
 * [Multilanguage](#multi-language)
 
 

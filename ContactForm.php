@@ -318,6 +318,7 @@ class ContactForm extends Form
      */
     protected function setShowRequiredFields(): void
     {
+
         foreach ($this->getFormElements() as $field) {
 
             $configFieldNameRequired = $this->generateConfigFieldname($field->className(), 'required');
@@ -325,7 +326,7 @@ class ContactForm extends Form
 
             // add field to form if config is set to show and field is not part of the formElements array at the moment
 
-            if ($this->frontendcontact_config[$configFieldNameShow]) {
+            if (isset($this->frontendcontact_config[$configFieldNameShow])) {
                 if ($field instanceof Inputfields) {
 
                     if ((isset($this->frontendcontact_config[$configFieldNameRequired])) && ($this->frontendcontact_config[$configFieldNameRequired])) {

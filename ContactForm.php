@@ -245,7 +245,9 @@ class ContactForm extends Form
                             break;
                         case('FieldtypeOptions'):
                             $userField = $this->user->{$field->name};
-                            $this->{$stored_name} = $userField->title;
+                            if($userField->title){
+                                $this->{$stored_name} = $userField->title;
+                            }
                             if ($this->{$stored_name}) { // only if a value is stored inside the database
                                 $formfield = $this->getFormElementByName($name);
                                 if ($formfield) {

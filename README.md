@@ -121,7 +121,7 @@ TRUE: The form field will be displayed on the form
 
 FALSE: The form field will not be included in the form
 
-BTW: You do not have to enter the value false inside the parenthesis - you can leave them empty
+BTW: You do not have to enter the value false inside the parenthesis - you can leave them empty ;-)
 
 ```php
 $form->showGender(true); // gender field will be included

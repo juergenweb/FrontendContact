@@ -328,10 +328,13 @@ class ContactForm extends Form
             if((array_key_exists($configFieldNameShow, $this->frontendcontact_config) && ($this->frontendcontact_config[$configFieldNameShow])) || (!array_key_exists($configFieldNameShow, $this->frontendcontact_config))){
                 if ($field instanceof Inputfields) {
 
-                    if ((isset($this->frontendcontact_config[$configFieldNameRequired])) && ($this->frontendcontact_config[$configFieldNameRequired])) {
-                        $field->setRule('required');
-                    } else {
-                        $field->removeRule('required');
+                    // run only on pre-defined fields
+                    if(array_key_exists($configFieldNameShow, $this->frontendcontact_config)){
+                        if ((isset($this->frontendcontact_config[$configFieldNameRequired])) && ($this->frontendcontact_config[$configFieldNameRequired])) {
+                            $field->setRule('required');
+                        } else {
+                            $field->removeRule('required');
+                        }
                     }
                 }
             } else {

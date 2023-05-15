@@ -245,13 +245,10 @@ class ContactForm extends Form
                             break;
                         case('FieldtypeOptions'):
                             $userField = $this->user->{$field->name};
-                            if($userField->title){
-                                $this->{$stored_name} = $userField->title;
-                            }
-                            if ($this->{$stored_name}) { // only if a value is stored inside the database
+                            if ($userField->title) { // only if a value is stored inside the database
                                 $formfield = $this->getFormElementByName($name);
                                 if ($formfield) {
-                                    $formfield->setAttribute('value', $userField->title);
+                                    $formfield->setDefaultValue($userField->title);
                                     $formfield->setAttribute('disabled');
                                 }
                             }

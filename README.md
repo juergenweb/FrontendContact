@@ -143,6 +143,8 @@ $form->requiredSurname(); // surname field will not be required
 $form->requiredSubject(true); // subject field will be required
 ```
 
+All other fields (message, email, data privacy, file upload and send copy) have a fixed status and cannot be changed to required or not.
+
 #### Change the position of a specific field inside the form
 I have set the order of the default fields inside the form according to my preferences. Maybe you disagree with me and you want to change the position of a field to be on another place. 
 

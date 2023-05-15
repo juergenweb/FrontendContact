@@ -22,7 +22,7 @@ The main goal was to add a complete working contactform with only one short line
 ## Requirements
 - ProcessWire 3.0.195 or newer
 - PHP 8.0 or newer
-- FrontendForms 2.1.30 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
+- FrontendForms 2.1.36 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
 
 ## Highlights
 - Fast and easy integration of a contact form inside a template by using only one line of code

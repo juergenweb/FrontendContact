@@ -179,7 +179,7 @@ To grab each form field object you have to use the FrontendForms method getEleme
 So please do not wonder, if your manual changing of the required status has no effect in this case. Please note: This will only happen if a user is logged in.
 
 ```php
-$genderfield = $form->getElementByName('contact-form-gender'); // returns the gender field object
+$genderfield = $form->getFormElementByName('contact-form-gender'); // returns the gender field object, please take a look inside the source code to get the correct name attribute of the field
 ```
 Now you can add fe some custom classes for styling purposes:
 

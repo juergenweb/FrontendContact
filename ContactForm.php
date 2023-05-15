@@ -325,8 +325,7 @@ class ContactForm extends Form
             $configFieldNameShow = $this->generateConfigFieldname($field->className(), 'show');
 
             // add field to form if config is set to show and field is not part of the formElements array at the moment
-
-            if (isset($this->frontendcontact_config[$configFieldNameShow])) {
+            if((array_key_exists($configFieldNameShow, $this->frontendcontact_config) && ($this->frontendcontact_config[$configFieldNameShow])) || (!array_key_exists($configFieldNameShow, $this->frontendcontact_config))){
                 if ($field instanceof Inputfields) {
 
                     if ((isset($this->frontendcontact_config[$configFieldNameRequired])) && ($this->frontendcontact_config[$configFieldNameRequired])) {
@@ -473,15 +472,19 @@ class ContactForm extends Form
         // set required status do fields
         $this->setShowRequiredFields();
 
+
         // map user data as value to the form fields if user is logged in
         $this->setMappedDataToField();
 
         // send attachments
         $this->mail->sendAttachments($this);
 
+
         if ($this->___isValid()) {
             $this->sendEmail();
         }
+
+
 
         return parent::render();
     }

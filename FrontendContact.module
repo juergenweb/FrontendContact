@@ -267,15 +267,22 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
     protected function checkForEmail(HookEvent $event): void
     {
-        if($_REQUEST['name'] == 'FrontendContact'){
+
+        if(array_key_exists('name',$_REQUEST) && $_REQUEST['name'] == 'FrontendContact'){
             $noemail = false;
             if(($this->input_emailtype == 'text') && ($this->input_default_to == '')){
                 $noemail = true;
-            } else if(($this->input_emailtype == 'pwfield') && (($this->input_defaultPWField_to == 'none') || (is_null($this->input_defaultPWField_to)))){
-                $noemail = true;
+            } else if($this->input_emailtype == 'pwfield') {
+
+                if (is_null($this->input_defaultPWField_to)) {
+                    $noemail = true;
+                } else {
+                    // check if field has a value
+                    if(!$this->getEmailValue()){
+                        $noemail = true;
+                    }
+                }
             }
-            bd($this->input_emailtype);
-            bd($this->input_default_to);
             if($noemail){
                 $this->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
             }

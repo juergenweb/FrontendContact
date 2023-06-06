@@ -269,14 +269,13 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     {
 
         if($_REQUEST['name'] == 'FrontendContact'){
-            bd($this->wire('modules')->getConfig($this));
-            $return = false;
+            $noemail = false;
             if(($this->input_emailtype == 'text') && ($this->input_default_to == '')){
-                $return = true;
+                $noemail = true;
             } else if(($this->input_emailtype == 'pwfield') && ($this->input_defaultPWField_to == null)){
-                $return = true;
+                $noemail = true;
             }
-            if($return){
+            if($noemail){
                 $this->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
             }
         }

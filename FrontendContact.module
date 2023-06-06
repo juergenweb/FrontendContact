@@ -35,7 +35,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     protected string|int|null $input_sendCopy_show = 0;
     protected string $input_emailtype = 'none';
     protected string $input_default_to = '';
-    protected string $input_defaultPWField_to = 'none';
+    protected string|null $input_defaultPWField_to = 'none';
     protected string $input_emailTemplate = 'inherit';
     protected string|int|null $input_minTime = 3;
 
@@ -129,6 +129,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $this->addHookAfter('InputfieldSelect::processInput', $this, 'checkValueOfPWEmailField');
         // outputs examples how to overwrite global settings
         $this->addHookAfter('Inputfield::render', $this, 'overwriteExamplesNotes');
+        $this->addHookBefore('page::render', $this, 'checkForEmail');
     }
 
     /**
@@ -262,6 +263,23 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         }
         $field->entityEncodeText = false;
         $field->notes = $this->frontendForms->createAdditionalNotesText($fields[$field->name]);
+    }
+
+    protected function checkForEmail(HookEvent $event): void
+    {
+
+        if($_REQUEST['name'] == 'FrontendContact'){
+            bd($this->wire('modules')->getConfig($this));
+            $return = false;
+            if(($this->input_emailtype == 'text') && ($this->input_default_to == '')){
+                $return = true;
+            } else if(($this->input_emailtype == 'pwfield') && ($this->input_defaultPWField_to == null)){
+                $return = true;
+            }
+            if($return){
+                $this->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
+            }
+        }
     }
 
     /**
@@ -688,7 +706,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         //save default module configurations on install
         $data = self::getDefaultData();
         wire('modules')->saveConfig($this, $data);
-        $this->wire('session')->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
+        //$this->wire('session')->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
     }
 
 }

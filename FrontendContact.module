@@ -33,7 +33,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     protected string|int|null $input_fileUploadMultiple_show = 0;
     protected string|int|null $input_privacy_show = 1;
     protected string|int|null $input_sendCopy_show = 0;
-    protected string $input_emailtype = 'none';
+    protected string $input_emailtype = 'text';
     protected string $input_default_to = '';
     protected string|null $input_defaultPWField_to = 'none';
     protected string $input_emailTemplate = 'inherit';
@@ -202,9 +202,9 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
             'input_fileUploadMultiple_show' => 0,
             'input_privacy_show' => 1,
             'input_sendCopy_show' => 0,
-            'input_emailtype' => 'none',
+            'input_emailtype' => 'text',
             'input_default_to' => '',
-            'input_defaultPWField_to' => 'none',
+            'input_defaultPWField_to' => null,
             'input_emailTemplate' => 'inherit',
             'input_minTime' => 3
         ];
@@ -267,14 +267,15 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
     protected function checkForEmail(HookEvent $event): void
     {
-
         if($_REQUEST['name'] == 'FrontendContact'){
             $noemail = false;
             if(($this->input_emailtype == 'text') && ($this->input_default_to == '')){
                 $noemail = true;
-            } else if(($this->input_emailtype == 'pwfield') && ($this->input_defaultPWField_to == null)){
+            } else if(($this->input_emailtype == 'pwfield') && (($this->input_defaultPWField_to == 'none') || (is_null($this->input_defaultPWField_to)))){
                 $noemail = true;
             }
+            bd($this->input_emailtype);
+            bd($this->input_default_to);
             if($noemail){
                 $this->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
             }

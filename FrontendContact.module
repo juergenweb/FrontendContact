@@ -706,7 +706,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         //save default module configurations on install
         $data = self::getDefaultData();
         wire('modules')->saveConfig($this, $data);
-        //$this->wire('session')->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
+        $this->wire('session')->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
     }
 
 }

@@ -16,6 +16,7 @@ namespace FrontendContact;
 use Exception;
 use FrontendForms\Button;
 use FrontendForms\Email;
+use FrontendForms\FileUploadMultiple;
 use FrontendForms\Form;
 use FrontendForms\Gender;
 use FrontendForms\Inputfields;
@@ -42,6 +43,7 @@ class ContactForm extends Form
     protected Subject $subject; // the subject field object
     protected Message $message; // the message field object
     protected Privacy $privacy; // the privacy field object
+    protected FileUploadMultiple $fileUploadMultiple;  // the file-upload field
     protected SendCopy $sendCopy; // send copy field object
     protected Button $button; // the button object
     protected WireMail $mail; // the WireMail object for sending mails
@@ -103,7 +105,9 @@ class ContactForm extends Form
                 $this->receiverAddress = $this->frontendcontact_config['input_default_to']; // manually entered mail address
                 break;
             case('pwfield'):
-                $this->receiverAddress = $this->frontendcontact_config['input_defaultPWField_to']; // value of a PW field
+                $field = $this->wire('fields')->get($this->frontendcontact_config['input_defaultPWField_to']);
+                $database = $this->wire('database');
+                $this->receiverAddress = FrontendContact::getPWEmail($field, $database);
                 break;
         }
 

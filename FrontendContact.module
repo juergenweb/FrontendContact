@@ -100,7 +100,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * Array that holds the module info data
      * @return array
      */
-    public static function getModuleInfo(): array
+    public static function getModuleInfo():array
     {
         return [
             'title' => 'FrontendContact',
@@ -120,7 +120,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function init(): void
+    protected function init():void
     {
         // only works if user is logged in
         if ($this->user->isLoggedin()) {
@@ -139,7 +139,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function getUserfieldsOfType(string $classname): array
+    protected function getUserfieldsOfType(string $classname):array
     {
         $fields = [];
         foreach ($this->userfields as $id => $name) {
@@ -161,7 +161,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function checkValueOfPWEmailField($event): void
+    protected function checkValueOfPWEmailField($event):void
     {
         $field = $event->object;
         if ($field->name === 'input_defaultPWField_to') {
@@ -185,7 +185,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * This is necessary to get them via getModuleConfig() inside the classes without saving the configuration page after installation
      * @return array
      */
-    public static function getDefaultData(): array
+    public static function getDefaultData():array
     {
         return [
             'input_gender_show' => 1,
@@ -217,7 +217,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * @throws WireException
      * @throws WirePermissionException
      */
-    private function getUserFields(): array
+    private function getUserFields():array
     {
         // get array of all editable user template fields
         $fields = $this->wire('modules')->get('ProcessProfile');
@@ -240,7 +240,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * @param HookEvent $event
      * @return void
      */
-    protected function overwriteExamplesNotes(HookEvent $event): void
+    protected function overwriteExamplesNotes(HookEvent $event):void
     {
         $field = $event->object;
         $fields = [
@@ -265,25 +265,32 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $field->notes = $this->frontendForms->createAdditionalNotesText($fields[$field->name]);
     }
 
-    protected function checkForEmail(HookEvent $event): void
+    /**
+     * Check if a default email address is set, otherwise output a warning on page load
+     * @return void
+     * @throws WirePermissionException
+     * @throws WireException
+     */
+    protected function checkForEmail():void
     {
 
-        if(array_key_exists('name',$_REQUEST) && $_REQUEST['name'] == 'FrontendContact'){
+        if (array_key_exists('name', $_REQUEST) && $_REQUEST['name'] == 'FrontendContact') {
             $noemail = false;
-            if(($this->input_emailtype == 'text') && ($this->input_default_to == '')){
+            if (($this->input_emailtype == 'text') && ($this->input_default_to == '')) {
                 $noemail = true;
-            } else if($this->input_emailtype == 'pwfield') {
-
-                if (is_null($this->input_defaultPWField_to)) {
-                    $noemail = true;
-                } else {
-                    // check if field has a value
-                    if(!$this->getEmailValue()){
+            } else {
+                if ($this->input_emailtype == 'pwfield') {
+                    if (is_null($this->input_defaultPWField_to)) {
                         $noemail = true;
+                    } else {
+                        // check if field has a value
+                        if (!$this->getEmailValue()) {
+                            $noemail = true;
+                        }
                     }
                 }
             }
-            if($noemail){
+            if ($noemail) {
                 $this->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
             }
         }
@@ -295,7 +302,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * @throws WireException
      * @throws WirePermissionException
      */
-    public function getModuleConfigInputfields(InputfieldWrapper $inputfields): void
+    public function getModuleConfigInputfields(InputfieldWrapper $inputfields):void
     {
 
         $formfieldsFieldset = $this->wire('modules')->get('InputfieldFieldset');
@@ -640,9 +647,11 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $text .= 'echo $form->render();// ' . $this->_('Render the form') . '<br>';
         $text .= '</code></pre>';
         $link = '<a href ="https://github.com/juergenweb/FrontendForms\" target="_blank">docs</a>';
-        $text .= '<p>' . sprintf($this->_('Some methods used in the example above are from the FrontendForms module and are explained in the %s of this module.'), $link) . '</p>';
+        $text .= '<p>' . sprintf($this->_('Some methods used in the example above are from the FrontendForms module and are explained in the %s of this module.'),
+                $link) . '</p>';
         $githublink = '<a href ="https://github.com/juergenweb/FrontendContact/tree/main/examples" target="_blank">' . $this->_('examples folder') . '</a>';
-        $text .= '<p>' . sprintf($this->_('You will find more examples on GitHub inside the %s. Please study these examples on how to customize the contact form.'), $githublink) . '</p>';
+        $text .= '<p>' . sprintf($this->_('You will find more examples on GitHub inside the %s. Please study these examples on how to customize the contact form.'),
+                $githublink) . '</p>';
         $description = $this->wire()->modules->get('InputfieldMarkup');
         $description->markupText = $text;
         $docFieldset->add($description);
@@ -656,7 +665,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function getEmailValue(): ?string
+    protected function getEmailValue():?string
     {
         // get email value from selected field if selected
         if ($this->input_defaultPWField_to) {
@@ -684,21 +693,20 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      * @return ContactForm
      * @throws WireException
      */
-    public function getForm(string|null $id = null): ContactForm
+    public function getForm(string|null $id = null):ContactForm
     {
         if (is_null($id)) {
             $id = 'contact-form';
         }
         return new ContactForm($id);
     }
-
-
+    
     /**
      * Render the form on the frontend
      * @return string
      * @throws WireException
      */
-    public function render(): string
+    public function render():string
     {
         return $this->getForm()->render();
     }
@@ -706,16 +714,17 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     /**
      * Run during install
      * @return void
-     * @throws WireException
      */
-    public function ___install(): void
+    public function ___install():void
     {
-        //save default module configurations on install
+        //save default module configurations on install, to be reachable inside the FrontendContact class
         $data = self::getDefaultData();
         wire('modules')->saveConfig($this, $data);
-        //$this->wire('session')->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
     }
 
+    /**
+     * @throws WireException
+     */
     public function ___uninstall():void
     {
         $this->wire('session')->removeNotices();

@@ -659,6 +659,22 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
     }
 
+    public static function getPWEmail($field, $database): ?string
+    {
+        $query = $database->prepare('SELECT data FROM ' . $field->getTable() . ' LIMIT 1');
+        $query->execute();
+        $result = $query->fetchAll();
+        if ($result) {
+            while ($row = $result) {
+                $email = $row[0]['data'];
+                if ($email) {
+                    return $email; // return the email value from the field
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Grab the email field if set, query the value from the database and save it to the module configuration
      * @return string|null
@@ -700,7 +716,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         }
         return new ContactForm($id);
     }
-    
+
     /**
      * Render the form on the frontend
      * @return string

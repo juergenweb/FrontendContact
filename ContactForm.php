@@ -14,6 +14,7 @@ namespace FrontendContact;
  */
 
 use Exception;
+use FrontendForms\Alert;
 use FrontendForms\Button;
 use FrontendForms\Email;
 use FrontendForms\FileUploadMultiple;
@@ -106,7 +107,9 @@ class ContactForm extends Form
             case('pwfield'):
                 $field = $this->wire('fields')->get($this->frontendcontact_config['input_defaultPWField_to']);
                 $database = $this->wire('database');
-                $this->receiverAddress = FrontendContact::getPWEmail($field, $database);
+                if(FrontendContact::getPWEmail($field, $database)){
+                    $this->receiverAddress = FrontendContact::getPWEmail($field, $database);
+                }
                 break;
         }
 
@@ -464,9 +467,13 @@ class ContactForm extends Form
      */
     public function render():string
     {
-        // check if a receiver address is set
+        // check if a receiver address is set, otherwise display a warning
         if (!$this->receiverAddress) {
-            throw new Exception("Email address for the recipient is missing, so email could not be sent.", 1);
+            //throw new Exception("Email address for the recipient is missing.", 1);
+            $alert = new Alert();
+            $alert->setText($this->_('Email address for the recipient is missing, so the form will not be displayed.'));
+            $alert->setCSSClass('alert_warningClass');
+            return $alert->render();
         }
 
         // set required status do fields

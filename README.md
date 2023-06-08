@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![ProcessWire 3](https://img.shields.io/badge/ProcessWire-3.x-orange.svg)](https://github.com/processwire/processwire)
 
-> ⚠ This module is very Alpha stage - so be aware of using it on live sites!
+> ⚠ This module is Beta stage - so be aware of using it on live sites!
 Only works in combination with the FrontendForms module - so please download this module first.
 
 A configurable module for ProcessWire for outputting one or more contact forms on your site based on the FrontendForms module.

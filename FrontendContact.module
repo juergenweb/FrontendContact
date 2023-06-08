@@ -71,7 +71,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     public function __construct()
     {
         parent::__construct();
-        
+
         //  set the property values from the configuration settings from DB
         foreach ($this->wire('modules')->getConfig($this) as $key => $value) {
             $this->$key = $value;
@@ -117,6 +117,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      */
     protected function init():void
     {
+
         // only works if user is logged in
         if ($this->user->isLoggedin()) {
             $this->userfields = $this->getUserFields();
@@ -124,6 +125,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $this->addHookAfter('InputfieldSelect::processInput', $this, 'checkValueOfPWEmailField');
         // outputs examples how to overwrite global settings
         $this->addHookAfter('Inputfield::render', $this, 'overwriteExamplesNotes');
+        // check if a valid default email is present, otherwise output a warning message
         $this->addHookBefore('page::render', $this, 'checkForEmail');
     }
 
@@ -269,7 +271,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     protected function checkForEmail():void
     {
         $has_value = true;
-        switch($this->input_emailtype){
+        switch ($this->input_emailtype) {
             case('text'):
                 if (!filter_var($this->input_default_to, FILTER_VALIDATE_EMAIL)) {
                     $has_value = false;
@@ -283,10 +285,12 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
                 }
                 break;
         }
-        if(!$has_value){
-            $this->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
-        }
 
+        $this->warnings('clear all');// remove all warnings to prevent displaying again after redirect
+        if (!$has_value) {
+            $this->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
+
+        }
     }
 
     /**
@@ -333,7 +337,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $gender_userfield->addOptions($this->getUserfieldsOfType('FieldtypeOptions'));
         $gender_userfield->defaultValue = 'none';
         $gender_userfield->attr('value', $this->input_gender_userfield_mapped);
-        $gender_userfield->description = $this->_('The value of this user field will be used as the form value, if the user is logged in.');;
+        $gender_userfield->description = $this->_('The value of this user field will be used as the form value, if the user is logged in.');
         $gender_userfield->notes = sprintf($this->_('Only fields of the type "%s" can be selected.'),
             'FieldtypeOptions');
         $gender_userfield->showIf = 'input_gender_show=1';
@@ -361,7 +365,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $name_required = $this->wire()->modules->get('InputfieldCheckbox');
         $name_required->attr('name', 'input_name_required');
         $name_required->attr('checked', $this->input_name_required == '1' ? 'checked' : '');
-        $name_required->label = $this->_('Mark this field as mandatory');;
+        $name_required->label = $this->_('Mark this field as mandatory');
         $name_required->showIf = 'input_name_show=1';
         $name_required->columnWidth = 33;
         $nameFieldset->add($name_required);
@@ -373,7 +377,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $name_userfield->addOptions($this->getUserfieldsOfType('FieldtypeText'));
         $name_userfield->defaultValue = 'none';
         $name_userfield->attr('value', $this->input_name_userfield_mapped);
-        $name_userfield->description = $this->_('The value of this user field will be used as the form value, if the user is logged in.');;
+        $name_userfield->description = $this->_('The value of this user field will be used as the form value, if the user is logged in.');
         $name_userfield->notes = sprintf($this->_('Only fields of the type "%s" can be selected.'), 'FieldtypeText');
         $name_userfield->showIf = 'input_name_show=1';
         $name_userfield->columnWidth = 34;
@@ -400,7 +404,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $surname_required = $this->wire()->modules->get('InputfieldCheckbox');
         $surname_required->attr('name', 'input_surname_required');
         $surname_required->attr('checked', $this->input_surname_required == '1' ? 'checked' : '');
-        $surname_required->label = $this->_('Mark this field as mandatory');;
+        $surname_required->label = $this->_('Mark this field as mandatory');
         $surname_required->showIf = 'input_surname_show=1';
         $surname_required->columnWidth = 33;
         $surnameFieldset->add($surname_required);
@@ -412,7 +416,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $surname_userfield->addOptions($this->getUserfieldsOfType('FieldtypeText'));
         $surname_userfield->defaultValue = 'none';
         $surname_userfield->attr('value', $this->input_surname_userfield_mapped);
-        $surname_userfield->description = $this->_('The value of this user field will be used as the form value, if the user is logged in.');;
+        $surname_userfield->description = $this->_('The value of this user field will be used as the form value, if the user is logged in.');
         $surname_userfield->notes = sprintf($this->_('Only fields of the type "%s" can be selected.'), 'FieldtypeText');
         $surname_userfield->showIf = 'input_surname_show=1';
         $surname_userfield->columnWidth = 33;
@@ -439,7 +443,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
         $subject_required = $this->wire()->modules->get('InputfieldCheckbox');
         $subject_required->attr('name', 'input_subject_required');
         $subject_required->attr('checked', $this->input_subject_required == '1' ? 'checked' : '');
-        $subject_required->label = $this->_('Mark this field as mandatory');;
+        $subject_required->label = $this->_('Mark this field as mandatory');
         $subject_required->showIf = 'input_subject_show=1';
         $subject_required->columnWidth = 50;
         $subjectFieldset->add($subject_required);
@@ -652,7 +656,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
     }
 
-    public static function getPWEmail($field, $database): ?string
+    public static function getPWEmail($field, $database):?string
     {
         $query = $database->prepare('SELECT data FROM ' . $field->getTable() . ' LIMIT 1');
         $query->execute();

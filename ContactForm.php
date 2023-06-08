@@ -31,7 +31,6 @@ use ProcessWire\FrontendContact;
 use ProcessWire\WireException;
 use ProcessWire\WirePermissionException;
 
-
 class ContactForm extends Form
 {
 
@@ -134,7 +133,6 @@ class ContactForm extends Form
      * @param $params
      * @return bool|mixed|object
      */
-
     public function __call($func, $params)
     {
         if (in_array($func, $this->methodList)) {
@@ -164,7 +162,7 @@ class ContactForm extends Form
      * @param string $string
      * @return ContactForm
      */
-    public function subject(string $string): self
+    public function subject(string $string):self
     {
         $m = $this->getMail();
         $m->subject($string);
@@ -178,7 +176,7 @@ class ContactForm extends Form
      * @throws WireException
      * @throws Exception
      */
-    public function to(string $email): self
+    public function to(string $email):self
     {
         $m = $this->getMail();
         if ($this->wire('sanitizer')->email($email)) {
@@ -195,7 +193,7 @@ class ContactForm extends Form
      * This is needed to change email templates on per WireMail base
      * @return WireMail
      */
-    public function getMail(): WireMail
+    public function getMail():WireMail
     {
         return $this->mail;
     }
@@ -206,7 +204,7 @@ class ContactForm extends Form
      * The appendix "_mapped" will be used to identify those fields
      * @return array
      */
-    protected function getMappedFields(): array
+    protected function getMappedFields():array
     {
         return array_filter($this->frontendcontact_config, function ($key) {
             return strpos($key, '_mapped');
@@ -220,12 +218,10 @@ class ContactForm extends Form
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function setMappedDataToField(): void
+    protected function setMappedDataToField():void
     {
         if ($this->user->isLoggedin()) {
-
             foreach ($this->getMappedFields() as $k => $v) {
-
                 if ($v != 'none') {
                     // get the user field
                     $field = $this->wire('fields')->get($this->frontendcontact_config[$k]);
@@ -258,11 +254,8 @@ class ContactForm extends Form
                             }
                             break;
                     }
-
                 }
-
             }
-
             //Email will always be set from the database
             $this->getFormElementByName('email')->setAttribute('value', $this->user->email)->setAttribute('disabled');
         }
@@ -274,7 +267,7 @@ class ContactForm extends Form
      * @throws WireException
      * @throws WirePermissionException
      */
-    protected function adaptGenderSelect(): void
+    protected function adaptGenderSelect():void
     {
 
         if (($this->frontendcontact_config['input_gender_show']) && ($this->frontendcontact_config['input_gender_userfield_mapped'] != 'none')) {
@@ -305,7 +298,7 @@ class ContactForm extends Form
      * @param string $suffix
      * @return string
      */
-    protected function generateConfigFieldname(string $className, string $suffix): string
+    protected function generateConfigFieldname(string $className, string $suffix):string
     {
         $className = lcfirst($className);
         $createName = ['input', $className, $suffix];
@@ -317,7 +310,7 @@ class ContactForm extends Form
      * Set a field to required or not, depending on the settings in the backend or on per form base
      * @return void
      */
-    protected function setShowRequiredFields(): void
+    protected function setShowRequiredFields():void
     {
 
         foreach ($this->getFormElements() as $field) {
@@ -326,11 +319,13 @@ class ContactForm extends Form
             $configFieldNameShow = $this->generateConfigFieldname($field->className(), 'show');
 
             // add field to form if config is set to show and field is not part of the formElements array at the moment
-            if((array_key_exists($configFieldNameShow, $this->frontendcontact_config) && ($this->frontendcontact_config[$configFieldNameShow])) || (!array_key_exists($configFieldNameShow, $this->frontendcontact_config))){
+            if ((array_key_exists($configFieldNameShow,
+                        $this->frontendcontact_config) && ($this->frontendcontact_config[$configFieldNameShow])) || (!array_key_exists($configFieldNameShow,
+                    $this->frontendcontact_config))) {
                 if ($field instanceof Inputfields) {
 
                     // run only on pre-defined fields
-                    if(array_key_exists($configFieldNameShow, $this->frontendcontact_config)){
+                    if (array_key_exists($configFieldNameShow, $this->frontendcontact_config)) {
                         if ((isset($this->frontendcontact_config[$configFieldNameRequired])) && ($this->frontendcontact_config[$configFieldNameRequired])) {
                             $field->setRule('required');
                         } else {
@@ -351,7 +346,7 @@ class ContactForm extends Form
      * @return void
      * @throws Exception
      */
-    protected function createAllFormFields(): void
+    protected function createAllFormFields():void
     {
         foreach (FrontendContact::$formFields as $className) {
             $propName = lcfirst($className);
@@ -364,8 +359,9 @@ class ContactForm extends Form
     /**
      * Grab all POST values and put them into one string for sending it with the mail
      * @return array
+     * @throws WireException
      */
-    protected function createDataPlaceholder(): array
+    protected function createDataPlaceholder():array
     {
         $values = $this->getValues();
         // remove privacy and send copy values from post array
@@ -395,7 +391,7 @@ class ContactForm extends Form
      * @throws WireException
      * @throws Exception
      */
-    public function sendEmail(): void
+    public function sendEmail():void
     {
 
         // create all placeholders including values stored inside the database
@@ -466,7 +462,7 @@ class ContactForm extends Form
      * @throws WireException
      * @throws Exception
      */
-    public function render(): string
+    public function render():string
     {
         // check if a receiver address is set
         if (!$this->receiverAddress) {
@@ -476,19 +472,15 @@ class ContactForm extends Form
         // set required status do fields
         $this->setShowRequiredFields();
 
-
         // map user data as value to the form fields if user is logged in
         $this->setMappedDataToField();
 
         // send attachments
         $this->mail->sendAttachments($this);
 
-
         if ($this->___isValid()) {
             $this->sendEmail();
         }
-
-
 
         return parent::render();
     }

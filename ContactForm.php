@@ -54,6 +54,7 @@ class ContactForm extends Form
     protected string $stored_surname = '';
     protected string $stored_email = '';
     protected bool $custom_receiver = false;
+    protected string $receiverAddress = '';
 
     protected array $frontendcontact_config = [];
 

@@ -55,6 +55,7 @@ class ContactForm extends Form
     protected string $stored_email = '';
     protected bool $custom_receiver = false;
     protected string $receiverAddress = '';
+    protected string|null $senderAddress = null;
 
     protected array $frontendcontact_config = [];
 
@@ -189,6 +190,18 @@ class ContactForm extends Form
         } else {
             throw new Exception("Email address for the recipient is not a valid email address.", 1);
         }
+        return $this;
+    }
+
+    /**
+     * Alias function for the WireMail function from() to overwrite the sender address for the mail on per form base
+     * @param string $from
+     * @return $this
+     * @throws \ProcessWire\WireException
+     */
+    public function from(string $from): self
+    {
+        $this->senderAddress = trim($from);
         return $this;
     }
 
@@ -432,7 +445,12 @@ class ContactForm extends Form
             $sender = $data[$this->getID() . '-email'];
         }
 
-        $this->mail->from($data[$this->getID() . '-email'], $sender);
+        if($this->senderAddress === null){
+            $this->mail->from($data[$this->getID() . '-email'], $sender);
+        } else {
+            $this->mail->from($this->senderAddress);
+        }
+
 
         // create subject string
         if (!$this->mail->subject) {

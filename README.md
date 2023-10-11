@@ -34,6 +34,7 @@ The main goal was to add a complete working contactform with only one short line
 - Usage of all the benefits of [FrontendForms](https://github.com/juergenweb/FrontendForms#highlights) (fe. CAPTCHA, various security settings,...)
 - Multi-language
 - IP of the sender will be send with the email too, so you can use it for IP-blocking if you will get a lot of spam from a certain IP
+- Supports Ajax form submission (as introduced in FrontendForms 2.1.47)
 
 ## Table of contents
 * [Configuration](#configurations)

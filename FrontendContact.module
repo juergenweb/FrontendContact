@@ -105,7 +105,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
             'version' => '1.0.1',
             'singular' => true,
             'autoload' => true,
-            'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.36']
+            'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.50']
         ];
     }
 

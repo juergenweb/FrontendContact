@@ -18,7 +18,7 @@
     class FrontendContact extends WireData implements Module, ConfigurableModule
     {
 
-        // Declaration of properties of the module configuration
+        // Property declaration of the module configuration
         protected string|int|null $input_gender_show = 1;
         protected string|int|null $input_gender_required = 1;
         protected string|null $input_gender_userfield_mapped = 'none';
@@ -31,7 +31,7 @@
         protected string|int|null $input_subject_show = 1;
         protected string|int|null $input_subject_required = 1;
         protected string|int|null $input_fileUploadMultiple_show = 0;
-        protected string|int|null $input_privacy_show = 1;
+        protected string|int|null $input_privacy_show = 2;
         protected string|int|null $input_sendCopy_show = 0;
         protected string $input_emailtype = 'text';
         protected string $input_default_to = '';
@@ -42,8 +42,7 @@
         // array of all fields inside the user template
         protected array $userfields = [];
 
-
-        // list of all possible default fields of the contact form
+        // All possible default fields of the contact form
         public static array $formFields = [
             'Gender',
             'Name',
@@ -106,10 +105,10 @@
                 'summary' => 'Simple configurable contact form for ProcessWire based on the FrontendForms module.',
                 'author' => "Jürgen Kern",
                 'href' => 'https://github.com/juergenweb/FrontendContact',
-                'version' => '1.0.1',
+                'version' => '1.0.2',
                 'singular' => true,
                 'autoload' => true,
-                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.50']
+                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.51']
             ];
         }
 
@@ -122,7 +121,7 @@
         protected function init(): void
         {
 
-            // only works if user is logged in
+            // only works if a user is logged in
             if ($this->user->isLoggedin()) {
                 $this->userfields = $this->getUserFields();
             }
@@ -147,7 +146,7 @@
             foreach ($this->userfields as $id => $name) {
                 $field = $this->wire('fields')->get($id);
                 if (isset($field->type)) {
-                    $fields['none'] = $this->_('none'); // add empty option
+                    $fields['none'] = $this->_('none'); // add an empty option
                     if ($field->type->className() == $classname) {
                         $fields[$id] = $name;
                     }
@@ -203,7 +202,7 @@
                 'input_subject_show' => 1,
                 'input_subject_required' => 1,
                 'input_fileUploadMultiple_show' => 0,
-                'input_privacy_show' => 1,
+                'input_privacy_show' => 2,
                 'input_sendCopy_show' => 0,
                 'input_emailtype' => 'text',
                 'input_default_to' => '',
@@ -215,7 +214,7 @@
 
         /**
          * Get all fields inside the user template which can be selected to map form fields
-         * Please note: Only user fields which are editable by the user will be taken into account
+         * Please note: Only user fields, which are editable by the user, will be taken into account
          * @return array - key: field id, value: field name
          * @throws WireException
          * @throws WirePermissionException
@@ -238,7 +237,7 @@
         }
 
         /**
-         * Array that holds all examples on how to overwrite global setting on per form base
+         * Array that holds all examples on how to overwrite global setting on per-form base
          * These examples will be displayed under the input fields in the module configuration
          * @param HookEvent $event
          * @return void
@@ -478,7 +477,7 @@
             $sendCopyFieldset->collapsed = true;
             $sendCopyFieldset->columnWidth = 100;
 
-            // Show or hide send copy checkbox on form
+            // Show or hide "send copy checkbox" on form
             $sendCopy_show = $this->wire()->modules->get('InputfieldCheckbox');
             $sendCopy_show->attr('name', 'input_sendCopy_show');
             $sendCopy_show->attr('checked', $this->input_sendCopy_show == '1' ? 'checked' : '');
@@ -729,12 +728,12 @@
         }
 
         /**
-         * Run during install
+         * Run during installation
          * @return void
          */
         public function ___install(): void
         {
-            //save default module configurations on install, to be reachable inside the FrontendContact class
+            //save default module configurations on installation, to be reachable inside the FrontendContact class
             $data = self::getDefaultData();
             wire('modules')->saveConfig($this, $data);
         }

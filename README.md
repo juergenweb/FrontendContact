@@ -214,12 +214,12 @@ You can run as many forms on one page as you need. The only thing you have to ta
 
 ```php
 $form1 = $modules->get('FrontendContact')->getForm('form1'); // add id inside the getForm() method
-$form1->to('juergen.kern@linznet.at'); // add a receiver email address for form 1
+$form1->to('email1@example.com'); // add a receiver email address for form 1
 //$form1->subject('Message via form 1'); // optional if you want to set a fixed subject
 echo $form1->render();
 
 $form2 = $modules->get('FrontendContact')->getForm('form2'); // add id inside the getForm() method
-$form2->to('webdesign@linznet.at'); // add a receiver email address for form 2
+$form2->to('email2@example.com'); // add a receiver email address for form 2
 //$form2->subject('Message via form 2'); // optional if you want to set a fixed subject
 echo $form2->render();
 ```

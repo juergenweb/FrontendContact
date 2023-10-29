@@ -233,4 +233,4 @@ in the module for other users.
 
 ## To-Do
 * More testing
-* Possibly adding new features
+* Add possibility to save a mail to a new page too

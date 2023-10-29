@@ -38,6 +38,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
     protected string|null $input_defaultPWField_to = 'none';
     protected string $input_emailTemplate = 'inherit';
     protected string|int|null $input_minTime = 3;
+protected string $version = '';
 
     // array of all fields inside the user template
     protected array $userfields = [];
@@ -88,6 +89,7 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
         // grab FrontendForms module to be able to use some methods of it
         $this->frontendForms = wire('modules')->get('FrontendForms');
+ $this->version = $this->frontendForms->getModuleInfo()['version'];
 
     }
 
@@ -720,7 +722,13 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
      */
     public function ___install():void
     {
-        //save default module configurations on install, to be reachable inside the FrontendContact class
+        $requiredVersion = '2.5.51';
+        if(version_compare($this->version, $requiredVersion, '>'))
+        {
+            throw new WireException(sprintf("This module requires FrontendForms %s or newer"), (int)$requiredVersion);
+        }
+
+//save default module configurations on install, to be reachable inside the FrontendContact class
         $data = self::getDefaultData();
         wire('modules')->saveConfig($this, $data);
     }

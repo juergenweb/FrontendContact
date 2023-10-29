@@ -45,7 +45,7 @@
         protected Subject $subject; // the subject field object
         protected Message $message; // the message field object
         protected FileUploadMultiple $fileUploadMultiple;  // the file-upload field
-        protected SendCopy $sendCopy; // send copy field object
+        protected SendCopy $sendCopy; // send the copy field object
         protected Privacy $privacy; // the privacy field object with the checkbox
         protected PrivacyText $privacyText; // the privacy hint text only
         protected Button $button; // the button object
@@ -131,7 +131,7 @@
             // create gender select options depending on a user field if a user field was mapped to it
             $this->adaptGenderSelect();
 
-            // set mandatory fields to show and to required
+            // set mandatory fields to show and to require
             $this->frontendcontact_config['input_email_show'] = true;
             $this->frontendcontact_config['input_message_show'] = true;
             $this->frontendcontact_config['input_button_show'] = true;
@@ -146,7 +146,7 @@
 
 
         /**
-         * Magic method used to set required status, add or remove a field or to get the field object on the fly
+         * Magic method used to set the required status, add or remove a field or to get the field object on the fly
          * The $methodList array will be used for allowed method calls
          * @param $func
          * @param $params
@@ -183,7 +183,7 @@
         }
 
         /**
-         * Alias function for the WireMail function subject() to set the subject for the mail on per form base
+         * Alias function for the WireMail function subject() to set the subject for the mail on per-form base
          * @param string $string
          * @return ContactForm
          */
@@ -195,7 +195,7 @@
         }
 
         /**
-         * Alias function for the WireMail function to() to set the receiver address for the mail on per form base
+         * Alias function for the WireMail function to() to set the receiver address for the mail on per-form base
          * @param string $email
          * @return $this
          * @throws WireException
@@ -217,7 +217,6 @@
          * Alias function for the WireMail function from() to overwrite the sender address for the mail on per form base
          * @param string $from
          * @return $this
-         * @throws \ProcessWire\WireException
          */
         public function from(string $from): self
         {
@@ -314,7 +313,7 @@
                 $fieldtypeGender = $this->wire('fields')->get($this->frontendcontact_config['input_gender_userfield_mapped']);
                 if ($fieldtypeGender) {
                     $type = $fieldtypeGender->type;
-                    // check if field is type of FieldtypeOptions
+                    // check if field is a type of FieldtypeOptions
                     if ($type->className() == 'FieldtypeOptions') {
                         $fieldtype = $type->getOptions($fieldtypeGender);
                         $lang = $this->wire('user')->language->id; // grab current lang id
@@ -344,7 +343,7 @@
         }
 
         /**
-         * Set a field to required or not, depending on the settings in the backend or on per form base
+         * Set a field to require or not, depending on the settings in the backend or on per-form base
          * @return void
          */
         protected function setShowRequiredFields(): void
@@ -401,11 +400,11 @@
         protected function createDataPlaceholder(): array
         {
             $values = $this->getValues();
-            // remove privacy and send copy values from post array
+            // remove privacy and send copy values from post-array
             unset($values [$this->getID() . '-privacy']);
             unset($values [$this->getID() . '-sendcopy']);
 
-            // create an extra placeholder containing all post values called all placeholders
+            // create an extra placeholder containing all post-values called all placeholders
             $placeholder = '';
             foreach ($values as $key => $value) {
                 $name = str_replace($this->getID() . '-', '', $key);
@@ -508,7 +507,7 @@
         public function render(): string
         {
 
-            // remove privacy field object depending on the configuration settings
+            // remove the privacy field object depending on the configuration settings
             switch ($this->frontendcontact_config['input_privacy_show']) {
                 case(1): // checkbox has been selected
                     // remove PrivacyText element
@@ -530,13 +529,13 @@
                 $alert = new Alert();
                 $alert->setText($this->_('Email address for the recipient is missing, so the form will not be displayed.'));
                 $alert->setCSSClass('alert_warningClass');
-                return $alert->render();
+                return $alert->___render();
             }
 
             // set required status do fields
             $this->setShowRequiredFields();
 
-            // map user data as value to the form fields if user is logged in
+            // map user data as value to the form fields if a user is logged in
             $this->setMappedDataToField();
 
             // send attachments

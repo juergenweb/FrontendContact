@@ -139,23 +139,11 @@
             $this->frontendcontact_config['input_message_required'] = true;
             $this->frontendcontact_config['input_privacy_required'] = true;
 
-            // remove privacy field object depending on the configuration settings
-            switch ($this->frontendcontact_config['input_privacy_show']) {
-                case(1): // checkbox has been selected
-                    // remove PrivacyText element
-                    $this->remove($this->privacyText);
-                    break;
-                case(2): // text only has been selected
-                    // remove Privacy element
-                    $this->remove($this->privacy);
-                    break;
-                default: // show none of them has been selected
-                    // remove both
-                    $this->remove($this->privacyText);
-                    $this->remove($this->privacy);
-            }
 
         }
+
+
+
 
         /**
          * Magic method used to set required status, add or remove a field or to get the field object on the fly
@@ -166,6 +154,8 @@
          */
         public function __call($func, $params)
         {
+            bd('gaga');
+
             if (in_array($func, $this->methodList)) {
                 $startsWith = substr($func, 0, 3);
 
@@ -173,8 +163,11 @@
 
                 switch ($startsWith) {
                     case('sho'):
+
                         $className = str_replace('show', '', $func);
                         $fieldName = $this->generateConfigFieldname($className, 'show');
+                        bd($fieldName);
+
                         $this->frontendcontact_config[$fieldName] = $param;
                         break;
                     case('req'):
@@ -186,6 +179,7 @@
 
             }
             return null;
+
         }
 
         /**
@@ -513,6 +507,24 @@
          */
         public function render(): string
         {
+
+            // remove privacy field object depending on the configuration settings
+            switch ($this->frontendcontact_config['input_privacy_show']) {
+                case(1): // checkbox has been selected
+                    // remove PrivacyText element
+                    $this->remove($this->privacyText);
+                    break;
+                case(2): // text only has been selected
+                    // remove Privacy element
+                    $this->remove($this->privacy);
+                    break;
+                default: // show none of them has been selected
+                    // remove both
+                    $this->remove($this->privacyText);
+                    $this->remove($this->privacy);
+            }
+
+
             // check if a receiver address is set, otherwise display a warning
             if (!$this->receiverAddress) {
                 $alert = new Alert();

@@ -22,7 +22,7 @@ The main goal was to add a complete working contactform with only one short line
 ## Requirements
 - ProcessWire 3.0.195 or newer
 - PHP 8.0 or newer
-- FrontendForms 2.1.36 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
+- FrontendForms 2.1.51 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
 
 ## Highlights
 - Fast and easy integration of a contact form inside a template by using only one line of code
@@ -47,11 +47,10 @@ The main goal was to add a complete working contactform with only one short line
 ## Configurations
 After you have installed the module, you have to set a default email address where the mails should be sent to. This email address can be entered manually or you can choose a ProcessWire field, which contains the email address. All other configuration options are optional.
 
-* **`Show or hide the following fields`** gender, name, surname, subject, file upload, privacy and send copy (email and message field are
-mandatory and therefore permanent and not selectable whether to be shown or not)
+* **`Show or hide the following fields`** gender, name, surname, subject, file upload, privacy and send copy (email and message field are mandatory and therefore permanent and not selectable whether to be shown or not)
 * **`Map the following fields to fields inside the user template`** email, gender, name, surname. If you have fields inside your user template which corresponds to fields inside the contact form, you can link them. This could be fe name, surname or email field. If a user is logged in, than the value of the appropriate mapped field of the user template will be set as value for that input field on the frontend
 * **`Set the following fields to required or not`** gender, name, surname, subject (send copy field is always
-optional and privacy field is always required. Therefore, for both fields the status cannot be changed)
+optional and privacy field is always required, if privacy checkbox has been selected. Therefore, for both fields the status cannot be changed)
 * **`Set a global receiver email address`** You can enter an email by text, or you can choose a PW field, which contains the value
 * **`Set a global minimum form submission time`** Set a global minimum time before a form is allowed to be submitted (spam protection)
 * **`Select email template`** Choose a HTML mail template for your email or send it as plain text
@@ -130,7 +129,7 @@ $form->showGender(true); // gender field will be included
 $form->showName(true); // name field will be included
 $form->showSurname(true); // surname field will be included
 $form->showSubject(false); // subject field will not be included
-$form->showPrivacy(); // privacy field will not be included
+$form->showPrivacy(0); // privacy field will not be included, 1: checkbox will be displayed, 2: privacy text will be displayed
 $form->showSendCopy(false); // send copy field will not be included
 $form->showFileUploadMultiple(false); // file upload field will not be included
 ```
@@ -173,6 +172,8 @@ $form->addAfter($name_field, $surname_field);
 ```
 
 Thats all! The name field has changed its position and will be after the the surname field. You can do this with other fields too if needed.
+
+Restriction: The privacy field position is always before the submit button and cannot be changed, because this is the place where it should be.
 
 #### Get fields for further customization methods
 Each field can be customized further individually. You have to use the methods from the FrontendForms module. You will find more information inside the readme file of the FrontendForms module - so take a look there.

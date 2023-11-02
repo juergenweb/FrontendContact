@@ -165,7 +165,6 @@
 
                         $className = str_replace('show', '', $func);
                         $fieldName = $this->generateConfigFieldname($className, 'show');
-                        bd($fieldName);
 
                         $this->frontendcontact_config[$fieldName] = $param;
                         break;

@@ -154,7 +154,6 @@
          */
         public function __call($func, $params)
         {
-            bd('gaga');
 
             if (in_array($func, $this->methodList)) {
                 $startsWith = substr($func, 0, 3);

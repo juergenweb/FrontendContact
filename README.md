@@ -55,6 +55,7 @@ optional and privacy field is always required, if privacy checkbox has been sele
 * **`Set a global receiver email address`** You can enter an email by text, or you can choose a PW field, which contains the value
 * **`Set a global minimum form submission time`** Set a global minimum time before a form is allowed to be submitted (spam protection)
 * **`Select email template`** Choose a HTML mail template for your email or send it as plain text
+* **`Select using an external mail service for sending mails`** If you have installed 3rd party modules for sending mails and these modules are compatible with this module, you can select if you want to use one of these modules for sending the mails of this module or not.
 
 Each global configuration setting can be overwritten on per form base.
 

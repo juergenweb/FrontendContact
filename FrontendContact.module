@@ -625,7 +625,6 @@
                 // Add the InputSelect for choosing a custom mail module for sending mails
                 if (FrontendForms::getNumberOfMailModules($modules) > 0) {
                     $this->input_mailmodule = 'none';
-                    bd($this);
                     $mailModuleSelect = FrontendForms::createMailModuleInputfield($modules, $this);
                     $emailFieldset->add($mailModuleSelect);
                 }

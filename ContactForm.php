@@ -100,7 +100,8 @@
             $this->frontendForms = $this->wire('modules')->get('FrontendForms');
 
             // instantiate the WireMail class object for sending the mails
-            $this->mail = new WireMail();
+            $mailInstance = (isset($this->frontendcontact_config['input_mailmodule'])) ? $this->frontendcontact_config['input_mailmodule'] : 'none'; // fallback
+            $this->mail = $this->newMailInstance($mailInstance );
 
             // set the title
             $this->mail->title($this->_('A new message via contact form'));
@@ -139,11 +140,7 @@
             $this->frontendcontact_config['input_message_required'] = true;
             $this->frontendcontact_config['input_privacy_required'] = true;
 
-
         }
-
-
-
 
         /**
          * Magic method used to set the required status, add or remove a field or to get the field object on the fly
@@ -482,7 +479,7 @@
             }
 
             // use HTML mail template or not
-            if ($this->input_emailTemplate != 'none') {
+            if ($this->get('input_emailTemplate') != 'none') {
                 $this->mail->bodyHTML($this->getMailPlaceholder('allvalues'));
             } else {
                 $this->mail->body($this->getMailPlaceholder('allvalues'));

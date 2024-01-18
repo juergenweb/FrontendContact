@@ -107,10 +107,10 @@
                 'summary' => 'Simple configurable contact form for ProcessWire based on the FrontendForms module.',
                 'author' => "Jürgen Kern",
                 'href' => 'https://github.com/juergenweb/FrontendContact',
-                'version' => '1.0.2',
+                'version' => '1.2.0',
                 'singular' => true,
                 'autoload' => true,
-                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.51']
+                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.57']
             ];
         }
 

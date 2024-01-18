@@ -37,7 +37,9 @@
         protected string $input_default_to = '';
         protected string|null $input_defaultPWField_to = 'none';
         protected string $input_emailTemplate = 'inherit';
+        protected string $input_mailmodule = 'none'; // Name of the custom module for sending mails
         protected string|int|null $input_minTime = 3;
+        protected array $config = []; // array containing the module configuration values
 
         // array of all fields inside the user template
         protected array $userfields = [];
@@ -73,7 +75,7 @@
         {
             parent::__construct();
 
-            //  set the property values from the configuration settings from DB
+            //  overwrite default values foreach property from the database
             foreach ($this->wire('modules')->getConfig($this) as $key => $value) {
                 $this->$key = $value;
             }
@@ -130,6 +132,7 @@
             $this->addHookAfter('Inputfield::render', $this, 'overwriteExamplesNotes');
             // check if a valid default email is present, otherwise output a warning message
             $this->addHookBefore('page::render', $this, 'checkForEmail');
+
         }
 
 
@@ -205,6 +208,7 @@
                 'input_privacy_show' => 2,
                 'input_sendCopy_show' => 0,
                 'input_emailtype' => 'text',
+                'input_mailmodule' => 'none',
                 'input_default_to' => '',
                 'input_defaultPWField_to' => null,
                 'input_emailTemplate' => 'inherit',
@@ -307,6 +311,8 @@
          */
         public function getModuleConfigInputfields(InputfieldWrapper $inputfields): void
         {
+
+            $modules = $this->wire()->modules;
 
             $formfieldsFieldset = $this->wire('modules')->get('InputfieldFieldset');
             $formfieldsFieldset->label = $this->_('Select and configure the fields of the contact-form');
@@ -615,6 +621,14 @@
                 $emailTemplate->description = $this->_('Select if you want to use a HTML template for the emails.');
                 $emailTemplate->notes = $this->_('Inherit from FrontendForms will take the setting from this module.');
                 $emailFieldset->add($emailTemplate);
+
+                // Add the InputSelect for choosing a custom mail module for sending mails
+                if (FrontendForms::getNumberOfMailModules($modules) > 0) {
+                    $this->input_mailmodule = 'none';
+                    bd($this);
+                    $mailModuleSelect = FrontendForms::createMailModuleInputfield($modules, $this);
+                    $emailFieldset->add($mailModuleSelect);
+                }
             }
 
             $inputfields->add($emailFieldset);

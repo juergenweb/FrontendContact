@@ -22,7 +22,7 @@ The main goal was to add a complete working contactform with only one short line
 ## Requirements
 - ProcessWire 3.0.195 or newer
 - PHP 8.0 or newer
-- FrontendForms 2.1.51 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
+- FrontendForms 2.1.57 or newer: Please download and install it from https://github.com/juergenweb/FrontendForms first.
 
 ## Highlights
 - Fast and easy integration of a contact form inside a template by using only one line of code
@@ -35,6 +35,7 @@ The main goal was to add a complete working contactform with only one short line
 - Multi-language
 - IP of the sender will be send with the email too, so you can use it for IP-blocking if you will get a lot of spam from a certain IP
 - Supports Ajax form submission (as introduced in FrontendForms 2.1.47)
+- Support for sending mails with the following 3rd party PW-modules: WireMailPostmark, WireMailPostmarkApp
 
 ## Table of contents
 * [Configuration](#configurations)

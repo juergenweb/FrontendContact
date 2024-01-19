@@ -101,7 +101,8 @@
 
             // instantiate the WireMail class object for sending the mails
             $mailInstance = (isset($this->frontendcontact_config['input_mailmodule'])) ? $this->frontendcontact_config['input_mailmodule'] : 'none'; // fallback
-            $this->mail = $this->newMailInstance($mailInstance );
+
+            $this->mail = $this->newMailInstance($mailInstance);
 
             // set the title
             $this->mail->title($this->_('A new message via contact form'));
@@ -460,12 +461,17 @@
                 $sender = $data[$this->getID() . '-email'];
             }
 
-            if ($this->senderAddress === null) {
-                $this->mail->from($data[$this->getID() . '-email'], $sender);
-            } else {
-                $this->mail->from($this->senderAddress);
+            // Set from value depending on settings
+            switch($this->frontendcontact_config['input_mailmodule']){
+                case('WireMailSmtp'):
+                    break;
+                default:
+                    if ($this->senderAddress === null) {
+                        $this->mail->from($data[$this->getID() . '-email'], $sender);
+                    } else {
+                        $this->mail->from($this->senderAddress);
+                    }
             }
-
 
             // create subject string
             if (!$this->mail->subject) {

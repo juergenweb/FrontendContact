@@ -28,3 +28,8 @@ I have added a new field to the module configuration which let you select, if yo
 Please note: This new field is only visible if you have installed one of the modules mentionend above. If not, you will not see this new field.
 
 I have planned to make this module working with other 3rd party mail service modules too, but for now I have only implemented and tested Postmark.
+
+## [1.2.1] - 2024-01-19
+
+As the next step, support for an additional mailing module added: [WireMailSmtp](https://processwire.com/modules/wire-mail-smtp/) by Horst.
+

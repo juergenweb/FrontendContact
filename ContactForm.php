@@ -464,6 +464,8 @@
             // Set from value depending on settings
             switch($this->frontendcontact_config['input_mailmodule']){
                 case('WireMailSmtp'):
+                    $senderName = $sender ?? $data[$this->getID() . '-email'];
+                     $this->mail->fromName($senderName);
                     break;
                 default:
                     if ($this->senderAddress === null) {

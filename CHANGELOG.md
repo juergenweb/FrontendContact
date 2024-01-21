@@ -33,3 +33,6 @@ I have planned to make this module working with other 3rd party mail service mod
 
 As the next step, support for an additional mailing module added: [WireMailSmtp](https://processwire.com/modules/wire-mail-smtp/) by Horst.
 
+## [1.2.2] - 2024-01-21
+
+Support for sending mails with the [WireMailPHPMailer](https://processwire.com/modules/altivebirit/) module added.

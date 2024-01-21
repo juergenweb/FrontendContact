@@ -488,7 +488,9 @@
 
             // use HTML mail template or not
             if ($this->get('input_emailTemplate') != 'none') {
-                $this->mail->bodyHTML($this->getMailPlaceholder('allvalues'));
+                // Add the HTML body property to the Mail object
+                Form::setBody($this->mail, $this->getMailPlaceholder('allvalues'), $this->frontendcontact_config['input_mailmodule']);
+                //$this->mail->bodyHTML($this->getMailPlaceholder('allvalues'));
             } else {
                 $this->mail->body($this->getMailPlaceholder('allvalues'));
             }

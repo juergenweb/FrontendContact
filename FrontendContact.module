@@ -261,8 +261,7 @@
                 'input_gender_required' => ['$form->requiredGender(false); // true, false'],
                 'input_name_required' => ['$form->requiredName(false); // true, false'],
                 'input_surname_required' => ['$form->requiredSurname(false); // true, false'],
-                'input_subject_required' => ['$form->requiredSubject(false); // true, false'],
-                'input_emailTemplate' => ['$form->getMail()->mailTemplate("template_2.html");']
+                'input_subject_required' => ['$form->requiredSubject(false); // true, false']
             ];
 
             if (!array_key_exists($field->name, $fields)) {

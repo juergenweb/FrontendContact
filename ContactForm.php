@@ -462,6 +462,10 @@
             }
 
             // Set from value depending on settings
+            if(!array_key_exists('input_mailmodule',$this->frontendcontact_config)){
+                $this->frontendcontact_config['input_mailmodule'] = 'none';
+            }
+
             switch($this->frontendcontact_config['input_mailmodule']){
                 case('WireMailSmtp'):
                     $senderName = $sender ?? $data[$this->getID() . '-email'];
@@ -474,6 +478,7 @@
                         $this->mail->from($this->senderAddress);
                     }
             }
+
 
             // create subject string
             if (!$this->mail->subject) {

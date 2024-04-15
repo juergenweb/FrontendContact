@@ -10,6 +10,9 @@ A configurable module for ProcessWire for outputting one or more contact forms o
 Please note: You have to install the FrontendForms module first, because this module relies on it.
 So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.
 
+## Live example
+You can see the module in action on this page: https://www.schulfreund.at/kontakt/
+
 ## Intentions for creating this module
 A contact form is something you will need on almost every website. Sometimes you will need more than one (fe if you have a staff member page, and you will offer a contact form for each staff member).
 

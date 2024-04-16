@@ -406,11 +406,12 @@
                 $name = str_replace($this->getID() . '-', '', $key);
                 // do not allow array values ($_FILES)
                 if (is_string($value)) {
-                    $placeholder .= '<div id="' . $key . '"><span class="label">' . $this->getMailPlaceholders()[strtoupper($name . 'label')] . '</label>: <span class="value">' . $value . '</span></div>';
+                    $valueTag = ($name === 'message')? 'div' : 'span';
+                    $placeholder .= '<div id="' . $key . '" class="bodypart"><span class="label">' . $this->getMailPlaceholders()[strtoupper($name . 'label')] . '</span>: <'.$valueTag.' class="value">' . $value . '</'.$valueTag.'></div>';
                 }
             }
             // add IP address as last value
-            $placeholder .= '<div id="ip"><span class="label">' . $this->_('IP') . '</label>: <span class="value">' . $this->wire('session')->getIP() . '</span></div>';
+            $placeholder .= '<div id="ip" class="bodypart"><span class="label">' . $this->_('IP') . '</label>: <span class="value">' . $this->wire('session')->getIP() . '</span></div>';
 
             $this->setMailPlaceholder('allvalues', $placeholder);
             return $values;

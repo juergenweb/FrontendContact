@@ -165,7 +165,7 @@
 
             if (version_compare($fromVersion, "1.3.0", "<=")) {
                 // get the first entry in the table of the field
-                if ($moduleConfig["input_defaultPWField_to"]) {
+                if ((array_key_exists('input_defaultPWField_to',$moduleConfig)) && ($moduleConfig["input_defaultPWField_to"])) {
 
                     $field = $this->wire('fields')->get($moduleConfig["input_defaultPWField_to"]);
                     if (!is_null($moduleConfig["input_defaultPWField_to"])) {

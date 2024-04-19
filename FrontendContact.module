@@ -176,9 +176,8 @@
                         bd($result);
 
                         if ($result) {
-                            while ($row = $result) {
-                                $pageID = $row[0]['pages_id'];
-                            }
+                            $pageID = $row[0]['pages_id'];
+                            
                         }
                         bd($pageID);
                         /*

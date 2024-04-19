@@ -924,7 +924,8 @@
          */
         public function ___upgrade($fromVersion, $toVersion)
         {
-            /*
+            bd($fromVersion);
+/*
                         $modules = $this->modules();
                         $moduleConfig = $modules->getModuleConfigData($this);
 

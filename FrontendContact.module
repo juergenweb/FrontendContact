@@ -149,6 +149,8 @@
 
         /**
          * Overwrite input_defaultPWfield value to the new syntax
+         * In the older version the value was the id of the field as an integer
+         * In version 1.3.0 and higher the value constist of the page number and the name of the email field (fe 1_myemailfield)
          * @param $fromVersion
          * @param $toVersion
          * @return void
@@ -164,7 +166,7 @@
             if (version_compare($fromVersion, "1.3.0", "<=")) {
                 // get the first entry in the table of the field
                 if ($moduleConfig["input_defaultPWField_to"]) {
-  
+
                     $field = $this->wire('fields')->get($moduleConfig["input_defaultPWField_to"]);
                     if (!is_null($moduleConfig["input_defaultPWField_to"])) {
 
@@ -183,7 +185,8 @@
 
                                             //save the new value to the database
                                             $moduleConfig["input_defaultPWField_to"] = $pageID.'_'.$moduleConfig["input_defaultPWField_to"];
-                                            $modules->saveModuleConfigData($this, $moduleConfig);
+                        bd($moduleConfig);
+                                            $modules->saveConfig($this, $moduleConfig);
 
                     }
                 }

@@ -20,6 +20,7 @@
     use FrontendForms\FileUploadMultiple;
     use FrontendForms\Form;
     use FrontendForms\Gender;
+    use FrontendForms\Phone;
     use FrontendForms\Inputfields;
     use FrontendForms\Message;
     use FrontendForms\Name;
@@ -28,6 +29,7 @@
     use FrontendForms\SendCopy;
     use FrontendForms\Subject;
     use FrontendForms\Surname;
+    use FrontendForms\InputCheckbox;
     use ProcessWire\FrontendForms;
     use ProcessWire\WireMail;
     use ProcessWire\FrontendContact;
@@ -42,8 +44,10 @@
         protected Name $name; // the name field object
         protected Surname $surname; // the surname field object
         protected Email $email; // the email field object
+        protected Phone $phone; // the phone field object
         protected Subject $subject; // the subject field object
         protected Message $message; // the message field object
+        protected InputCheckbox $callback; // the call-back checkbox above the phone field
         protected FileUploadMultiple $fileUploadMultiple;  // the file-upload field
         protected SendCopy $sendCopy; // send the copy field object
         protected Privacy $privacy; // the privacy field object with the checkbox
@@ -56,6 +60,7 @@
         protected string $stored_name = '';
         protected string $stored_surname = '';
         protected string $stored_email = '';
+        protected string $stored_phone = '';
         protected bool $custom_receiver = false;
         protected string $receiverAddress = '';
         protected string|null $senderAddress = null;
@@ -75,6 +80,9 @@
             'requiredName',
             'showSurname',
             'requiredSurname',
+            'showPhone',
+            'requiredPhone',
+            'showCallback',
             'showSubject',
             'requiredSubject',
             'showFileUploadMultiple',
@@ -113,19 +121,9 @@
             // add default settings from this module to the form
             $this->setMinTime($this->frontendcontact_config['input_minTime']); // min time
 
-            // set default receiver address
-            switch ($this->frontendcontact_config['input_emailtype']) {
-                case('text'):
-                    $this->receiverAddress = $this->frontendcontact_config['input_default_to']; // manually entered mail address
-                    break;
-                case('pwfield'):
-                    $field = $this->wire('fields')->get($this->frontendcontact_config['input_defaultPWField_to']);
-                    $database = $this->wire('database');
-                    if (FrontendContact::getPWEmail($field, $database)) {
-                        $this->receiverAddress = FrontendContact::getPWEmail($field, $database);
-                    }
-                    break;
-            }
+            $this->receiverAddress = FrontendContact::getEmailValue($this->frontendcontact_config) ?? '';
+
+            $this->callback = $this->callbackCheckbox(); // instantiate the callback checkbox
 
             // Create an instance of each form field depending on the module config
             $this->createAllFormFields();
@@ -141,6 +139,23 @@
             $this->frontendcontact_config['input_message_required'] = true;
             $this->frontendcontact_config['input_privacy_required'] = true;
 
+
+
+        }
+
+
+        /**
+         * Create the callback checkbox object
+         * @return \FrontendForms\InputCheckbox
+         */
+        protected function callbackCheckbox(): InputCheckbox
+        {
+            $callback = new InputCheckbox('callback');
+            $callback->setLabel($this->_('Request a callback'));
+            $callback->setDescription($this->_('If you would like us to call you back, please check this box and enter your phone number in the appearing field below.'));
+            $callback->setAttribute('value', $this->_('Yes'));
+            $callback->setAttribute('class', 'fc-callback');
+            return $callback;
         }
 
         /**
@@ -383,8 +398,24 @@
             foreach (FrontendContact::$formFields as $className) {
                 $propName = lcfirst($className);
                 $class = 'FrontendForms\\' . $className;
+
                 $this->{$propName} = new $class(strtolower($className));
+                if($className === 'Phone'){
+                    $this->add($this->callback);
+                    // add a custom wrapper to it
+                    $this->{$propName}->useCustomWrapper()->setAttribute('id', $this->getID().'-'.$this->{$propName}->getID().'-customwrapper')->setAttribute('style', 'display:none');
+                    // remove style attribute if callback is checked
+                    if(isset($_POST[ $this->getID().'-callback'])){
+                        $this->{$propName}->useCustomWrapper()->removeAttribute('style');
+                    }
+                    // add the requiredWith validator if callback checkbox is used
+                    $this->{$propName}->setRule('requiredWith', $this->getID().'-callback');
+                    // add asteris to the input field
+                    $this->{$propName}->getLabel()->setRequired();
+                }
                 $this->add($this->{$propName}); // add every form field independent of settings to the form
+
+
             }
         }
 
@@ -406,8 +437,8 @@
                 $name = str_replace($this->getID() . '-', '', $key);
                 // do not allow array values ($_FILES)
                 if (is_string($value)) {
-                    $valueTag = ($name === 'message')? 'div' : 'span';
-                    $placeholder .= '<div id="' . $key . '" class="bodypart"><span class="label">' . $this->getMailPlaceholders()[strtoupper($name . 'label')] . '</span>: <'.$valueTag.' class="value">' . $value . '</'.$valueTag.'></div>';
+                    $valueTag = ($name === 'message') ? 'div' : 'span';
+                    $placeholder .= '<div id="' . $key . '" class="bodypart"><span class="label">' . $this->getMailPlaceholders()[strtoupper($name . 'label')] . '</span>: <' . $valueTag . ' class="value">' . $value . '</' . $valueTag . '></div>';
                 }
             }
             // add IP address as last value
@@ -463,14 +494,14 @@
             }
 
             // Set from value depending on settings
-            if(!array_key_exists('input_mailmodule',$this->frontendcontact_config)){
+            if (!array_key_exists('input_mailmodule', $this->frontendcontact_config)) {
                 $this->frontendcontact_config['input_mailmodule'] = 'none';
             }
 
-            switch($this->frontendcontact_config['input_mailmodule']){
+            switch ($this->frontendcontact_config['input_mailmodule']) {
                 case('WireMailSmtp'):
                     $senderName = $sender ?? $data[$this->getID() . '-email'];
-                     $this->mail->fromName($senderName);
+                    $this->mail->fromName($senderName);
                     break;
                 default:
                     if ($this->senderAddress === null) {
@@ -479,7 +510,6 @@
                         $this->mail->from($this->senderAddress);
                     }
             }
-
 
             // create subject string
             if (!$this->mail->subject) {
@@ -518,6 +548,21 @@
         public function render(): string
         {
 
+            $phoneField = $this->getFormelementByName('phone');
+            // remove the callback checkbox depending on the settings
+            if((!$this->frontendcontact_config['input_phone_callback']) || (!$this->frontendcontact_config['input_phone_show'])) {
+                $this->remove($this->callback);
+                // remove the custom wrapper from the phone field
+                $phoneField->useCustomWrapper(false);
+            } else {
+
+                // add special data-attributes to the callback checkbox
+                $this->callback->setAttribute('data-phone-id', $this->getID().'-'.$phoneField->getID());
+                $this->callback->setAttribute('data-callbackdesc-id', $this->getID().'-'.$this->callback->getID().'-desc');
+                // add an id to the description of the callback checkbox for Javascript manipulation (hiding)
+                $this->callback->getDescription()->setAttribute('id', $this->getID().'-'.$this->callback->getID().'-desc');
+
+            }
             // remove the privacy field object depending on the configuration settings
             switch ($this->frontendcontact_config['input_privacy_show']) {
                 case(1): // checkbox has been selected
@@ -533,7 +578,6 @@
                     $this->remove($this->privacyText);
                     $this->remove($this->privacy);
             }
-
 
             // check if a receiver address is set, otherwise display a warning
             if (!$this->receiverAddress) {
@@ -557,6 +601,7 @@
             }
 
             return parent::render();
+
         }
 
     }

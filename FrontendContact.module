@@ -140,7 +140,7 @@
             $this->addHookAfter('Inputfield::processInput', $this, 'checkForFrontendContactEmailField');
             $this->addHookBefore('Page::render', $this, 'noEmailWarning');
             $this->addHookBefore('Modules::saveConfig', $this, 'removeWarning');
-            $this->addHookAfter('ProcessModule::executeDownload', $this, 'versionWarning');
+            $this->addHookBefore('ProcessModule::executeDownload', $this, 'versionWarning');
         }
 
         /****

@@ -140,35 +140,48 @@
             $this->addHookAfter('Inputfield::processInput', $this, 'checkForFrontendContactEmailField');
             $this->addHookBefore('Page::render', $this, 'noEmailWarning');
             $this->addHookBefore('Modules::saveConfig', $this, 'removeWarning');
-            $this->addHookAfter('Process::upgrade', $this, 'versionWarning');
         }
 
 
         /****
          * HOOK FUNCTIONS
          */
+        
+        /**
+         * Overwrite input_defaultPWfield value to the new syntax
+         * @param $fromVersion
+         * @param $toVersion
+         * @return void
+         */
+        public function ___upgrade($fromVersion, $toVersion)
+        {
+            $this->clearAllCache();
+            $modules = $this->modules();
+            $moduleConfig = $modules->getModuleConfigData($this);
+            $moduleConfig = array_merge($this->getDefaults(), $moduleConfig);
 
+            if (version_compare($fromVersion, "1.3.0", "<=")) {
+                // get the first entry in the table of the field
+                if ($moduleConfig["input_defaultPWField_to"]) {
 
-    protected function versionWarning(HookEvent $event) {
+                    $field = $this->wire('fields')->get($moduleConfig["input_defaultPWField_to"]);
+                    $database = $this->wire('database');
+                    // get the page id of the given email field value
+                    $query = $database->prepare('SELECT pages_id FROM ' . $field->getTable() . ' LIMIT 1');
+                    $query->execute();
+                    $result = $query->fetchAll();
+                    if ($result) {
+                        while ($row = $result) {
+                            $pageID = $row[0]['data'];
+                        }
+                    }
 
-        $moduleVersion = wire('modules')->get('FrontendContact')->getModuleInfo()['version'];
-
-        bd($moduleVersion);
-        if (version_compare($moduleVersion, '1.3.0') < 0) {
-            // fallback for older version before 1.3.0
-            wire()->warning('IMPORTANT: You must select and save your e-mail field containing the default e-mail address again in the module configuration, as this module version brings important changes. If you do not do this, FrontendContact will no longer be able to send the mails properly!');
+                    //save the new value to the database
+                    $moduleConfig["input_defaultPWField_to"] = $pageID.'_'.$moduleConfig["input_defaultPWField_to"];
+                    $modules->saveModuleConfigData($this, $moduleConfig);
+                }
+            }
         }
-        // Get the object the event occurred on, if needed
-        $ProcessModule = $event->object;
-
-        // An 'after' hook can retrieve and/or modify the return value
-        $return = $event->return;
-
-        /* Your code here, perhaps modifying the return value */
-
-        // Populate back return value, if you have modified it
-        $event->return = $return;
-    }
 
         /**
          * Check if an email value has been entered or a PW email field has been selected inside the

@@ -146,7 +146,7 @@
         /****
          * HOOK FUNCTIONS
          */
-        
+
         /**
          * Overwrite input_defaultPWfield value to the new syntax
          * @param $fromVersion
@@ -155,7 +155,7 @@
          */
         public function ___upgrade($fromVersion, $toVersion)
         {
-            $this->clearAllCache();
+            
             $modules = $this->modules();
             $moduleConfig = $modules->getModuleConfigData($this);
             $moduleConfig = array_merge($this->getDefaults(), $moduleConfig);

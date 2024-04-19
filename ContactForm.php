@@ -99,6 +99,11 @@
 
             parent::__construct($id);
 
+            // default values for older versions < 1.3.0, which do not contain this setting fields
+            $this->frontendcontact_config['input_phone_callback'] = 0;
+            $this->frontendcontact_config['input_phone_show'] = 0;
+            $this->frontendcontact_config['input_phone_required'] = 0;
+
             // get module configuration data from FrontendContact module and create properties of each setting
             foreach ($this->wire('modules')->getConfig('FrontendContact') as $key => $value) {
                 $this->frontendcontact_config[$key] = $value;

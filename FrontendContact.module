@@ -33,6 +33,9 @@
         protected string|int|null $input_fileUploadMultiple_show = 0;
         protected string|int|null $input_privacy_show = 2;
         protected string|int|null $input_sendCopy_show = 0;
+        protected string|int|null $input_phone_show = 0;
+        protected string|int|null $input_phone_callback = 0;
+        protected string|int|null $input_phone_required = 0;
         protected string $input_emailtype = 'text';
         protected string $input_default_to = '';
         protected string|null $input_defaultPWField_to = 'none';
@@ -40,6 +43,7 @@
         protected string $input_mailmodule = 'none'; // Name of the custom module for sending mails
         protected string|int|null $input_minTime = 3;
         protected array $config = []; // array containing the module configuration values
+        protected string $configUrlLink = ''; // the link to the module configuration page
 
         // array of all fields inside the user template
         protected array $userfields = [];
@@ -50,6 +54,7 @@
             'Name',
             'Surname',
             'Email',
+            'Phone',
             'Subject',
             'Message',
             'FileUploadMultiple',
@@ -110,7 +115,7 @@
                 'version' => '1.2.2',
                 'singular' => true,
                 'autoload' => true,
-                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.60']
+                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.68']
             ];
         }
 
@@ -122,19 +127,105 @@
          */
         protected function init(): void
         {
+            $configUrl = wire('modules')->getModuleEditUrl('FrontendContact');
+            $this->configUrlLink = '<a href="' . $configUrl . '">' . $this->_('Go to the module configuration page') . '</a>';
 
             // only works if a user is logged in
             if ($this->user->isLoggedin()) {
                 $this->userfields = $this->getUserFields();
             }
-            $this->addHookAfter('InputfieldSelect::processInput', $this, 'checkValueOfPWEmailField');
-            // outputs examples how to overwrite global settings
-            $this->addHookAfter('Inputfield::render', $this, 'overwriteExamplesNotes');
-            // check if a valid default email is present, otherwise output a warning message
-            $this->addHookBefore('page::render', $this, 'checkForEmail');
 
+            $this->addHookAfter('Inputfield::render', $this, 'overwriteExamplesNotes');
+            $this->addHookAfter('page::save', $this, 'checkForEmail');
+            $this->addHookAfter('Inputfield::processInput', $this, 'checkForFrontendContactEmailField');
+            $this->addHookBefore('Page::render', $this, 'noEmailWarning');
+            $this->addHookBefore('Modules::saveConfig', $this, 'removeWarning');
         }
 
+        /****
+         * HOOK FUNCTIONS
+         */
+
+        /**
+         * Check if an email value has been entered or a PW email field has been selected inside the
+         * module configuration before the configuration will be saved
+         * addHookBefore Modules::saveConfig
+         * @param \ProcessWire\HookEvent $event
+         * @return void
+         */
+        protected function removeWarning(HookEvent $event): void
+        {
+            // run only if FrontendContact config is saved
+            if ($event->arguments(0) === 'FrontendContact') {
+                $data = $event->arguments(1);
+                if ($data['input_emailtype'] === 'pwfield') {
+                    $remove = $data['input_defaultPWField_to'];
+                } else {
+                    $remove = $data['input_default_to'];
+                }
+                // remove all previous warnings
+                if ($remove) $this->warnings('clear all');
+            }
+        }
+
+        /**
+         * This function checks if an InputfieldEmail or InputfieldImprint, which has been chosen for the default mail
+         * address has a value after saving a page -> otherwise a warning will be displayed
+         * @param \ProcessWire\HookEvent $event
+         * @return void
+         */
+        protected function checkForFrontendContactEmailField(HookEvent $event): void
+        {
+            $field = $event->object;
+            $anchorLink = '<a href="#wrap_Inputfield_' . $field->name . '">' . $this->_('Go to the field') . '</a>';
+            // run only on InputfieldEmail and InputfieldImprint
+            if (($field->className === 'InputfieldEmail') || ($field->className === 'InputfieldImprint')) {
+                // check if a PW field has been selected as the default mail field
+                if ($this->input_emailtype === 'pwfield') {
+                    // get the selected PW inputfield from the module configuration
+                    $fieldName = explode('_', $this->input_defaultPWField_to)[1];
+                    // check if it is the same field as the one processed
+                    if ($fieldName === $field->name) {
+                        // check if field has a value, otherwise output a warning
+                        if (!$event->arguments(0)->$fieldName) {
+                            $warning_text = '<p>' . sprintf($this->_('The e-mail field "%s" on this page does not contain a value, but this field was selected as the default e-mail field in the configuration of the FrontendContact module.'), '<b>' . $fieldName . '</b>');
+                            $possibility1 = $this->_('You enter a valid e-mail address in this field');
+                            $possibility2 = $this->_('Go to the module configuration of the FrontendContact module and select another field that contains a valid e-mail address');
+                            $warning_text .= ' ' . $this->_('For this reason, you have 2 options now to solve this problem:') . '</p><ol>';
+                            $warning_text .= '<li>1: ' . $possibility1 . ' (' . $anchorLink . ')</li>';
+                            $warning_text .= '<li>2: ' . $possibility2 . ' (' . $this->configUrlLink . ')</li>';
+                            $warning_text .= '</ol><p>';
+                            $warning_text .= $this->_('If you do not change anything, your contact forms created via the FrontendContact module which will use the default e-mail address, will no longer send mails because the recipient mail address is missing.') . '</p>';
+                            $this->warning($warning_text, Notice::allowMarkup);
+                            // if there is no value -> delete the value in the module configuration
+                            $data = wire('modules')->getConfig('FrontendContact');
+                            $data['input_defaultPWField_to'] = '';
+                            wire('modules')->saveConfig('FrontendContact', $data);
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * Check if a valid email address has been entered, or a PW email field has been selected inside the module
+         * configuration of this module
+         * addHookBefore Page::render
+         * @param \ProcessWire\HookEvent $event
+         * @return void
+         */
+        protected function noEmailWarning(HookEvent $event): void
+        {
+            $missingEmail = false;
+            $config = wire('modules')->getConfig('FrontendContact');
+            if ($config['input_emailtype'] === 'pwfield') {
+                $missingEmail = $config['input_defaultPWField_to'];
+            } else {
+                $missingEmail = $config['input_default_to'];
+            }
+            if (!$missingEmail)
+                $this->warning($this->_('FrontendContact requires a default e-mail address. Please enter a valid e-mail address manually or select a PW field that contains a valid e-mail address inside the mail configuration tab.'));
+        }
 
         /**
          * Select user fields depending on the Fieldtype (class name)
@@ -158,30 +249,6 @@
             return $fields;
         }
 
-        /**
-         * Method to show a warning if the PW field for the email address of the recipient contains no value
-         * @param $event
-         * @return void
-         * @throws WireException
-         * @throws WirePermissionException
-         */
-        protected function checkValueOfPWEmailField($event): void
-        {
-            $field = $event->object;
-            if ($field->name === 'input_defaultPWField_to') {
-                if ($field->value) {
-                    $warningText = '';
-                    if (!($this->wire('fields')->get($field->value)->value)) {
-                        $warningText .= $this->_('The ProcessWire field you have chosen for the recipient email has no value at the moment. If you want to use this field, please go to the page, where this field is included and enter an email value there.');
-                    }
-                    // check if the text field has a value
-                    if ($this->input_default_to) {
-                        $warningText .= sprintf($this->_('Otherwise this email will be used: %s'), $this->input_default_to);
-                    }
-                    $this->warning($warningText);
-                }
-            }
-        }
 
         /**
          * Set default values for configuration fields
@@ -204,6 +271,9 @@
                 'input_surname_userfield_mapped' => 'none',
                 'input_subject_show' => 1,
                 'input_subject_required' => 1,
+                'input_phone_show' => 0,
+                'input_phone_required' => 0,
+                'input_phone_callback' => 0,
                 'input_fileUploadMultiple_show' => 0,
                 'input_privacy_show' => 2,
                 'input_sendCopy_show' => 0,
@@ -257,10 +327,13 @@
                 'input_name_show' => ['$form->showName(false); // true, false'],
                 'input_surname_show' => ['$form->showSurname(false); // true, false'],
                 'input_subject_show' => ['$form->showSubject(false); // true, false'],
+                'input_phone_show' => ['$form->showPhone(false); // true, false'],
+                'input_phone_callback' => ['$form->showCallback(false); // true, false'],
                 'input_fileUploadMultiple_show' => ['$form->showFileUploadMultiple(false); // true, false'],
                 'input_gender_required' => ['$form->requiredGender(false); // true, false'],
                 'input_name_required' => ['$form->requiredName(false); // true, false'],
                 'input_surname_required' => ['$form->requiredSurname(false); // true, false'],
+                'input_phone_required' => ['$form->requiredPhone(false); // true, false'],
                 'input_subject_required' => ['$form->requiredSubject(false); // true, false']
             ];
 
@@ -268,8 +341,15 @@
                 return;
             }
             $field->entityEncodeText = false;
-            $field->notes = $field->notes.$this->frontendForms->createAdditionalNotesText($fields[$field->name]);
+            $field->notes = $field->notes . $this->frontendForms->createAdditionalNotesText($fields[$field->name]);
         }
+
+        /**
+         * Get the value of the selected PW field
+         * @return string|null returns email address or null if not set
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
+         */
 
         /**
          * Check if a default email address is set, otherwise output a warning on page load
@@ -279,26 +359,9 @@
          */
         protected function checkForEmail(): void
         {
-            $has_value = true;
-            switch ($this->input_emailtype) {
-                case('text'):
-                    if (!filter_var($this->input_default_to, FILTER_VALIDATE_EMAIL)) {
-                        $has_value = false;
-                    }
-                    break;
-                case('pwfield'):
-                    $field = $this->wire('fields')->get($this->input_defaultPWField_to);
-                    $database = $this->wire('database');
-                    if (!filter_var(self::getPWEmail($field, $database), FILTER_VALIDATE_EMAIL)) {
-                        $has_value = false;
-                    }
-                    break;
-            }
-
-            $this->warnings('clear all');// remove all warnings to prevent displaying again after redirect
-            if (!$has_value) {
-                $this->warning($this->_('Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
-
+            if (!self::getEmailValue($this->wire('modules')->getConfig($this))) {
+                $this->warnings('clear all');// remove all warnings to prevent displaying again after redirect
+                $this->warning($this->_('The FrontendContact module requires a valid email address. Please enter a valid email address or select a PW field, which contains the email address inside the default email configuration tab.'));
             }
         }
 
@@ -436,6 +499,41 @@
 
             $formfieldsFieldset->add($surnameFieldset);
 
+            /** Phone **/
+            $phoneFieldset = $this->wire('modules')->get('InputfieldFieldset');
+            $phoneFieldset->label = $this->_('Phone field');
+            $phoneFieldset->collapsed = true;
+            $phoneFieldset->columnWidth = 100;
+
+            // Show or hide the subject field
+            $phone_show = $this->wire()->modules->get('InputfieldCheckbox');
+            $phone_show->attr('name', 'input_phone_show');
+            $phone_show->attr('checked', $this->input_phone_show == '1' ? 'checked' : '');
+            $phone_show->label = $this->_('Add this field to the form');
+            $phone_show->columnWidth = 34;
+            $phoneFieldset->add($phone_show);
+
+            // Set it required or not
+            $phone_required = $this->wire()->modules->get('InputfieldCheckbox');
+            $phone_required->attr('name', 'input_phone_required');
+            $phone_required->attr('checked', $this->input_phone_required == '1' ? 'checked' : '');
+            $phone_required->label = $this->_('Mark this field as mandatory');
+            $phone_required->showIf = 'input_phone_show=1';
+            $phone_required->columnWidth = 33;
+            $phoneFieldset->add($phone_required);
+
+            // Add call back checkbox
+            $phone_callback = $this->wire()->modules->get('InputfieldCheckbox');
+            $phone_callback->attr('name', 'input_phone_callback');
+            $phone_callback->attr('checked', $this->input_phone_callback == '1' ? 'checked' : '');
+            $phone_callback->label = $this->_('Show a "Request a call back" checkbox above the phone field on the frontend');
+            $phone_callback->notes = $this->_('In this case, the phone input field will only be displayed after this checkbox is checked on the frontend.');
+            $phone_callback->showIf = 'input_phone_show=1';
+            $phone_callback->columnWidth = 33;
+            $phoneFieldset->add($phone_callback);
+
+            $formfieldsFieldset->add($phoneFieldset);
+
             /** Subject **/
             $subjectFieldset = $this->wire('modules')->get('InputfieldFieldset');
             $subjectFieldset->label = $this->_('Subject field');
@@ -499,7 +597,6 @@
             $privacyFieldset->collapsed = true;
             $privacyFieldset->columnWidth = 100;
 
-
             // Show or hide privacy checkbox or text on form
             $privacy_show = $this->wire()->modules->get('InputfieldSelect');
             $privacy_show->label = $this->_('Add privacy text or privacy checkbox to the form');
@@ -534,6 +631,7 @@
                 'text' => $this->_('Enter email address manually'),
                 'pwfield' => $this->_('Use the value of a PW field')
             ]);
+
             $emailtype->defaultValue = 'text';
             $emailtype->attr('value', $this->input_emailtype);
             $emailtype->notes = $this->_('You can change the recipient email address on per form base.');
@@ -560,37 +658,65 @@
             $emailField->attr('name', 'input_defaultPWField_to');
             $emailField->required = 1;
             $emailField->requiredIf = 'input_emailtype=pwfield';
-            // create options
-            $emailFields = $this->wire('fields')->find('type=FieldtypeEmail, name!=email');
-            $fields = [];
-            //check if imprint module is installed
-            if ($this->wire('modules')->isInstalled('FieldtypeImprint')) {
-                // get all fields of this field type
-                $imprintfield = $this->wire('fields')->find('type=FieldtypeImprint')->first();
-                if ($imprintfield->name) {
-                    $fields[$imprintfield->id] = $imprintfield->name;
-                }
-            }
-            $templates = [];
-            foreach ($emailFields as $field) {
-                // check if this field is included inside a template
 
-                foreach ($this->wire('templates') as $t) {
-                    if ($t->hasField($field->name)) {
-                        $templates[] = $field->name;
+            $pwemailfields = [];
+            // add options from FieldtypeImprint if installed
+            if (wire('modules')->isInstalled('FieldtypeImprint')) {
+                // get the configuration values of the inputfield
+                $imprintfields = wire('fields')->findByType('FieldtypeImprint');
+                if ($imprintfields) {
+                    $imprintfield = reset($imprintfields);
+                    $imprintfield_name = $imprintfield->name;
+                    // find templates using this field
+                    $template_has_imprintfield = wire('fields')->get($imprintfield_name)->getFieldgroups()->implode('|', 'name');
+                    $pages_has_imprintfield = wire('pages')->find("template=$template_has_imprintfield, has_parent!=2");
+                    if ($pages_has_imprintfield->count) {
+                        foreach ($pages_has_imprintfield as $imprint_page) {
+                            // add the option only if the field contains a value
+                            if ($imprint_page->$imprintfield_name->email) {
+
+                                $pwemailfields[$imprint_page->id . '_' . $imprintfield_name . '_fieldtypeimprint'] = $imprint_page->$imprintfield_name->email . '[' . $this->_('Page title') . ': ' . $imprint_page->title . ', '
+                                    . $this->_('Page-ID') . ': ' . $imprint_page->id . ', '
+                                    . $this->_('Fieldname') . ': ' . $imprintfield_name . ', '
+                                    . $this->_('Fieldtype') . ': ' . $imprintfield->type . ']';
+
+                            }
+                        }
                     }
                 }
-                if (in_array($field->name, $templates)) {
-                    $fields[$field->id] = $field->name;
+            }
+
+            // add options from FieldtypeEmail
+            $emailFields = $this->wire('fields')->find('type=FieldtypeEmail, name!=email');
+
+            foreach ($emailFields as $field) {
+                $fieldName = $field->name;
+                // find templates using this field
+                $template_has_emailfield = wire('fields')->get($fieldName)->getFieldgroups()->implode('|', 'name');
+                $pages_has_emailfield = wire('pages')->find("template=$template_has_emailfield, has_parent!=2");
+                foreach ($pages_has_emailfield as $p) {
+                    //check if the page field contains a value
+                    if ($p->$fieldName) {
+                        $pwemailfields[$p->id . '_' . $fieldName] = $p->$fieldName . '[' . $this->_('Page title') . ': ' . $p->title . ', '
+                            . $this->_('Page-ID') . ': ' . $p->id . ', '
+                            . $this->_('Fieldname') . ': ' . $fieldName . ', '
+                            . $this->_('Fieldtype') . ': ' . $field->type . ']';
+                    }
                 }
             }
-            $emailField->addOptions($fields);
+            $emailField->addOptions($pwemailfields);
             $emailField->attr('value', $this->input_defaultPWField_to);
             $emailField->description = $this->_('Select a field which contains the email address, where the mails should be sent to if you want.');
-            if (count($templates)) {
-                $notes = $this->_('Only fields of the type "FieldtypeEmail" can be selected. If this field has more than one value, only the first value will be taken.');
-                // get the email value
-                $currentEmailValue = $this->getEmailValue() ?? $this->_('This field is empty and does not contain an email value!! You can use this field, but you have to add a value to this field. Otherwise you will get an error on the Frontend.');
+            if (count($emailField->getOptions())) {
+
+                if (wire('modules')->isInstalled('FieldtypeImprint')) {
+                    $notes = $this->_('Only fields of type "FieldtypeEmail" and "FieldtypeImprint" that contain an email address as a value can be selected.');
+                } else {
+                    $notes = $this->_('Only fields of type "FieldtypeEmail" that contain an email address as a value can be selected.');
+                }
+
+                // get the email value from FieldtypeEmail
+                $currentEmailValue = self::getEmailValue($this->wire('modules')->getConfig($this)) ?? $this->_('No PW field with a valid e-mail value is currently selected. Please select a field from the input selection above.');
                 $notes .= ' ' . sprintf($this->_('Current value: %s'), '**' . $currentEmailValue . '**');
                 $emailField->notes = $notes;
             } else {
@@ -681,38 +807,40 @@
 
         }
 
-        public static function getPWEmail($field, $database): ?string
+        /**
+         * Grab the email field if set, query the value from the database and save it to the module configuration
+         * @param array $moduleConfig
+         * @return string|null
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
+         */
+        public static function getEmailValue(array $moduleConfig): ?string
         {
-            $query = $database->prepare('SELECT data FROM ' . $field->getTable() . ' LIMIT 1');
-            $query->execute();
-            $result = $query->fetchAll();
-            if ($result) {
-                while ($row = $result) {
-                    $email = $row[0]['data'];
-                    if ($email) {
-                        return $email; // return the email value from the field
+            // get email value from selected field if selected
+            if ($moduleConfig['input_defaultPWField_to']) {
+
+                $data = explode('_', $moduleConfig['input_defaultPWField_to']);
+                $pageId = $data[0];
+                $fieldName = $data[1];
+                $page = wire('pages')->get($pageId);
+                // check if value contains fieldtypeimprint
+                if (isset($data[2])) {
+                    // it is a value from a FieldtypeImprint
+                    return $page->$fieldName->email;
+                } else {
+                    // it is a value from a FieldtypeEmail
+                    $field = wire('fields')->get($data[1]);
+                    if ($field) {
+                        return $page->$field;
                     }
                 }
             }
-            return null;
-        }
-
-        /**
-         * Grab the email field if set, query the value from the database and save it to the module configuration
-         * @return string|null
-         * @throws WireException
-         * @throws WirePermissionException
-         */
-        protected function getEmailValue(): ?string
-        {
-            // get email value from selected field if selected
-            if ($this->input_defaultPWField_to) {
-                $field = $this->wire('fields')->get($this->input_defaultPWField_to);
-                if ($field) {
-                    self::getPWEmail($field, $this->wire('database'));
-                }
+            if (array_key_exists('input_defaultField_to', $moduleConfig)) {
+                return $moduleConfig['input_defaultField_to']; // return the value of the text email field
+            } else {
+                return null;
             }
-            return $this->input_defaultField_to; // return the value of the text email field
+
         }
 
         /**

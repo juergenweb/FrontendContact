@@ -184,7 +184,7 @@
 
 
                                             //save the new value to the database
-                                            $moduleConfig["input_defaultPWField_to"] = $pageID.'_'.$moduleConfig["input_defaultPWField_to"];
+                                            $moduleConfig["input_defaultPWField_to"] = $pageID.'_'.$field->name;
                         bd($moduleConfig);
                                             $modules->saveConfig($this, $moduleConfig);
 

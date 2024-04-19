@@ -951,6 +951,7 @@
         public function ___uninstall(): void
         {
             $this->wire('session')->removeNotices();
+            $this->clearAllCache();
         }
 
     }

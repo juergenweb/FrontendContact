@@ -924,14 +924,16 @@
          */
         public function ___upgrade($fromVersion, $toVersion)
         {
-            //bd($fromVersion);
+            bd($fromVersion);
+$this->clearAllCache();
 /*
-                        $modules = $this->modules();
+                        
+$modules = $this->modules();
                         $moduleConfig = $modules->getModuleConfigData($this);
 
                         //$moduleConfig = array_merge($this->getDefaults(), $moduleConfig);
 
-                        if (version_compare($fromVersion, "1.3.0", "<=")) {
+                        if (version_compare($fromVersion, "1.3.0", "<")) {
                             // get the first entry in the table of the field
                             if ($moduleConfig["input_defaultPWField_to"]) {
 

@@ -140,11 +140,34 @@
             $this->addHookAfter('Inputfield::processInput', $this, 'checkForFrontendContactEmailField');
             $this->addHookBefore('Page::render', $this, 'noEmailWarning');
             $this->addHookBefore('Modules::saveConfig', $this, 'removeWarning');
+            $this->addHookAfter('ProcessModule::executeDownload', $this, 'versionWarning');
         }
 
         /****
          * HOOK FUNCTIONS
          */
+
+
+    protected function versionWarning(HookEvent $event) {
+
+        $moduleVersion = wire('modules')->get('FrontendContact')->getModuleInfo()['version'];
+
+        bd($moduleVersion);
+        if (version_compare($moduleVersion, '1.3.0') < 0) {
+            // fallback for older version before 1.3.0
+            wire()->warning('IMPORTANT: You must select and save your e-mail field containing the default e-mail address again in the module configuration, as this module version brings important changes. If you do not do this, FrontendContact will no longer be able to send the mails properly!');
+        }
+        // Get the object the event occurred on, if needed
+        $ProcessModule = $event->object;
+
+        // An 'after' hook can retrieve and/or modify the return value
+        $return = $event->return;
+
+        /* Your code here, perhaps modifying the return value */
+
+        // Populate back return value, if you have modified it
+        $event->return = $return;
+    }
 
         /**
          * Check if an email value has been entered or a PW email field has been selected inside the
@@ -887,17 +910,9 @@
         public function ___install(): void
         {
 
-            $moduleVersion = wire('modules')->get('FrontendContact')->getModuleInfo()['version'];
-
-            if (version_compare($moduleVersion, '1.3.0') < 0) {
-                // fallback for older version before 1.3.0
-                wire()->warning('IMPORTANT: You must select and save your e-mail field containing the default e-mail address again in the module configuration, as this module version brings important changes. If you do not do this, FrontendContact will no longer be able to send the mails properly!');
-            }
-
             //save default module configurations on installation, to be reachable inside the FrontendContact class
             $data = self::getDefaultData();
             wire('modules')->saveConfig($this, $data);
-
 
         }
 

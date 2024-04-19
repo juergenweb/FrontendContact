@@ -158,6 +158,7 @@
 
             $modules = $this->modules();
             $moduleConfig = $modules->getModuleConfigData($this);
+            bd($moduleConfig);
             //$moduleConfig = array_merge($this->getDefaults(), $moduleConfig);
 
             if (version_compare($fromVersion, "1.3.0", "<=")) {

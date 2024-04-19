@@ -157,7 +157,7 @@
          */
         public function ___upgrade($fromVersion, $toVersion)
         {
-
+/*
             $modules = $this->modules();
             $moduleConfig = $modules->getModuleConfigData($this);
 
@@ -191,6 +191,7 @@
                     }
                 }
             }
+*/
         }
 
         /**

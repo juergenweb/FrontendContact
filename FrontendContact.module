@@ -112,7 +112,7 @@
                 'summary' => 'Simple configurable contact form for ProcessWire based on the FrontendForms module.',
                 'author' => "Jürgen Kern",
                 'href' => 'https://github.com/juergenweb/FrontendContact',
-                'version' => '1.2.2',
+                'version' => '1.2.1',
                 'singular' => true,
                 'autoload' => true,
                 'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.1.68']
@@ -160,7 +160,7 @@
 
             $modules = $this->modules();
             $moduleConfig = $modules->getModuleConfigData($this);
-            bd($moduleConfig);
+
             //$moduleConfig = array_merge($this->getDefaults(), $moduleConfig);
 
             if (version_compare($fromVersion, "1.3.0", "<=")) {
@@ -183,10 +183,10 @@
                         }
 
 
-                                            //save the new value to the database
-                                            $moduleConfig["input_defaultPWField_to"] = $pageID.'_'.$field->name;
-                        bd($moduleConfig);
-                                            $modules->saveConfig($this, $moduleConfig);
+                        //save the new value to the database
+                        $moduleConfig["input_defaultPWField_to"] = $pageID.'_'.$field->name;
+                       
+                        $modules->saveConfig($this, $moduleConfig);
 
                     }
                 }
@@ -865,15 +865,17 @@
         {
 
             // get email value from selected field if selected
+
             if ($moduleConfig['input_defaultPWField_to']) {
 
                 $moduleVersion = wire('modules')->get('FrontendContact')->getModuleInfo()['version'];
 
+                /*
                 if (version_compare($moduleVersion, '1.3.0') < 0) {
                     // fallback for older version before 1.3.0
                     wire()->warning('IMPORTANT: You must select and save your e-mail field containing the default e-mail address again in the module configuration, as this module version brings important changes. If you do not do this, FrontendContact will no longer be able to send the mails properly!');
                     return $moduleConfig['input_defaultPWField_to'];
-                } else {
+                } else { */
 
                     $data = explode('_', $moduleConfig['input_defaultPWField_to']);
                     $pageId = $data[0];
@@ -884,14 +886,16 @@
                         // it is a value from a FieldtypeImprint
                         return $page->$fieldName->email;
                     } else {
+
                         // it is a value from a FieldtypeEmail
                         $field = wire('fields')->get($data[1]);
                         if ($field) {
+
                             return $page->$field;
                         }
                     }
 
-                }
+                //}
 
 
             }

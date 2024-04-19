@@ -101,6 +101,10 @@
 
         }
 
+private function clearAllCache() {
+		$this->cache()->deleteFor($this);
+	}
+
         /**
          * Array that holds the module info data
          * @return array

@@ -155,10 +155,10 @@
          */
         public function ___upgrade($fromVersion, $toVersion)
         {
-            
+
             $modules = $this->modules();
             $moduleConfig = $modules->getModuleConfigData($this);
-            $moduleConfig = array_merge($this->getDefaults(), $moduleConfig);
+            //$moduleConfig = array_merge($this->getDefaults(), $moduleConfig);
 
             if (version_compare($fromVersion, "1.3.0", "<=")) {
                 // get the first entry in the table of the field

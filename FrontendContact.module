@@ -176,8 +176,8 @@
                         bd($result);
 
                         if ($result) {
-                            $pageID = $row[0]['pages_id'];
-                            
+                            $pageID = $result[0]['pages_id'];
+
                         }
                         bd($pageID);
                         /*

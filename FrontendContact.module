@@ -166,6 +166,9 @@
                 if ($moduleConfig["input_defaultPWField_to"]) {
 
                     $field = $this->wire('fields')->get($moduleConfig["input_defaultPWField_to"]);
+                    if(!is_null($moduleConfig["input_defaultPWField_to"])){
+
+
                     $database = $this->wire('database');
                     // get the page id of the given email field value
                     $query = $database->prepare('SELECT pages_id FROM ' . $field->getTable() . ' LIMIT 1');
@@ -180,6 +183,7 @@
                     //save the new value to the database
                     $moduleConfig["input_defaultPWField_to"] = $pageID.'_'.$moduleConfig["input_defaultPWField_to"];
                     $modules->saveModuleConfigData($this, $moduleConfig);
+                    }
                 }
             }
         }

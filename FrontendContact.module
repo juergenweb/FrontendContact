@@ -173,7 +173,7 @@
                     $result = $query->fetchAll();
                     if ($result) {
                         while ($row = $result) {
-                            $pageID = $row[0]['data'];
+                            $pageID = $row[0]['pages_id'];
                         }
                     }
 

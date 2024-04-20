@@ -39,7 +39,7 @@ Support for sending mails with the [WireMailPHPMailer](https://processwire.com/m
 
 ## [1.3.0] - 2024-04-20
 
-This update comes with some major changes, so please test if the contact form sends correctly after upgrade.
+This update comes with some major changes, so please test if the contact form sends correctly after upgrade. This new version needs the latest version of FrontendForms (2.1.68) to work. If you have a lower version installed, please update to the latest version. Otherwise you are not able to download this version of FrontendContact. 
 
 ### Now you can select the default email address from all email values from the same email field as the default receiver email address
 

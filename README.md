@@ -134,6 +134,8 @@ $form->showGender(true); // gender field will be included
 $form->showName(true); // name field will be included
 $form->showSurname(true); // surname field will be included
 $form->showSubject(false); // subject field will not be included
+$form->showCallback(true); // Request a callback checkbox field will be included
+$form->showPhone(true); // phone field will be included
 $form->showPrivacy(0); // privacy field will not be included, 1: checkbox will be displayed, 2: privacy text will be displayed
 $form->showSendCopy(false); // send copy field will not be included
 $form->showFileUploadMultiple(false); // file upload field will not be included

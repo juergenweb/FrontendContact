@@ -41,6 +41,8 @@ Support for sending mails with the [WireMailPHPMailer](https://processwire.com/m
 
 This update comes with some major changes, so please test if the contact form sends correctly after upgrade. This new version needs the latest version of FrontendForms (2.1.68) to work. If you have a lower version installed, please update to the latest version. Otherwise you are not able to download this version of FrontendContact. 
 
+If you are using the German translation, that comes with this module, do not forget to update this as well, because there are a lot of new translation strings in this version.
+
 ### Now you can select the default email address from all email values from the same email field as the default receiver email address
 
 In all previous versions of this module, it was possible to select a certain PW email field, where the value of this field was taken into account for sending emails to this email address.

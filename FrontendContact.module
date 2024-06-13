@@ -848,8 +848,8 @@
                 }
 
             }
-            if (array_key_exists('input_defaultField_to', $moduleConfig)) {
-                return $moduleConfig['input_defaultField_to']; // return the value of the text email field
+            if (array_key_exists('input_default_to', $moduleConfig)) {
+                return $moduleConfig['input_default_to']; // return the value of the text email field
             } else {
                 return null;
             }

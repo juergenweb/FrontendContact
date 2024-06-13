@@ -77,3 +77,5 @@ This is a checkbox field, which can be added to the form too in combination with
 
 You will find the new configuration fields inside the module configuration.
 
+## [1.3.1] - 2024-06-13
+I have discovered a wrong field name for the default email address -> this leads to that the module complains about a missing default email address. This writing mistake has been corrected now.

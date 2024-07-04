@@ -432,6 +432,10 @@
         protected function createDataPlaceholder(): array
         {
             $values = $this->getValues();
+            // add email if user is logged in
+            if($this->wire('user')->isLoggedin()){
+                $values [$this->getID() . '-email'] = $this->wire('user')->email;
+            }
             // remove privacy and send copy values from post-array
             unset($values [$this->getID() . '-privacy']);
             unset($values [$this->getID() . '-sendcopy']);
@@ -509,6 +513,7 @@
                     $this->mail->fromName($senderName);
                     break;
                 default:
+                    bd($data);
                     if ($this->senderAddress === null) {
                         $this->mail->from($data[$this->getID() . '-email'], $sender);
                     } else {

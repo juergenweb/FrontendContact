@@ -433,8 +433,11 @@
         {
             $values = $this->getValues();
             // add email if user is logged in
+            $fields = FrontendContact::$formFields;
+            // get the position of the email field
+            $key = array_search ('Email', $fields);
             if($this->wire('user')->isLoggedin()){
-                $values [$this->getID() . '-email'] = $this->wire('user')->email;
+                $values = array_merge(array_slice($values, 0, $key), [$this->getID() . '-email' => $this->wire('user')->email], array_slice($values, $key));
             }
             // remove privacy and send copy values from post-array
             unset($values [$this->getID() . '-privacy']);
@@ -513,7 +516,6 @@
                     $this->mail->fromName($senderName);
                     break;
                 default:
-                    bd($data);
                     if ($this->senderAddress === null) {
                         $this->mail->from($data[$this->getID() . '-email'], $sender);
                     } else {

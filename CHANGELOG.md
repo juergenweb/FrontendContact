@@ -87,4 +87,5 @@ If a user is logged in and sends an email, the email address has not been added 
 
 ## [1.3.3] - 2024-07-12
 
-Re-written for new Inputfield dependencies for the phone field. 
+Re-written for new Inputfield dependencies for the phone field (requires FrontendForms >= 2.2.5).
+If set, the phone field will only be visible if the checkbox for "request a callback" will be checked. Otherwise the phone field is hidden.

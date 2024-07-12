@@ -145,7 +145,6 @@
             $this->frontendcontact_config['input_privacy_required'] = true;
 
 
-
         }
 
 
@@ -405,21 +404,22 @@
                 $class = 'FrontendForms\\' . $className;
 
                 $this->{$propName} = new $class(strtolower($className));
-                if($className === 'Phone'){
-                    $this->add($this->callback);
-                    // add a custom wrapper to it
-                    $this->{$propName}->useCustomWrapper()->setAttribute('id', $this->getID().'-'.$this->{$propName}->getID().'-customwrapper')->setAttribute('style', 'display:none');
-                    // remove style attribute if callback is checked
-                    if(isset($_POST[ $this->getID().'-callback'])){
-                        $this->{$propName}->useCustomWrapper()->removeAttribute('style');
+                if ($className === 'Phone') {
+                    
+                    // add the checkbox first if set
+                    if(array_key_exists('input_phone_callback',$this->frontendcontact_config) &&  ($this->frontendcontact_config['input_phone_callback'])){
+                        $this->add($this->callback);
+                        // add the condition to show the phone field
+                        $this->{$propName}->showIf([
+                                'name' => 'callback',
+                                'operator' => 'isnotempty',
+                                'value' => ''
+                            ]
+                        );
                     }
-                    // add the requiredWith validator if callback checkbox is used
-                    $this->{$propName}->setRule('requiredWith', $this->getID().'-callback');
-                    // add asteris to the input field
-                    $this->{$propName}->getLabel()->setRequired();
+
                 }
                 $this->add($this->{$propName}); // add every form field independent of settings to the form
-
 
             }
         }
@@ -435,8 +435,8 @@
             // add email if user is logged in
             $fields = FrontendContact::$formFields;
             // get the position of the email field
-            $key = array_search ('Email', $fields);
-            if($this->wire('user')->isLoggedin()){
+            $key = array_search('Email', $fields);
+            if ($this->wire('user')->isLoggedin()) {
                 $values = array_merge(array_slice($values, 0, $key), [$this->getID() . '-email' => $this->wire('user')->email], array_slice($values, $key));
             }
             // remove privacy and send copy values from post-array
@@ -562,17 +562,17 @@
 
             $phoneField = $this->getFormelementByName('phone');
             // remove the callback checkbox depending on the settings
-            if((!$this->frontendcontact_config['input_phone_callback']) || (!$this->frontendcontact_config['input_phone_show'])) {
+            if ((!$this->frontendcontact_config['input_phone_callback']) || (!$this->frontendcontact_config['input_phone_show'])) {
                 $this->remove($this->callback);
                 // remove the custom wrapper from the phone field
                 $phoneField->useCustomWrapper(false);
             } else {
 
                 // add special data-attributes to the callback checkbox
-                $this->callback->setAttribute('data-phone-id', $this->getID().'-'.$phoneField->getID());
-                $this->callback->setAttribute('data-callbackdesc-id', $this->getID().'-'.$this->callback->getID().'-desc');
+                $this->callback->setAttribute('data-phone-id', $this->getID() . '-' . $phoneField->getID());
+                $this->callback->setAttribute('data-callbackdesc-id', $this->getID() . '-' . $this->callback->getID() . '-desc');
                 // add an id to the description of the callback checkbox for Javascript manipulation (hiding)
-                $this->callback->getDescription()->setAttribute('id', $this->getID().'-'.$this->callback->getID().'-desc');
+                $this->callback->getDescription()->setAttribute('id', $this->getID() . '-' . $this->callback->getID() . '-desc');
 
             }
             // remove the privacy field object depending on the configuration settings

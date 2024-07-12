@@ -84,3 +84,7 @@ I have discovered a wrong field name for the default email address -> this leads
 ## [1.3.2] - 2024-07-04
 
 If a user is logged in and sends an email, the email address has not been added to the mail, because it will not be added to the POST data (email field is disabled in this case). This has been fixed now.
+
+## [1.3.3] - 2024-07-12
+
+Re-written for new Inputfield dependencies for the phone field. 

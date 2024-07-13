@@ -408,6 +408,20 @@
                     
                     // add the checkbox first if set
                     if(array_key_exists('input_phone_callback',$this->frontendcontact_config) &&  ($this->frontendcontact_config['input_phone_callback'])){
+
+                        // grab the description of the checkbox
+                        $desc = $this->callback->getDescription();
+                        $desc->hideIf([
+                                'name' => $this->getID().'-callback',
+                                'operator' => 'isnotempty',
+                                'value' => ''
+                            ]
+                        );
+                        
+                        // add the data-conditional-rules attr manually
+                        $conditions = json_encode($desc->getConditions());
+                        $desc->setAttribute('data-conditional-rules', htmlspecialchars($conditions));
+
                         $this->add($this->callback);
                         // add the condition to show the phone field
                         $this->{$propName}->showIf([
@@ -416,9 +430,16 @@
                                 'value' => ''
                             ]
                         );
+
                     }
 
                 }
+
+
+
+
+
+
                 $this->add($this->{$propName}); // add every form field independent of settings to the form
 
             }

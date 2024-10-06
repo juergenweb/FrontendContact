@@ -132,6 +132,7 @@
          */
         protected function init(): void
         {
+          
             $configUrl = wire('modules')->getModuleEditUrl('FrontendContact');
             $this->configUrlLink = '<a href="' . $configUrl . '">' . $this->_('Go to the module configuration page') . '</a>';
 
@@ -302,6 +303,11 @@
          */
         private function getUserFields(): array
         {
+            // check first if user has permission "profile-edit"
+            // otherwise return an empty array to prevent the error message "You do not have permission to execute this module"
+            if(!$this->wire('user')->hasPermission ('profil-edit')) {
+                return [];
+            }
             // get array of all editable user template fields
             $fields = $this->wire('modules')->get('ProcessProfile');
             $all_userfields = $fields->data['profileFields'];

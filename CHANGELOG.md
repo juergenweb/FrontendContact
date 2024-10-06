@@ -89,3 +89,7 @@ If a user is logged in and sends an email, the email address has not been added 
 
 Re-written for new Inputfield dependencies for the phone field (requires FrontendForms >= 2.2.5).
 If set, the phone field will only be visible if the checkbox for "request a callback" will be checked. Otherwise the phone field is hidden.
+
+## [1.3.4] - 2024-10-06
+
+Check for user permission "profile-edit" added to the method getUserFields(), to prevent display of error message on module initialization if user has not "profile-edit" permission. Thanks to Christian for reporting this issue.

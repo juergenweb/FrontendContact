@@ -1,0 +1,249 @@
+{
+    "file": "site\/modules\/FrontendContact\/FrontendContact.module",
+    "textdomain": "site--modules--frontendcontact--frontendcontact-module",
+    "translations": {
+        "334c4a4c42fdb79d7ebc3e73b517e6f8": {
+            "text": "keines"
+        },
+        "0853768675f29bc4a8d4e72d0cda51a7": {
+            "text": "W\u00e4hlen und konfigurieren Sie die Felder des Kontakt-Formulars"
+        },
+        "ec658a483855963167ec2c1c0920dc3c": {
+            "text": "W\u00e4hlen Sie die Felder aus, die im Formular angezeigt werden sollen. Hinweis: 2 Felder des Formulars (E-Mail, Nachricht) sind obligatorisch und daher immer vorhanden und nicht konfigurierbar."
+        },
+        "7a79ef710284e6b41094c40d263e74a9": {
+            "text": "Anrede-Feld"
+        },
+        "ca13db9a8af2c429a7d463972e16e8cc": {
+            "text": "Dieses Feld zum Formular hinzuf\u00fcgen"
+        },
+        "d88657aa263af3eec8ebd27063df0826": {
+            "text": "Dieses Feld als Pflichtfeld markieren"
+        },
+        "794d728b3048784af271713801ff7e43": {
+            "text": "W\u00e4hlen Sie das entsprechende Benutzerfeld"
+        },
+        "2c56b06102bdeecd02cb9c0eb60ad68e": {
+            "text": "Der Wert dieses Benutzerfeldes wird als Formularwert verwendet, wenn der Benutzer eingeloggt ist."
+        },
+        "771ff1e4a9e320cefe7b3bcb7833bb75": {
+            "text": "Es k\u00f6nnen nur Felder des Typs \"%s\" ausgew\u00e4hlt werden."
+        },
+        "1998614bbedbcbde9824e5fc35ee6578": {
+            "text": "Vorname-Feld"
+        },
+        "d10164f22e3f8c737b75b58bd93cfea1": {
+            "text": "Nachname-Feld"
+        },
+        "1118ef52300a1d6b722dd362c65ffdd3": {
+            "text": "Betreff-Feld"
+        },
+        "c360753a98dc6b8941f21355928cf2dc": {
+            "text": "Datei-Upload-Feld"
+        },
+        "d87c94ef8d15731701f244cc97cdc31f": {
+            "text": "Kopie der Nachricht senden Feld"
+        },
+        "77e1fbfaf357fe8bb957203a1af579de": {
+            "text": "Wenn das Kontrollk\u00e4stchen aktiviert ist, wird eine Checkbox im Kontaktformular angezeigt, so dass der Benutzer w\u00e4hlen kann, ob er eine Kopie der Nachricht auf sein E-Mail-Konto erhalten m\u00f6chte, oder nicht."
+        },
+        "077fed5281d056a3907fec2cf0774039": {
+            "text": "Dieses Feld ist immer optional."
+        },
+        "5d94335d8060aa4e766e1171096c106a": {
+            "text": "Datenschutzerkl\u00e4rung akzeptieren Feld"
+        },
+        "52b7eac43569326f5fd14232ef8c8994": {
+            "text": "Datenschutztext oder Datenschutz-Kontrollk\u00e4stchen zum Formular hinzuf\u00fcgen"
+        },
+        "f25ff33f3e8c3f873dc85b3a401809eb": {
+            "text": "W\u00e4hlen Sie aus, ob Sie nur einen Datenschutztext oder eine Datenschutz-Checkbox \u00fcber der Schaltfl\u00e4che \"Senden\" anzeigen m\u00f6chten."
+        },
+        "89ca52172700db318a89a30e1b677ddc": {
+            "text": "Nichts anzeigen"
+        },
+        "0e99c9e8c94dc2a1c42561e4862923ae": {
+            "text": "Checkbox anzeigen"
+        },
+        "823dbdeca8e8e353dde97aa7708ff251": {
+            "text": "Text anzeigen"
+        },
+        "57e0942ea0dc40513cfa36f66cf8a29c": {
+            "text": "Sie k\u00f6nnen die Anzeige des Datenschutztextes bzw. des Kontrollk\u00e4stchens deaktivieren, aber Sie sollten sich dar\u00fcber im Klaren sein, dass dies zu rechtlichen Konsequenzen f\u00fchren kann, wenn in Ihrem Land ein Datenschutzhinweis erforderlich ist."
+        },
+        "7507729fd86157f8c6c06b36b11c9b92": {
+            "text": "Standard-E-Mail-Konfiguration"
+        },
+        "7f5cc1f1b0224b7dbd820acc620ba612": {
+            "text": "Geben Sie die allgemeine E-Mail-Adresse des Empf\u00e4ngers ein"
+        },
+        "aedd897e5d75122232de3578c2a1816a": {
+            "text": "Jedes Kontaktformular ben\u00f6tigt einen Empf\u00e4nger: W\u00e4hlen Sie, ob Sie ihn manuell eingeben oder den Wert eines bestimmten PW-Feldes verwenden m\u00f6chten."
+        },
+        "dcc9cc33d64413affcebc7df5dd29fc0": {
+            "text": "E-Mail Adresse manuell eingeben"
+        },
+        "95a68face04a3fb6617f87f03d126438": {
+            "text": "Den Wert eines ProcessWire Feldes verwenden"
+        },
+        "38d72d17598adfdf577f2c94752a7802": {
+            "text": "Sie k\u00f6nnen die Empf\u00e4nger-E-Mail-Adresse bei jedem Formular manuell \u00e4ndern."
+        },
+        "1b9b268ea00afc39d37e33d105c4a2f9": {
+            "text": "Standard-E-Mail-Adresse als Text"
+        },
+        "b6c92863807b34099290954e3100d4dc": {
+            "text": "Geben Sie eine E-Mail Adresse ein (z.B. office@myemail.com)"
+        },
+        "3c76d6e31a98d339d12c825437c5bca8": {
+            "text": "Standard-E-Mail-Adresse aus dem Feld"
+        },
+        "b0533064d340a5b28be51f962f0c150d": {
+            "text": "W\u00e4hlen Sie ein Feld aus, das die E-Mail-Adresse enth\u00e4lt, an die die E-Mails auf gesendet werden sollen."
+        },
+        "3c969a23a06faacad77a9607feee6654": {
+            "text": "Aktueller Wert: %s"
+        },
+        "0b55da97fe62f1c2acc4901b9cea6776": {
+            "text": "Im Moment sind keine ausw\u00e4hlbaren Felder verf\u00fcgbar. Sie m\u00fcssen zuerst ein Feld vom Typ E-Mail erstellen und es zu einer Vorlage hinzuf\u00fcgen, wenn Sie diese Option nutzen m\u00f6chten."
+        },
+        "391b1c0e2e6a571d16ee13451bfe5740": {
+            "text": "W\u00e4hlen Sie eine E-Mail-Vorlage"
+        },
+        "78325c4af90ffc228c3798aa64c67ad1": {
+            "text": "Von den FrontenForms Einstellungen \u00fcbernehmen"
+        },
+        "768e9766bf4b93f28bb332609b8e7429": {
+            "text": "keine HTML-Vorlage (nur einfacher Text)"
+        },
+        "7aab33ddcda6341e8d9483b90b419d17": {
+            "text": "W\u00e4hlen Sie, ob Sie eine HTML-Vorlage f\u00fcr die E-Mails verwenden m\u00f6chten."
+        },
+        "0a6eca4828ea7f3fa67e27f3e5920330": {
+            "text": "Wenn FrontendForms Einstellungen \u00fcbernehmen ausgew\u00e4hlt wurde, dann werden die dort angegeben Einstellungen herangezogen."
+        },
+        "c18393d954f62604d9f34be940b2b4ab": {
+            "text": "Minimale Zeit bis zum Absenden des Formulars"
+        },
+        "4313d12c580c56aacafee9d21c220c34": {
+            "text": "Bitte geben Sie die Mindestzeit in Sekunden an, bevor ein Formular abgeschickt werden soll. Passen Sie die Anzahl der Sekunden an die Anzahl der Formularfelder in Ihrem Formular an. Bitte beachten Sie: je mehr Felder, desto mehr Sekunden sind zum Ausf\u00fcllen des Formulars erforderlich."
+        },
+        "6ae9ea08baca30904d7120cb36c6dd84": {
+            "text": "Wenn der Wert 0 ist, ist diese Funktion deaktiviert. Diese Funktion misst die Zeit zwischen dem Laden und Absenden eines Formulars. Wenn die Zeit zu kurz ist (beispielsweise, wenn ein Spam-Bot das Formular in weniger als 1 Sekunde ausf\u00fcllt), f\u00fchrt dies zu einem Formularfehler."
+        },
+        "9a8ba14504462ac1a5b3365a5f8e8501": {
+            "text": "Nur zum Beachten: Alle anderen Einstellungen zum Spamschutz werden aus der globalen Konfiguration des FrontendForms-Moduls \u00fcbernommen."
+        },
+        "8152e92924892023d55b62a942636981": {
+            "text": "Kurzanleitung"
+        },
+        "be69ba584185a9903279c68567703491": {
+            "text": "Dies ist eine einfache Schnellstart-Anleitung f\u00fcr die Implementierung des Kontaktformulars auf Ihrer Website."
+        },
+        "10bc314c8ce765c66d24c6bc9be3ff7c": {
+            "text": "Einfachste Einbindung"
+        },
+        "a926f0320830b6855e481c66913fbd7d": {
+            "text": "F\u00fcgen Sie diesen Code in Ihre Vorlage ein, wo das Formular angezeigt werden soll."
+        },
+        "3eb54c619a3ba10eccf743d5c2ed17b8": {
+            "text": "In diesem Fall verwendet das Formular die globalen Einstellungen der Konfiguration im Backend."
+        },
+        "d96f982f39b682ec49a68e64c06271c4": {
+            "text": "Erweiterte Integration mit ge\u00e4nderten Einstellungen"
+        },
+        "85198a3318560cd72357e5b4eed142a5": {
+            "text": "Wenn Sie m\u00f6chten, dass das Formular abweichend von den globalen Einstellungen angezeigt wird oder Sie einige Parameter \u00e4ndern m\u00f6chten, m\u00fcssen Sie wie nachfolgend beschrieben vorgehen."
+        },
+        "4486575452a4b7304315b37b12a10745": {
+            "text": "\u00dcberschreiben Sie die Empf\u00e4ngeradress oder f\u00fcgen Sie weitere Empf\u00e4nger hinzu"
+        },
+        "3fcad3b5510b9165bdc27112753f5e1f": {
+            "text": "\u00dcberschreiben Sie die maximalen Versuche"
+        },
+        "c3918ca5c17155b88a3eac3d3cb47465": {
+            "text": "\u00dcberschreiben Sie die Mindestzeit f\u00fcr die Formular\u00fcbermittlung"
+        },
+        "e7dd7541c4d73ddbc65943916bba00d5": {
+            "text": "\u00dcberschreiben Sie die maximale Zeit f\u00fcr die Formular\u00fcbermittlung"
+        },
+        "e71e8b2058be94c3322d89eed7d2b97a": {
+            "text": "Aktivieren Sie die Anzeige des Kontrollk\u00e4stchens \"Kopie an mich senden\""
+        },
+        "547b82ff5c3cefc47c60b9a19f1accce": {
+            "text": "Datenschutz-Checkbox, Datenschutz-Text oder gar nichts anzeigen"
+        },
+        "2a8a647991b8fd208b7c904ba2a62e81": {
+            "text": "Anzeige einer alternativen Nachricht nach erfolgreicher Formular\u00fcbermittlung"
+        },
+        "373c9ebf8cc7fc3e98159f964aa6b7d2": {
+            "text": "Ausgabe des Formulars"
+        },
+        "f42c96435bca2eeca5dec2b9440f33bb": {
+            "text": "Einige der im obigen Beispiel verwendeten Methoden stammen aus dem Modul FrontendForms und werden in den %s zu diesem Modul erl\u00e4utert."
+        },
+        "be472a74e2acc3a024841b1511e729aa": {
+            "text": "examples Ordner"
+        },
+        "ff0644d502bf6cdc09a01552a6489936": {
+            "text": "Weitere Beispiele finden Sie auf GitHub im %s. Bitte studieren Sie diese Beispiele, wie Sie das Kontaktformular anpassen k\u00f6nnen."
+        },
+        "de560a91f4e77491d6daefa3bcd92db8": {
+            "text": "Direkt zur Modul-Konfigurationsseite"
+        },
+        "d608bf108e44b21a14e132dce0ec7f1e": {
+            "text": "Direkte zum Eingabefeld"
+        },
+        "5f486d590b7fc1b98a3f7b51db79e82c": {
+            "text": "Das E-Mail-Feld '%s' auf dieser Seite enth\u00e4lt keinen Wert, aber dieses Feld wurde in der Konfiguration des FrontendContact-Moduls als Standard-E-Mail-Feld ausgew\u00e4hlt."
+        },
+        "c581df0d69e006213c8a21e1779f3006": {
+            "text": "Sie geben in dieses Eingabefeld eine g\u00fcltige E-Mail-Adresse ein"
+        },
+        "6b4b7575e665470e97bff455489652e7": {
+            "text": "Sie gehen zur Modul-Konfiguration des FrontendContact-Moduls und w\u00e4hlen dort eine anderes Feld, welches eine g\u00fcltige E-Mail-Adresse enth\u00e4lt"
+        },
+        "d9f81f992b5211cbaf9c8e2f2b8550a9": {
+            "text": "Aus diesem Grund haben sie nun 2 M\u00f6glichkeiten, um diese Problem zu beheben:"
+        },
+        "33a85f1a3f66abc06a25e0511d7e13eb": {
+            "text": "Wenn Sie nichts \u00e4ndern, versenden Ihre Kontaktformulare, die \u00fcber das FrontendContact-Modul erstellt wurden und die Standard-E-Mail-Adresse verwenden, keine E-Mails mehr, da die Empf\u00e4nger-Mailadresse fehlt."
+        },
+        "604a722e5a8847763242193354b945c1": {
+            "text": "FrontendContact ben\u00f6tigt eine Standard-E-Mail-Adresse. Bitte geben Sie eine g\u00fcltige E-Mail-Adresse manuell ein oder w\u00e4hlen Sie ein PW-Feld aus, welches eine g\u00fcltige E-Mail-Adresse im Tab E-Mail-Konfiguration enth\u00e4lt."
+        },
+        "6c097b3140c8a820b687e0764406e259": {
+            "text": "F\u00fcr das FrontendContact-Modul ist eine g\u00fcltige E-Mail-Adresse erforderlich. Bitte geben Sie eine g\u00fcltige E-Mail-Adresse ein oder w\u00e4hlen Sie ein PW-Feld aus, das die E-Mail-Adresse im Tab E-Mail-Konfiguration enth\u00e4lt."
+        },
+        "63f953d4dbfa6a02d2eeb59f62e0346a": {
+            "text": "Telefon-Feld"
+        },
+        "132075c5bb387246402239fde7018dfd": {
+            "text": "Eine Checkbox \"R\u00fcckruf anfordern\" oberhalb des Telefonfeldes auf dem Frontend anzeigen"
+        },
+        "1a503f48b0551dd6fc6ee5a35f93c8f3": {
+            "text": "In diesem Fall wird das Telefon-Eingabefeld nur angezeigt, wenn dieses Kontrollk\u00e4stchen auf dem Frontend angeklickt wird."
+        },
+        "12cb401e3a068898222575c6a5ef5ece": {
+            "text": "Seiten-Titel"
+        },
+        "2d507736babbc81a5d9c6087d746e527": {
+            "text": "Seiten-ID"
+        },
+        "d5337b4d4789fb0353bf92ba5c71278b": {
+            "text": "Feldname"
+        },
+        "eeccef6865b610d55442ac1ea6e7bc0e": {
+            "text": "Feldtyp"
+        },
+        "89a04e00a8c836f280c7c4b033b929fd": {
+            "text": "Es k\u00f6nnen nur Felder vom Typ \"FieldtypeEmail\" und \"FieldtypeImprint\" ausgew\u00e4hlt werden, die eine E-Mail-Adresse als Wert enthalten."
+        },
+        "6130df886c5b80f9fff77716328f1cd6": {
+            "text": "Es k\u00f6nnen nur Felder vom Typ \"FieldtypeEmail\" ausgew\u00e4hlt werden, die eine E-Mail-Adresse als Wert enthalten."
+        },
+        "1a9894002749a17ef95b9aa763c8d3d1": {
+            "text": "Derzeit ist kein PW-Feld mit einem g\u00fcltigen E-Mail-Wert ausgew\u00e4hlt. Bitte w\u00e4hlen Sie ein Feld aus der Eingabeauswahl oben aus."
+        }
+    }
+}

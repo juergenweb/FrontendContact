@@ -1,0 +1,24 @@
+{
+    "file": "site\/modules\/FrontendContact\/ContactForm.php",
+    "textdomain": "site--modules--frontendcontact--contactform-php",
+    "translations": {
+        "4758f7b6eca42e3f45ef7fde662fc3a0": {
+            "text": "Eine neue Nachricht \u00fcber das Kontaktformular"
+        },
+        "a12a3079e14ced46e69ba52b8a90b21a": {
+            "text": "="
+        },
+        "adf97d7947b919115b6ed7e7ea7d93bf": {
+            "text": "Es ist keine Empf\u00e4nger-E-Mail Adresse angegeben, daher wird das Formular auch nicht angegezeigt."
+        },
+        "934a5d07b81c24dbf292e3156b0bec9e": {
+            "text": "Ich m\u00f6chte einen R\u00fcckruf"
+        },
+        "0a0aeb83db46e27ef0821d84f4b76a93": {
+            "text": "Wenn Sie m\u00f6chten, dass wir Sie zur\u00fcckrufen, aktivieren Sie bitte dieses K\u00e4stchen und geben Sie Ihre Telefonnummer in das unten erscheinende Feld ein."
+        },
+        "93cba07454f06a4a960172bbd6e2a435": {
+            "text": "Ja"
+        }
+    }
+}

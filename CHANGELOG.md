@@ -93,3 +93,13 @@ If set, the phone field will only be visible if the checkbox for "request a call
 ## [1.3.4] - 2024-10-06
 
 Check for user permission "profile-edit" added to the method getUserFields(), to prevent display of error message on module initialization if user has not "profile-edit" permission. Thanks to Christian for reporting this issue.
+
+## 2024-10-27
+
+- **Support for RockLanguage added**
+
+If you have installed the [RockLanguage](https://processwire.com/modules/rock-language/) module by Bernhard Baumrock, this module now supports the sync of the language files. This means that you do not have to take care about new translations after you have downloaded a new version of FrontendContact. All new translations (at the moment only German translations) will be synced with your your ProcessWire language files. 
+
+Please note: The sync will only take place if you are logged in as Superuser and $config->debug is set to true (take a look at the [docs](https://www.baumrock.com/en/processwire/modules/rocklanguage/docs/)).
+
+The (old) CSV files usage is still supported.

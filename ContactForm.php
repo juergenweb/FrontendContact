@@ -103,6 +103,7 @@
             $this->frontendcontact_config['input_phone_callback'] = 0;
             $this->frontendcontact_config['input_phone_show'] = 0;
             $this->frontendcontact_config['input_phone_required'] = 0;
+            $this->frontendcontact_config['input_log_submission'] = 0;
 
             // get module configuration data from FrontendContact module and create properties of each setting
             foreach ($this->wire('modules')->getConfig('FrontendContact') as $key => $value) {
@@ -559,7 +560,6 @@
             if ($this->get('input_emailTemplate') != 'none') {
                 // Add the HTML body property to the Mail object
                 Form::setBody($this->mail, $this->getMailPlaceholder('allvalues'), $this->frontendcontact_config['input_mailmodule']);
-                //$this->mail->bodyHTML($this->getMailPlaceholder('allvalues'));
             } else {
                 $this->mail->body($this->getMailPlaceholder('allvalues'));
             }
@@ -569,6 +569,14 @@
             if (!$this->mail->send()) {
                 // output an error message that the mail could not be sent
                 $this->generateEmailSentErrorAlert();
+            } else {
+                if($this->frontendcontact_config['input_log_submission']){
+                    // write a log entry for the successful submission
+                    $ip = $this->wire('session')->getIP();
+                    $email = $data[$this->getID() . '-email'];
+                    $log_entry = $email. ' [IP: '.$ip.']';
+                    $this->wire('log')->log($log_entry, ['name' => 'successful-submissions-frontendcontact']);
+                }
             }
         }
 

@@ -94,7 +94,7 @@ If set, the phone field will only be visible if the checkbox for "request a call
 
 Check for user permission "profile-edit" added to the method getUserFields(), to prevent display of error message on module initialization if user has not "profile-edit" permission. Thanks to Christian for reporting this issue.
 
-## 2024-10-27
+## [1.3.5] 2024-10-27
 
 - **Support for RockLanguage added**
 
@@ -103,3 +103,8 @@ If you have installed the [RockLanguage](https://processwire.com/modules/rock-la
 Please note: The sync will only take place if you are logged in as Superuser and $config->debug is set to true (take a look at the [docs](https://www.baumrock.com/en/processwire/modules/rocklanguage/docs/)).
 
 The (old) CSV files usage is still supported.
+
+- **Logging of successful form submissions added**
+
+A new checkbox field in the module configuration offers you the possibility to log successfull form submissions if you want. Everytime a form has been be sent successfully, a log entry containing the sender email address and the IP adress (not the content of the message) will be written to a log file called "successful-submissions-frontendcontact".
+You can use this information to take a look how many mails have been sent, so it is only an additional source of information.

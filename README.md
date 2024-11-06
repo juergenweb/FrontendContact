@@ -39,6 +39,7 @@ The main goal was to add a complete working contactform with only one short line
 - IP of the sender will be send with the email too, so you can use it for IP-blocking if you will get a lot of spam from a certain IP
 - Supports Ajax form submission (as introduced in FrontendForms 2.1.47)
 - Support for sending mails with the following 3rd party PW-modules: WireMailPostmark, WireMailPostmarkApp, WireMailSmtp, WireMailPHPMailer
+- Logging of successful form submissions can be enabled
 
 ## Table of contents
 * [Configuration](#configurations)

@@ -244,6 +244,15 @@
         },
         "1a9894002749a17ef95b9aa763c8d3d1": {
             "text": "Derzeit ist kein PW-Feld mit einem g\u00fcltigen E-Mail-Wert ausgew\u00e4hlt. Bitte w\u00e4hlen Sie ein Feld aus der Eingabeauswahl oben aus."
+        },
+        "58212c64d40729173be684213995fc67": {
+            "text": "Erfolgreiche Formulareinreichungen protokollieren"
+        },
+        "509751fe4e76f8c7dc4eabb49ea34025": {
+            "text": "Wenn Sie jede erfolgreiche Formular\u00fcbermittlung als Log-Eintrag speichern m\u00f6chten, kreuzen Sie bitte dieses Kontrollk\u00e4stchen an."
+        },
+        "e4566f067c325d8bc2cf206472026234": {
+            "text": "Bitte beachten Sie: Sie m\u00fcssen Ihre Besucher dar\u00fcber informieren, dass ihre E-Mail- und IP-Adresse in diesem Fall gespeichert wird."
         }
     }
 }

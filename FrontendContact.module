@@ -47,6 +47,7 @@
 
         // array of all fields inside the user template
         protected array $userfields = [];
+        protected string|int|null $input_log_submission = 0; // write every successfull submission as an entry into the log files
 
         // All possible default fields of the contact form
         public static array $formFields = [
@@ -290,7 +291,8 @@
                 'input_default_to' => '',
                 'input_defaultPWField_to' => null,
                 'input_emailTemplate' => 'inherit',
-                'input_minTime' => 3
+                'input_minTime' => 3,
+                'input_log_submission' => 0
             ];
         }
 
@@ -782,6 +784,15 @@
             $notesText .= $this->_('Only to mention: All other spam protection measure settings will be taken from the global configuration of the FrontendForms module.');
             $minTime->notes = $notesText;
             $inputfields->add($minTime);
+
+            // Log successful submissions
+            $log_submission = $this->wire()->modules->get('InputfieldCheckbox');
+            $log_submission->attr('name', 'input_log_submission');
+            $log_submission->attr('checked', $this->input_log_submission == '1' ? 'checked' : '');
+            $log_submission->label = $this->_('Log successful submissions');
+            $log_submission->description = $this->_('If you want to save every successful form submission as an log entry, please toggle this checkbox.');
+            $log_submission->notes = $this->_('Please note: You have to inform your visitors that their email and IP address will be stored in this case.');
+            $inputfields->add($log_submission);
 
             /**  $docFieldset */
             $docFieldset = $this->wire('modules')->get('InputfieldFieldset');

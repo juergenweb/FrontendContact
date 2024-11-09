@@ -239,6 +239,8 @@ The default task of a contact form is to send the form data as a mail. This modu
 The place for saving all pages is inside the admin tree under the parent page "Frontend Contact", which will be created automatically. 
 In addition all fields for storing the data were also created automatically. You do not need to take care of it.
 
+![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/pages-in-the-admin.png?raw=true)
+
 ## Multi-language
 This module is ready for usage in multi-language site.
 The module will be shipped with the German translation file (default is English).

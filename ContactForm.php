@@ -99,11 +99,13 @@
 
             parent::__construct($id);
 
-            // default values for older versions < 1.3.0, which do not contain this setting fields
+            // default values for older versions, which do not contain this setting fields
             $this->frontendcontact_config['input_phone_callback'] = 0;
             $this->frontendcontact_config['input_phone_show'] = 0;
             $this->frontendcontact_config['input_phone_required'] = 0;
             $this->frontendcontact_config['input_log_submission'] = 0;
+            $this->frontendcontact_config['input_sub_action'] = 0;
+
 
             // get module configuration data from FrontendContact module and create properties of each setting
             foreach ($this->wire('modules')->getConfig('FrontendContact') as $key => $value) {
@@ -400,33 +402,46 @@
          */
         protected function createAllFormFields(): void
         {
+
             foreach (FrontendContact::$formFields as $className) {
                 $propName = lcfirst($className);
                 $class = 'FrontendForms\\' . $className;
 
-                $this->{$propName} = new $class(strtolower($className));
+                $field = new $class(strtolower($className));
+                $this->{$propName} = $field;
+
+                if ($className === 'Subject') {
+                    $field->hideIf([
+                        'name' => $this->getID() . '-gender', // name of the select field
+                        'operator' => 'is', // this is the operator
+                        'value' => 'Frau' // the value must not be empty to show the firstname field
+                    ]);
+                }
+
                 if ($className === 'Phone') {
-                    
+
                     // add the checkbox first if set
-                    if(array_key_exists('input_phone_callback',$this->frontendcontact_config) &&  ($this->frontendcontact_config['input_phone_callback'])){
+                    if (array_key_exists('input_phone_callback', $this->frontendcontact_config) && ($this->frontendcontact_config['input_phone_callback'])) {
+
+                        $this->add($this->callback);
 
                         // grab the description of the checkbox
                         $desc = $this->callback->getDescription();
+
                         $desc->hideIf([
-                                'name' => $this->getID().'-callback',
+                                'name' => $this->getID() . '-callback',
                                 'operator' => 'isnotempty',
                                 'value' => ''
                             ]
                         );
-                        
+
                         // add the data-conditional-rules attr manually
                         $conditions = json_encode($desc->getConditions());
                         $desc->setAttribute('data-conditional-rules', htmlspecialchars($conditions));
 
-                        $this->add($this->callback);
                         // add the condition to show the phone field
-                        $this->{$propName}->showIf([
-                                'name' => 'callback',
+                        $field->showIf([
+                                'name' => $this->getID() . '-callback',
                                 'operator' => 'isnotempty',
                                 'value' => ''
                             ]
@@ -436,14 +451,60 @@
 
                 }
 
+                if ($className === 'FileUploadMultiple') {
 
+                    // check if a file upload max size limit is set
+                    if (array_key_exists('input_filemaxuploadsize', $this->frontendcontact_config) && ($this->frontendcontact_config['input_filemaxuploadsize'])) {
+                        // add rule for max upload file size
+                        $field->setRule('allowedFileSize', $this->frontendcontact_config['input_filemaxuploadsize']);
+                    }
+                    //check if message should be save as a page
+                    if ($this->frontendcontact_config['input_sub_action'] > 0) {
+                        // add extension restrictions to it
+                        $fileupload_field = $this->wire('fields')->get('fcontact_files');
+                        if ($fileupload_field->extensions) {
+                            $allowed_extensions = explode(' ', $fileupload_field->extensions);
+                            $field->setRule('allowedFileExt', $allowed_extensions);
+                        }
+                    }
 
+                }
 
-
-
-                $this->add($this->{$propName}); // add every form field independent of settings to the form
+                $this->add($field); // add every form field independent of settings to the form
 
             }
+        }
+
+        /**
+         * Add the mapped user data to the values array if set
+         * @param array $values
+         * @param array $fields
+         * @param string $mapped_field_name
+         * @param string $field_name
+         * @param string $form_field_name
+         * @return array
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
+         */
+        protected function addMappedValueToPlaceholders(array $values, array $fields, string $mapped_field_name, string $field_name, string $form_field_name): array
+        {
+            // add the firstname from the user profile if mapped to a field
+            $mappedNameField = $this->frontendcontact_config[$mapped_field_name];
+            if ($mappedNameField != 'none') {
+                $nameField = $this->wire('fields')->get($mappedNameField)->name;
+                if ($this->wire('user')->$nameField) {
+                    if (!is_string($this->wire('user')->$nameField)) {
+                        if ($this->wire('user')->$nameField->className == 'SelectableOptionArray') {
+                            $value = $this->wire('user')->$nameField->title;
+                        }
+                    } else {
+                        $value = $this->wire('user')->$nameField;
+                    }
+                    $values[$this->getID() . '-' . $form_field_name] = $value;
+                }
+            }
+
+            return $values;
         }
 
         /**
@@ -454,13 +515,27 @@
         protected function createDataPlaceholder(): array
         {
             $values = $this->getValues();
-            // add email if user is logged in
             $fields = FrontendContact::$formFields;
+
             // get the position of the email field
-            $key = array_search('Email', $fields);
+
             if ($this->wire('user')->isLoggedin()) {
+
+                // add email if user is logged in
+                $key = array_search('Email', $fields);
                 $values = array_merge(array_slice($values, 0, $key), [$this->getID() . '-email' => $this->wire('user')->email], array_slice($values, $key));
+
+                // add the gender from the user profile if mapped to a field
+                $values = $this->addMappedValueToPlaceholders($values, $fields, 'input_gender_userfield_mapped', 'Gender', 'gender');
+
+                // add the firstname from the user profile if mapped to a field
+                $values = $this->addMappedValueToPlaceholders($values, $fields, 'input_name_userfield_mapped', 'Name', 'name');
+
+                // add the lastname from the user profile if mapped to a field
+                $values = $this->addMappedValueToPlaceholders($values, $fields, 'input_surname_userfield_mapped', 'Surname', 'surname');
+
             }
+
             // remove privacy and send copy values from post-array
             unset($values [$this->getID() . '-privacy']);
             unset($values [$this->getID() . '-sendcopy']);
@@ -479,6 +554,7 @@
             $placeholder .= '<div id="ip" class="bodypart"><span class="label">' . $this->_('IP') . '</label>: <span class="value">' . $this->wire('session')->getIP() . '</span></div>';
 
             $this->setMailPlaceholder('allvalues', $placeholder);
+
             return $values;
         }
 
@@ -490,8 +566,12 @@
          * @throws WireException
          * @throws Exception
          */
-        public function sendEmail(): void
+        public function sendEmail(int $pageID): void
         {
+            // set the upload path to the newly created page id
+            $new_upload_path = $this->wire('config')->paths->assets . 'files/' . $pageID . '/';
+
+            $this->setUploadPath($new_upload_path);
 
             // create all placeholders including values stored inside the database
             $data = $this->createDataPlaceholder();
@@ -564,20 +644,117 @@
                 $this->mail->body($this->getMailPlaceholder('allvalues'));
             }
 
-            $this->mail->sendAttachments($this); // for sending attachments
+            $keep = false;
+            if (($this->frontendcontact_config['input_sub_action'] == 1 || $this->frontendcontact_config['input_sub_action'] == 2)) {
+                $keep = true;
+            }
+
+            $this->mail->sendAttachments($this, $keep); // for sending attachments
 
             if (!$this->mail->send()) {
                 // output an error message that the mail could not be sent
                 $this->generateEmailSentErrorAlert();
             } else {
-                if($this->frontendcontact_config['input_log_submission']){
+                if ($this->frontendcontact_config['input_log_submission']) {
                     // write a log entry for the successful submission
                     $ip = $this->wire('session')->getIP();
                     $email = $data[$this->getID() . '-email'];
-                    $log_entry = $email. ' [IP: '.$ip.']';
+                    $log_entry = $email . ' [IP: ' . $ip . ']';
                     $this->wire('log')->log($log_entry, ['name' => 'successful-submissions-frontendcontact']);
                 }
             }
+        }
+
+        /**
+         * Function to save the email as a page inside the admin tree
+         * @return void
+         */
+        protected function saveEmail(): int
+        {
+            // for safety... check first if the parent page exists
+            $frontendcontact_page = $this->wire('pages')->get('template=admin, name=frontend-contact');
+
+            if ($frontendcontact_page->id != 0) {
+                // safe the email as a new page under the parent
+
+                // get the form data that has been submitted
+                $data = $this->createDataPlaceholder();
+
+                // grab all uploaded files if there are one
+                $uploaded_filenames = [];
+                if (array_key_exists($this->getID() . '-fileuploadmultiple', $data)) {
+                    $uploaded_filenames = $data[$this->getID() . '-fileuploadmultiple']; // array of all uploaded filenames
+                }
+
+                // create a new Page instance
+                $p = new \ProcessWire\Page();
+
+                // set the template and parent (required)
+                $p->template = $this->wire('templates')->get('frontend-contact-message');
+                $p->parent = $this->wire('pages')->get($frontendcontact_page->id);
+
+                // populate the page's fields with sanitized data
+                // the page will sanitize it's own data, but this way no assumptions are made
+                $p->fcontact_email = $this->wire('sanitizer')->email($data[$this->getID() . '-email']);
+                if (array_key_exists($this->getID() . '-subject', $data)) {
+                    $title_value = $this->wire('sanitizer')->text($data[$this->getID() . '-subject']);
+                }
+                $title_value = $title_value ? $title_value : sprintf($this->_('Contact message from %s'), $p->fcontact_email);;
+
+                $p->title = $title_value;
+                $p->name = $this->wire('sanitizer')->pageName($p->title . '-' . time());
+                if (array_key_exists($this->getID() . '-gender', $data))
+                    $p->fcontact_gender = $this->wire('sanitizer')->text($data[$this->getID() . '-gender']);
+                if (array_key_exists($this->getID() . '-firstname', $data))
+                    $p->fcontact_firstname = $this->wire('sanitizer')->text($data[$this->getID() . '-name']);
+                if (array_key_exists($this->getID() . '-surname', $data))
+                    $p->fcontact_lastname = $this->wire('sanitizer')->text($data[$this->getID() . '-surname']);
+                if (array_key_exists($this->getID() . '-phone', $data))
+                    $p->fcontact_phone = $this->wire('sanitizer')->text($data[$this->getID() . '-phone']);
+                if (array_key_exists($this->getID() . '-subject', $data))
+                    $p->fcontact_subject = $this->wire('sanitizer')->text($data[$this->getID() . '-subject']);
+                if (array_key_exists($this->getID() . '-message', $data))
+                    $p->fcontact_message = $this->wire('sanitizer')->textarea($data[$this->getID() . '-message']);
+
+                if ($p->save()) {
+
+                    // run only if "save as page" or is selected
+                    if ($this->frontendcontact_config['input_sub_action'] == 1) {
+
+                        // get all uploaded files including their path inside the site/assets/files dir
+                        $fileNames = $this->getUploadedFiles();
+
+                        if ($fileNames) {
+
+                            // store all uploaded files in the database and copy them to newly created page folder
+                            $p->of(false);
+                            $new_upload_path = $this->wire('config')->paths->assets . 'files/' . $p->id . '/';
+                            $this->setUploadPath($new_upload_path);
+
+                            // first copy all files to the new page folder
+                            foreach ($fileNames as $path) {
+                                // copy each file to the new page folder
+                                $this->wire('files')->copy($path, $this->getUploadPath());
+                                // remove it from the old folder
+                                $this->wire('files')->unlink($path);
+                            }
+
+                        }
+                    }
+
+                    // after that save them in the database
+                    if ($uploaded_filenames) {
+                        foreach ($uploaded_filenames as $name) {
+                            $path = $this->getUploadPath() . $name;
+                            $p->fcontact_files->add($path);
+                            $p->save('fcontact_files');
+                        }
+                    }
+
+                    return $p->id;
+                }
+            }
+            return 0;
         }
 
         /**
@@ -634,11 +811,24 @@
             // map user data as value to the form fields if a user is logged in
             $this->setMappedDataToField();
 
-            // send attachments
-            $this->mail->sendAttachments($this);
-
             if ($this->___isValid()) {
-                $this->sendEmail();
+
+                switch ($this->frontendcontact_config['input_sub_action']) {
+                    case(0):
+                        $this->sendEmail(0);
+                        break;
+                    case(1):
+                        $this->saveEmail();
+                        break;
+                    case(2):
+                        $newID = $this->saveEmail();
+                        if ($newID != 0) {
+                            $this->sendEmail($newID);
+                        }
+
+                        break;
+                }
+
             }
 
             return parent::render();

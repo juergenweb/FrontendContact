@@ -108,3 +108,15 @@ The (old) CSV files usage is still supported.
 
 A new checkbox field in the module configuration offers you the possibility to log successfull form submissions if you want. Everytime a form has been be sent successfully, a log entry containing the sender email address and the IP adress (not the content of the message) will be written to a log file called "successful-submissions-frontendcontact".
 You can use this information to take a look how many mails have been sent, so it is only an additional source of information.
+
+## [1.3.6] 2024-11-09
+
+- **Saving mails as pages too**
+
+According to a user request in the forum by Flashmaster82, you have now the possibility to select what action should be taken after the form has been validated successfull:
+
+- send as mail (this is the default behavior)
+- save email as a page only (this is new and saves the message only as a page without sending it as an mail)
+- save email as a page and send as email (this is also new and combines both possibilities)
+
+If a message should be saved as a page, then each message will be saved inside the admin tree

@@ -113,7 +113,7 @@ You can use this information to take a look how many mails have been sent, so it
 
 - **Saving mails as pages too**
 
-According to a user request in the forum by Flashmaster82, you have now the possibility to select what action should be taken after the form has been validated successfull:
+According to a user (request in the forum by Flashmaster82)[https://processwire.com/talk/topic/28442-frontendcontact-module-for-creating-one-or-more-contact-forms-on-the-frontend/?do=findComment&comment=235364], you have now the possibility to select which action should be taken after the form has been validated successfull:
 
 - send as mail (this is the default behavior)
 - save email as a page only (this is new and saves the message only as a page without sending it as an mail)

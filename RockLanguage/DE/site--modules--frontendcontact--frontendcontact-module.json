@@ -253,6 +253,63 @@
         },
         "e4566f067c325d8bc2cf206472026234": {
             "text": "Bitte beachten Sie: Sie m\u00fcssen Ihre Besucher dar\u00fcber informieren, dass ihre E-Mail- und IP-Adresse in diesem Fall gespeichert wird."
+        },
+        "019ec3132cdf8ee0f2e2a75cf5d3e459": {
+            "text": "Anrede"
+        },
+        "20db0bfeecd8fe60533206a2b5e9891a": {
+            "text": "Vorname"
+        },
+        "8d3f5eff9c40ee315d452392bed5309b": {
+            "text": "Nachname"
+        },
+        "082e55a73f10496681c84231dc1c88f7": {
+            "text": "="
+        },
+        "bcc254b55c4a1babdf1dcb82c207506b": {
+            "text": "Telefon"
+        },
+        "c7892ebbb139886662c6f2fc8c450710": {
+            "text": "Betreff"
+        },
+        "4c2a8fe7eaf24721cc7a9f0175115bd4": {
+            "text": "Nachricht"
+        },
+        "851653473b3ef3f0731eae01bd208e0e": {
+            "text": "Hochgeladene Dateien"
+        },
+        "8c83256888633307bedbb66015b03a74": {
+            "text": "Nachricht von %s"
+        },
+        "5aded4172fe2fe24f53659f9e39cb0f7": {
+            "text": "W\u00e4hlen Sie eine Aktion nach erfolgreicher Formular\u00fcbermittlung aus"
+        },
+        "ee89f9cfaa5cf85212ab51bb3934b269": {
+            "text": "Als Seite speichern"
+        },
+        "9c6cac5151fd0f6c40812f8b1478272a": {
+            "text": "Als Seite speichern und Mail senden"
+        },
+        "d0b3752ee0498ff65e86e3d768ff4b11": {
+            "text": "W\u00e4hlen Sie aus, welche Aktion ausgef\u00fchrt werden soll, nachdem die Formular\u00fcbermittlung erfolgreich war."
+        },
+        "a3e584da0bddb73bce5f9e8917d0e9f1": {
+            "text": "Wenn Sie sich daf\u00fcr entscheiden, die Mails als Seiten zu speichern, dann wird jede Mail als separate Seite unter der Admin-Seite gespeichert."
+        },
+        "0a840d9fe7c69ecfc1a98cc315170f76": {
+            "text": "Bitte achten Sie darauf, Ihre Besucher darauf hinzuweisen, dass in diesem Fall der Inhalt der Mails gespeichert wird."
+        },
+        "20cb2b0b5b1da2f2845f70a66cc87812": {
+            "text": "Als Mail senden (Standard)"
+        },
+        "f9395a29a0f6eb8d3330c3eca9aca5bb": {
+            "text": "Maximal zul\u00e4ssige Dateigr\u00f6\u00dfe f\u00fcr Uploads"
+        },
+        "f7313687b6c50f8769d73411ad78ea32": {
+            "text": "Sie k\u00f6nnen die Dateigr\u00f6\u00dfe f\u00fcr hochgeladene Dateien begrenzen. Wenn Sie kein Limit setzen, wird stattdessen der Wert der php-ini-upload_max_filesize verwendet."
+        },
+        "0d83de3b553b89155d0a2117d4855735": {
+            "text": "Bitte geben Sie den Wert als Zahl in Bytes (z.B. 10000) oder als Zahl gefolgt von der Einheit und getrennt durch ein Leerzeichen (fe 1 MB) ein."
         }
     }
 }

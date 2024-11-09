@@ -47,6 +47,7 @@ The main goal was to add a complete working contactform with only one short line
 * [Special contact form methods](#special-contact-form-methods)
 * [Extending the form with additional inputfields](#extending-the-form-with-additional-input-fields-or-other-elements)
 * [Run multiple forms on one page](#run-multiple-forms-on-one-page)
+* [Save messages as pages](#save-messages-as-page)
 * [Multilanguage](#multi-language)
 
 ## Configurations
@@ -240,6 +241,12 @@ The place for saving all pages is inside the admin tree under the parent page "F
 In addition all fields for storing the data were also created automatically. You do not need to take care of it.
 
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/pages-in-the-admin.png?raw=true)
+
+Each child page represents a message sent via the form.
+
+If you have added custom fields by yourself, they cannot be saved at the moment. You can only save the standard fields of this module.
+
+There is a configuration field inside the backend, where you can select to save messages as pages.
 
 ## Multi-language
 This module is ready for usage in multi-language site.

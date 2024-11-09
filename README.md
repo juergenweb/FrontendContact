@@ -47,7 +47,7 @@ The main goal was to add a complete working contactform with only one short line
 * [Special contact form methods](#special-contact-form-methods)
 * [Extending the form with additional inputfields](#extending-the-form-with-additional-input-fields-or-other-elements)
 * [Run multiple forms on one page](#run-multiple-forms-on-one-page)
-* [Save messages as pages](#save-messages-as-page)
+* [Save messages as pages](#save-messages-as-pages)
 * [Multilanguage](#multi-language)
 
 ## Configurations

@@ -705,7 +705,7 @@
                 $p->name = $this->wire('sanitizer')->pageName($p->title . '-' . time());
                 if (array_key_exists($this->getID() . '-gender', $data))
                     $p->fcontact_gender = $this->wire('sanitizer')->text($data[$this->getID() . '-gender']);
-                if (array_key_exists($this->getID() . '-firstname', $data))
+                if (array_key_exists($this->getID() . '-name', $data))
                     $p->fcontact_firstname = $this->wire('sanitizer')->text($data[$this->getID() . '-name']);
                 if (array_key_exists($this->getID() . '-surname', $data))
                     $p->fcontact_lastname = $this->wire('sanitizer')->text($data[$this->getID() . '-surname']);

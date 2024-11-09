@@ -119,4 +119,8 @@ According to a user request in the forum by Flashmaster82, you have now the poss
 - save email as a page only (this is new and saves the message only as a page without sending it as an mail)
 - save email as a page and send as email (this is also new and combines both possibilities)
 
-If a message should be saved as a page, then each message will be saved inside the admin tree
+Read more about this new feature [here](https://github.com/juergenweb/FrontendContact/tree/main?tab=readme-ov-file#save-messages-as-pages)
+
+- **New module configuration added**
+
+A new configuration field to limit the file size of uploaded files globally added. Can be overwritten on each form via adding the validation rule "allowedFileSize" to the file upload field.

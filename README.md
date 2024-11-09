@@ -60,6 +60,8 @@ optional and privacy field is always required, if privacy checkbox has been sele
 * **`Set a global minimum form submission time`** Set a global minimum time before a form is allowed to be submitted (spam protection)
 * **`Select email template`** Choose a HTML mail template for your email or send it as plain text
 * **`Select using an external mail service for sending mails`** If you have installed 3rd party modules for sending mails and these modules are compatible with this module, you can select if you want to use one of these modules for sending the mails of this module or not.
+* **`Select a max filesize for uploded files template`** You can limit the filesize of uploaded files by setting a global limit.
+* **`Select what should be done after successfull form submission`** You can select if you want to send an mail only, save the message as a page only or a combination of both.
 
 Each global configuration setting can be overwritten on per form base.
 
@@ -90,7 +92,6 @@ $form = $modules->get('FrontendContact')->getForm(); // this loads the form obje
 $form->to('office@myemail.com'); // set or overwrite the recipient email address
 echo $form->render();
 ```
-
 ### Special contact form methods
 Beside the methods of the FrontendForms module, I have added some extra methods for this module to make it much more confortable to manipulate the form.
 
@@ -232,6 +233,11 @@ $form2->to('email2@example.com'); // add a receiver email address for form 2
 echo $form2->render();
 ```
 As you can see, you have to enter the id as parameter of the getForm() method of each form. If you do not enter the id, each form will have the default id "contact-form" which will be added by default if no id was set. This should not be the case, because the validation would not work properly.
+
+## Save messages as pages
+The default task of a contact form is to send the form data as a mail. This module offers you the possibility to save the content of the form as a page too.
+The place for saving all pages is inside the admin tree under the parent page "Frontend Contact", which will be created automatically. 
+In addition all fields for storing the data were also created automatically. You do not need to take care of it.
 
 ## Multi-language
 This module is ready for usage in multi-language site.

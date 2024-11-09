@@ -48,7 +48,7 @@
         // array of all fields inside the user template
         protected array $userfields = [];
         protected string|int|null $input_log_submission = 0; // write every successfull submission as an entry into the log files
-
+        protected string|int|null $input_sub_action = 0;
         // All possible default fields of the contact form
         public static array $formFields = [
             'Gender',
@@ -133,7 +133,7 @@
          */
         protected function init(): void
         {
-          
+
             $configUrl = wire('modules')->getModuleEditUrl('FrontendContact');
             $this->configUrlLink = '<a href="' . $configUrl . '">' . $this->_('Go to the module configuration page') . '</a>';
 
@@ -147,6 +147,8 @@
             $this->addHookAfter('Inputfield::processInput', $this, 'checkForFrontendContactEmailField');
             $this->addHookBefore('Page::render', $this, 'noEmailWarning');
             $this->addHookBefore('Modules::saveConfig', $this, 'removeWarning');
+            $this->addHookBefore('Modules::saveConfig', $this, 'createAdminPage');
+            $this->addHookBefore('ProcessPageEdit::execute', $this, 'changeHeadline');
         }
 
 
@@ -174,6 +176,154 @@
                 }
                 // remove all previous warnings
                 if ($remove) $this->warnings('clear all');
+            }
+        }
+
+        /**
+         * Create parent page for the emails under the admin if it does not exist
+         * @param \ProcessWire\HookEvent $event
+         * @return void
+         */
+        protected function createAdminPage(HookEvent $event): void
+        {
+            // run only if FrontendContact config is saved
+            if ($event->arguments(0) === 'FrontendContact') {
+                // check if parent page exists
+                $frontendcontact_page = $this->wire('pages')->get('template=admin, name=frontend-contact');
+                if ($frontendcontact_page->id === 0) {
+                    // create the new admin page
+
+                    // create a new Page instance
+                    $p = new Page();
+
+                    // set the template and parent (required)
+                    $p->template = $this->wire('templates')->get("admin");
+                    $p->parent = $this->wire('pages')->get(2);
+                    $p->title = 'Frontend Contact';
+                    $p->name = 'frontend-contact';
+                    $p->status(['hidden']);
+                    $p->save();
+
+                    // create gender field
+                    if (!$this->wire('fields')->get('fcontact_gender')) {
+                        $gender = new Field();
+                        $gender->name = 'fcontact_gender';
+                        $gender->label = $this->_('Gender');
+                        $gender->type = 'FieldtypeText';
+                        $gender->tags = 'frontendcontact';
+                        wire('fields')->save($gender);
+                    }
+
+                    // create firstname field
+                    if (!$this->wire('fields')->get('fcontact_firstname')) {
+                        $firstname = new Field();
+                        $firstname->name = 'fcontact_firstname';
+                        $firstname->label = $this->_('First name');
+                        $firstname->type = 'FieldtypeText';
+                        $firstname->tags = 'frontendcontact';
+                        wire('fields')->save($firstname);
+                    }
+
+                    // create lastname field
+                    if (!$this->wire('fields')->get('fcontact_lastname')) {
+                        $lastname = new Field();
+                        $lastname->name = 'fcontact_lastname';
+                        $lastname->label = $this->_('Last name');
+                        $lastname->type = 'FieldtypeText';
+                        $lastname->tags = 'frontendcontact';
+                        wire('fields')->save($lastname);
+                    }
+
+                    // create email field
+                    if (!$this->wire('fields')->get('fcontact_email')) {
+                        $email = new Field();
+                        $email->name = 'fcontact_email';
+                        $email->label = $this->_('E-Mail');
+                        $email->type = 'FieldtypeEmail';
+                        $email->textformatters = ['TextformatterEntities'];
+                        $email->tags = 'frontendcontact';
+                        wire('fields')->save($email);
+                    }
+
+                    // create phone field
+                    if (!$this->wire('fields')->get('fcontact_phone')) {
+                        $phone = new Field();
+                        $phone->name = 'fcontact_phone';
+                        $phone->label = $this->_('Phone');
+                        $phone->type = 'FieldtypeText';
+                        $phone->tags = 'frontendcontact';
+                        wire('fields')->save($phone);
+                    }
+
+                    // create subject field
+                    if (!$this->wire('fields')->get('fcontact_subject')) {
+                        $subject = new Field();
+                        $subject->name = 'fcontact_subject';
+                        $subject->label = $this->_('Subject');
+                        $subject->type = 'FieldtypeText';
+                        $subject->tags = 'frontendcontact';
+                        wire('fields')->save($subject);
+                    }
+
+                    // create message field
+                    if (!$this->wire('fields')->get('fcontact_message')) {
+                        $message = new Field();
+                        $message->name = 'fcontact_message';
+                        $message->label = $this->_('Message');
+                        $message->type = 'FieldtypeTextarea';
+                        $message->tags = 'frontendcontact';
+                        wire('fields')->save($message);
+                    }
+
+                    // create file upload field
+                    if (!$this->wire('fields')->get('fcontact_files')) {
+                        $fileupload = new Field();
+                        $fileupload->name = 'fcontact_files';
+                        $fileupload->label = $this->_('Uploaded files');
+                        $fileupload->type = 'FieldtypeFile';
+                        $fileupload->tags = 'frontendcontact';
+                        $fileupload->maxFiles = 0;
+                        $fileupload->descriptionRows = 0;
+                        $fileupload->extensions = 'pdf doc docx xls xlsx gif jpg jpeg png txt';
+                        wire('fields')->save($fileupload);
+                    }
+
+                    // Create fieldgroup
+                    if (!$this->wire('fieldgroups')->get('frontend-contact-message')) {
+                        $fieldgroup = new Fieldgroup();
+                        // if you want to edit fields in this field group via admin panel, name need to be same with template name
+                        $fieldgroup->name = 'frontend-contact-message';
+                        $fieldgroup->add('title');
+                        $fieldgroup->add('fcontact_gender');
+                        $fieldgroup->add('fcontact_firstname');
+                        $fieldgroup->add('fcontact_lastname');
+                        $fieldgroup->add('fcontact_email');
+                        $fieldgroup->add('fcontact_phone');
+                        $fieldgroup->add('fcontact_subject');
+                        $fieldgroup->add('fcontact_message');
+                        $fieldgroup->add('fcontact_files');
+
+                        // save fieldgroup
+                        wire('fieldgroups')->save($fieldgroup);
+                    }
+
+                    // Create template
+                    if (!$this->wire('templates')->get('frontend-contact-message')) {
+                        $template = new Template();
+                        $template->name = 'frontend-contact-message';
+                        $template->label = 'FrontendContact message';
+                        $template->tags = 'frontendcontact';
+                        $template->noChildren = 1;
+                        $template->noLang = 1;
+
+                        $template->fieldgroup = wire('fieldgroups')->get('frontend-contact-message');
+
+                        // save template
+                        wire('templates')->save($template);
+                    }
+
+                }
+
             }
         }
 
@@ -214,6 +364,23 @@
                     }
                 }
             }
+        }
+
+        /**
+         * Customize the headline on message pages
+         * @param \ProcessWire\HookEvent $event
+         * @return void
+         * @throws \ProcessWire\WireException
+         */
+        protected function changeHeadline(HookEvent $event): void
+        {
+            $pageEdit = $event->object;
+            $page = $pageEdit->getPage();
+            if ($page->template != 'frontend-contact-message') {
+                return; // return early
+            }
+            $dateCreated = date('Y-m-d', $page->created);
+            $this->wire('processHeadline', sprintf($this->_('Contact message from %s'), $dateCreated));
         }
 
         /**
@@ -292,7 +459,8 @@
                 'input_defaultPWField_to' => null,
                 'input_emailTemplate' => 'inherit',
                 'input_minTime' => 3,
-                'input_log_submission' => 0
+                'input_log_submission' => 0,
+                'input_sub_action' => 0
             ];
         }
 
@@ -307,7 +475,7 @@
         {
             // check first if user has permission "profile-edit"
             // otherwise return an empty array to prevent the error message "You do not have permission to execute this module"
-            if(!$this->wire('user')->hasPermission ('profil-edit')) {
+            if (!$this->wire('user')->hasPermission('profil-edit')) {
                 return [];
             }
             // get array of all editable user template fields
@@ -587,6 +755,15 @@
             $fileupload_show->label = $this->_('Add this field to the form');
             $fileuploadFieldset->add($fileupload_show);
 
+            $filemaxuploadsize = $this->wire()->modules->get('InputfieldText');
+            $filemaxuploadsize->attr('name', 'input_filemaxuploadsize');
+            $filemaxuploadsize->label = $this->_('Max allowed file size for uploads');
+            $filemaxuploadsize->value = $this->input_filemaxuploadsize;
+            $filemaxuploadsize->showIf = 'input_fileUploadMultiple_show=1';
+            $filemaxuploadsize->description = $this->_('You can limit the file size for uploaded files. If you do not set a limit, the value of the php-ini upload_max_filesize will be used instead.');
+            $filemaxuploadsize->notes = $this->_('Please enter the value as number in Bytes (fe 10000) or as a number followed by the unit and separated with a space (fe 1 MB).');
+            $fileuploadFieldset->add($filemaxuploadsize);
+
             $formfieldsFieldset->add($fileuploadFieldset);
 
             /** show_sendCopy */
@@ -794,6 +971,22 @@
             $log_submission->notes = $this->_('Please note: You have to inform your visitors that their email and IP address will be stored in this case.');
             $inputfields->add($log_submission);
 
+            // Actions after submissions
+            $sub_actions = $this->wire()->modules->get('InputfieldSelect');
+            $sub_actions->label = $this->_('Select an action after successful form submission');
+            $sub_actions->attr('name', 'input_sub_action');
+            $sub_actions->addOption('0', $this->_('Send as mail (default)'));
+            $sub_actions->addOption('1', $this->_('Save as page'));
+            $sub_actions->addOption('2', $this->_('Save as page and send as mail'));
+            $sub_actions->defaultValue = 0;
+            $sub_actions->attr('value', $this->input_sub_action);
+            $sub_actions->description = $this->_('Select which action to take after the form submission is successful.');
+            $notes_text = $this->_('If you choose to save the mails as pages, each mail will be saved as a separate page under the admin page.');
+            $notes_text .= ' ' . $this->_('Please take care to inform your visitors that the content of the mails will be stored in this case.');
+            $sub_actions->notes = $notes_text;
+            $sub_actions->required = 1;
+            $inputfields->add($sub_actions);
+
             /**  $docFieldset */
             $docFieldset = $this->wire('modules')->get('InputfieldFieldset');
             $docFieldset->label = $this->_('How to');
@@ -917,6 +1110,46 @@
         {
             $this->wire('session')->removeNotices();
             $this->clearAllCache();
+
+            $fields = $this->wire('fields');
+            $templates = $this->wire('templates');
+            $pages = $this->wire('pages');
+
+            // remove all pages inside the admin tree
+            $parent_page = $pages->get('name=frontend-contact');
+
+            if ($parent_page->id != 0) {
+                $pages->delete($parent_page, true);
+            }
+
+            // remove all fields from the frontend-contact-message template
+            $t = $templates->get('frontend-contact-message');
+            $fieldsToDelete = [
+                'fcontact_gender',
+                'fcontact_firstname',
+                'fcontact_lastname',
+                'fcontact_email',
+                'fcontact_phone',
+                'fcontact_subject',
+                'fcontact_message',
+                'fcontact_files'
+            ];
+            $fg = $t->fieldgroup;
+            foreach ($fieldsToDelete as $f) {
+                $fg->remove($fields->get($f));
+            }
+            $fg->save();
+
+            //delete the fields
+            foreach ($fieldsToDelete as $f) {
+                $delField = $this->wire('fields')->get($f);
+                $fields->delete($delField);
+            }
+
+            // delete the template
+            $t = $templates->get('frontend-contact-message');
+            $templates->delete($t);
+
         }
 
 

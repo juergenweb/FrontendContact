@@ -259,4 +259,3 @@ in the module for other users.
 
 ## To-Do
 * More testing
-* Add possibility to save a mail to a new page too

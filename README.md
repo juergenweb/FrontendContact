@@ -252,6 +252,8 @@ If you have added custom fields by yourself, they cannot be saved at the moment.
 
 There is a configuration field inside the backend, where you can select to save messages as pages.
 
+*Limitations:* Only all standard fields of the form (gender, surname, lastname,...) can be saved inside a page. If you have added some additional fields, they cannot not be stored at the moment.
+
 ## Multi-language
 This module is ready for usage in multi-language site.
 The module will be shipped with the German translation file (default is English).
@@ -260,3 +262,4 @@ in the module for other users.
 
 ## To-Do
 * More testing
+* Adding support for saving custom fields in pages too

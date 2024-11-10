@@ -119,7 +119,7 @@ According to a user request in the forum by Flashmaster82 [https://processwire.c
 - save email as a page only (this is new and saves the message only as a page without sending it as an mail)
 - save email as a page and send as email (this is also new and combines both possibilities)
 
-Read more about this new feature [here]https://github.com/juergenweb/FrontendContact/tree/main?tab=readme-ov-file#save-messages-as-pages).
+Read more about this new feature [here](https://github.com/juergenweb/FrontendContact/tree/main?tab=readme-ov-file#save-messages-as-pages).
 
 - **New module configuration added**
 

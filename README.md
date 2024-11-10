@@ -239,8 +239,6 @@ As you can see, you have to enter the id as parameter of the getForm() method of
 ## Save messages as pages
 The default task of a contact form is to send the form data as a mail. This module offers you the possibility to save the content of the form as a page too.
 
-![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/save-action.jpg?raw=true)
-
 The place for saving all pages is inside the admin tree under the parent page "Frontend Contact", which will be created automatically. 
 In addition all fields for storing the data were also created automatically. You do not need to take care of it.
 
@@ -249,6 +247,8 @@ In addition all fields for storing the data were also created automatically. You
 Each child page represents a message sent via the form.
 
 There is a configuration field inside the backend, where you can select to save messages as pages.
+
+![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/save-action.jpg?raw=true)
 
 *Limitations:* Only all standard fields of the form (gender, surname, lastname,...) can be saved inside a page. If you have added some additional fields, they cannot not be stored at the moment.
 

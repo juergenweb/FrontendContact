@@ -40,6 +40,7 @@ The main goal was to add a complete working contactform with only one short line
 - Supports Ajax form submission (as introduced in FrontendForms 2.1.47)
 - Support for sending mails with the following 3rd party PW-modules: WireMailPostmark, WireMailPostmarkApp, WireMailSmtp, WireMailPHPMailer
 - Logging of successful form submissions can be enabled
+- Supports saving of mails as pages too (you can decide if you want to send email only, to save email as a page or do both)
 
 ## Table of contents
 * [Configuration](#configurations)

@@ -743,7 +743,7 @@
                     }
 
                     // after that save them in the database
-                    if ($uploaded_filenames) {
+                    if (array_filter($uploaded_filenames)) {
                         foreach ($uploaded_filenames as $name) {
                             $path = $this->getUploadPath() . $name;
                             $p->fcontact_files->add($path);

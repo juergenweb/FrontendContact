@@ -1,0 +1,87 @@
+{
+    "file": "site\/modules\/FrontendContact\/FrontendContactManager.module",
+    "textdomain": "site--modules--frontendcontact--frontendcontactmanager-module",
+    "translations": {
+        "d8bb39abcc22d6bb3078f589858db811": {
+            "text": "Liste aller Nachrichten"
+        },
+        "d7778d0c64b6ba21494c97f77a66885a": {
+            "text": "Filtern"
+        },
+        "a4cd8aa29d867953cdd89cb97eff3bd4": {
+            "text": "Anhand des Betreffs filtern"
+        },
+        "196f52ee8d02eaac663dea5b4b41e2c2": {
+            "text": "Filtern Sie Nachrichten basierend auf einem bestimmten Wort oder einer bestimmten Phrase im Betreff."
+        },
+        "fc9051d3058ef097bafa1fdba38d23ec": {
+            "text": "Anhand der E-Mail-Adresse filtern"
+        },
+        "60854bdcc84b31c6e00092acd890aef9": {
+            "text": "Filtern Sie Nachrichten basierend auf einem bestimmten Wort oder einer bestimmten Phrase in der E-Mail-Adresse."
+        },
+        "c43d31681a308254a7daada5da908b80": {
+            "text": "Anhand des Vornamen filtern"
+        },
+        "28115b9b8ace59294ed21fc0afdd0c07": {
+            "text": "Filtern Sie Nachrichten basierend auf einem bestimmten Wort oder einer bestimmten Phrase im Vornamen."
+        },
+        "14cc47be0b3235385a8387db7871066b": {
+            "text": "Anhand des Nachnamen filtern"
+        },
+        "f5eff3d71bd565a4d29b190e3469c4cb": {
+            "text": "Filtern Sie Nachrichten basierend auf einem bestimmten Wort oder einer bestimmten Phrase im Nachnamen."
+        },
+        "01abfc750a0c942167651c40d088531d": {
+            "text": "="
+        },
+        "da8ae07488400e41612a3aa4a64a0dd1": {
+            "text": "Datum der Absendung"
+        },
+        "c7892ebbb139886662c6f2fc8c450710": {
+            "text": "Betreff"
+        },
+        "8aace3ec18d83874d22850b7eee93c7d": {
+            "text": "Absender"
+        },
+        "1e884e3078d9978e216a027ecd57fb34": {
+            "text": "="
+        },
+        "8f9bfe9d1345237cb3b2b205864da075": {
+            "text": "Benutzer"
+        },
+        "274b68192b056e268f128ff63bfcd4a4": {
+            "text": "k.A."
+        },
+        "da7dd4067def4a79e099269adc9f5d0f": {
+            "text": "Es gibt keine Nachrichten"
+        },
+        "0f6125bce53a7f802da8d9feb2ae7e40": {
+            "text": "Paginierungsnummer f\u00fcr Datentabellen"
+        },
+        "c8afe997985601d8ab23420fe9a9d5a3": {
+            "text": "Bitte w\u00e4hlen Sie aus, wie viele Eintr\u00e4ge pro Seite in einer Datentabelle angezeigt werden sollen."
+        },
+        "cf74d4fba3d676998324ae2e6b7cff1b": {
+            "text": "Wenn die Gesamtzahl der Eintr\u00e4ge in der Tabelle h\u00f6her ist, wird die Tabelle paginiert."
+        },
+        "f33fcba9d157e63d417c6e2fb36a7758": {
+            "text": "="
+        },
+        "576e0baf65a211b1cbb6a830f943f4f6": {
+            "text": "Suchen Sie eine bestimmte Nachricht basierend auf bestimmten Kriterien."
+        },
+        "0805fc81d56261a0abc146a3875ea7ac": {
+            "text": "Es wurden keine Nachrichten \u00fcbermittelt."
+        },
+        "868417fcd8dc445f59633412d577b47f": {
+            "text": "Listen Sie alle Nachrichten auf und filtern Sie sie nach bestimmten Kriterien."
+        },
+        "42627d82960fe6201543e91e1704b2d9": {
+            "text": "Sie m\u00fcssen das Speichern von Nachrichten als Seiten innerhalb der FrontendContact-Modulkonfiguration aktivieren, um den FrontendContact Manager verwenden zu k\u00f6nnen."
+        },
+        "075ae3d2fc31640504f814f60e5ef713": {
+            "text": "deaktiviert"
+        }
+    }
+}

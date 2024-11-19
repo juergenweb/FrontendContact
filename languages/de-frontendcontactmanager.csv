@@ -1,0 +1,28 @@
+en,de,description,file,hash
+"List of all messages","Liste aller Nachrichten",,site/modules/FrontendContact/FrontendContactManager.module,d8bb39abcc22d6bb3078f589858db811
+disabled,deaktiviert,,site/modules/FrontendContact/FrontendContactManager.module,075ae3d2fc31640504f814f60e5ef713
+"You must enable saving messages as pages within the FrontendContact module configuration to use the FrontendContact Manager.","Sie müssen das Speichern von Nachrichten als Seiten innerhalb der FrontendContact-Modulkonfiguration aktivieren, um den FrontendContact Manager verwenden zu können.",,site/modules/FrontendContact/FrontendContactManager.module,42627d82960fe6201543e91e1704b2d9
+"Find a specific message based on specific criteria.","Suchen Sie eine bestimmte Nachricht basierend auf bestimmten Kriterien.",,site/modules/FrontendContact/FrontendContactManager.module,576e0baf65a211b1cbb6a830f943f4f6
+Filter,Filtern,,site/modules/FrontendContact/FrontendContactManager.module,d7778d0c64b6ba21494c97f77a66885a
+"Filter by subject","Anhand des Betreffs filtern",,site/modules/FrontendContact/FrontendContactManager.module,a4cd8aa29d867953cdd89cb97eff3bd4
+"Filter messages based on a specific word or phrase in the subject.","Filtern Sie Nachrichten basierend auf einem bestimmten Wort oder einer bestimmten Phrase im Betreff.",,site/modules/FrontendContact/FrontendContactManager.module,196f52ee8d02eaac663dea5b4b41e2c2
+"Filter by mail address","Anhand der E-Mail-Adresse filtern",,site/modules/FrontendContact/FrontendContactManager.module,fc9051d3058ef097bafa1fdba38d23ec
+"Filter messages based on a specific word or phrase in the mail address.","Filtern Sie Nachrichten basierend auf einem bestimmten Wort oder einer bestimmten Phrase in der E-Mail-Adresse.",,site/modules/FrontendContact/FrontendContactManager.module,60854bdcc84b31c6e00092acd890aef9
+"Filter by first name","Anhand des Vornamen filtern",,site/modules/FrontendContact/FrontendContactManager.module,c43d31681a308254a7daada5da908b80
+"Filter messages based on a specific word or phrase in the first name.","Filtern Sie Nachrichten basierend auf einem bestimmten Wort oder einer bestimmten Phrase im Vornamen.",,site/modules/FrontendContact/FrontendContactManager.module,28115b9b8ace59294ed21fc0afdd0c07
+"Filter by last name","Anhand des Nachnamen filtern",,site/modules/FrontendContact/FrontendContactManager.module,14cc47be0b3235385a8387db7871066b
+"Filter messages based on a specific word or phrase in the last name.","Filtern Sie Nachrichten basierend auf einem bestimmten Wort oder einer bestimmten Phrase im Nachnamen.",,site/modules/FrontendContact/FrontendContactManager.module,f5eff3d71bd565a4d29b190e3469c4cb
+"No messages have been submitted.","Es wurden keine Nachrichten übermittelt.",,site/modules/FrontendContact/FrontendContactManager.module,0805fc81d56261a0abc146a3875ea7ac
+#,=,,site/modules/FrontendContact/FrontendContactManager.module,01abfc750a0c942167651c40d088531d
+"Date of sending","Datum der Absendung",,site/modules/FrontendContact/FrontendContactManager.module,da8ae07488400e41612a3aa4a64a0dd1
+Subject,Betreff,,site/modules/FrontendContact/FrontendContactManager.module,c7892ebbb139886662c6f2fc8c450710
+Sender,Absender,,site/modules/FrontendContact/FrontendContactManager.module,8aace3ec18d83874d22850b7eee93c7d
+E-mail,=,,site/modules/FrontendContact/FrontendContactManager.module,1e884e3078d9978e216a027ecd57fb34
+User,Benutzer,,site/modules/FrontendContact/FrontendContactManager.module,8f9bfe9d1345237cb3b2b205864da075
+n/a,k.A.,,site/modules/FrontendContact/FrontendContactManager.module,274b68192b056e268f128ff63bfcd4a4
+"There are no messages.","Es gibt keine Nachrichten",,site/modules/FrontendContact/FrontendContactManager.module,da7dd4067def4a79e099269adc9f5d0f
+"Pagination number for data tables","Paginierungsnummer für Datentabellen",,site/modules/FrontendContact/FrontendContactManager.module,0f6125bce53a7f802da8d9feb2ae7e40
+"Please select how many entries should be displayed inside a data table per page.","Bitte wählen Sie aus, wie viele Einträge pro Seite in einer Datentabelle angezeigt werden sollen.",,site/modules/FrontendContact/FrontendContactManager.module,c8afe997985601d8ab23420fe9a9d5a3
+"If the total number of entries inside the table is higher, the table will be paginated.","Wenn die Gesamtzahl der Einträge in der Tabelle höher ist, wird die Tabelle paginiert.",,site/modules/FrontendContact/FrontendContactManager.module,cf74d4fba3d676998324ae2e6b7cff1b
+"FrontendContact Manager",=,,site/modules/FrontendContact/FrontendContactManager.module,f33fcba9d157e63d417c6e2fb36a7758
+"List all messages and filter them according to specific criteria.","Listen Sie alle Nachrichten auf und filtern Sie sie nach bestimmten Kriterien.",,site/modules/FrontendContact/FrontendContactManager.module,868417fcd8dc445f59633412d577b47f

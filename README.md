@@ -41,6 +41,7 @@ The main goal was to add a complete working contactform with only one short line
 - Support for sending mails with the following 3rd party PW-modules: WireMailPostmark, WireMailPostmarkApp, WireMailSmtp, WireMailPHPMailer
 - Logging of successful form submissions can be enabled
 - Supports saving of mails as pages too (you can decide if you want to send email only, to save email as a page or do both)
+- Extra module FrontendContact Manager included which creates a new admin page under "Setup" to list and search all messages
 
 ## Table of contents
 * [Configuration](#configurations)
@@ -251,6 +252,13 @@ There is a configuration field inside the backend, where you can select to save 
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/save-action.jpg?raw=true)
 
 *Limitations:* Only all standard fields of the form (gender, surname, lastname,...) can be saved inside a page. If you have added some additional fields, they cannot not be stored at the moment.
+
+## Extra module FrontendContact Manager
+
+This module includes an extra module called FrontendContact Manager which is optional and has to be installed manually.
+This module adds a new page under the setup navigation menu item and this page contains all messages inside a paginated table.
+
+You can search this table for a specific message by using certain filter criteria, so it should be a helper module for administrators. This module works only if you have selected to save messages as pages too.
 
 ## Multi-language
 This module is ready for usage in multi-language site.

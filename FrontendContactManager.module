@@ -1,0 +1,313 @@
+<?php
+
+    namespace ProcessWire;
+
+    /**
+     * A custom admin page module for the FrontendContact module
+     */
+    class FrontendContactManager extends Process implements Module, ConfigurableModule
+    {
+
+        protected WireInputData|null $filtervalues = null; // post data after the filter form has been submitted
+        protected int $items_per_page = 10; // default number of questions to show inside the table, if there are more questions -> pagination will be added
+        protected array $frontendContactConfig = []; // array containing all configuration values of FrontendContact.module
+        protected int $action = 0; // default action after form submission
+
+        /**
+         * Constructor method which runs during class initialization
+         */
+        public function __construct()
+        {
+            parent::__construct();
+            $this->frontendContactConfig = wire('modules')->getConfig('FrontendContact');
+        }
+
+        /**
+         * Function to run before all modules have been initialized
+         * @return void
+         * @throws \ProcessWire\WireException
+         */
+        public function init(): void
+        {
+            // set post values if the filter form has been submitted
+            if ($this->wire('input')) {
+                $this->filtervalues = $this->wire('input')->post;
+            }
+
+            // set config values if present
+            if ($this->input_paginationnumber)
+                $this->items_per_page = $this->input_paginationnumber;
+
+            if(array_key_exists('input_sub_action', $this->frontendContactConfig)){
+                $this->action = $this->frontendContactConfig['input_sub_action'];
+            }
+
+            $headline = $this->_('List of all messages');
+            if($this->action == 0){
+               $headline .= ' ('.$this->_('disabled').')';
+            }
+            $this->headline($headline);
+        }
+
+        /**
+         * Create the module info
+         * @return array
+         */
+        public static function getModuleinfo(): array
+        {
+            return [
+                'title' => __('FrontendContact Manager', __FILE__),
+                'summary' => __('List all messages and filter them according to specific criteria.', __FILE__),
+                'author' => 'Jürgen Kern',
+                'version' => '1.0.0',
+                'icon' => 'envelope',
+                'permanent' => false,
+                'autoload' => true,
+                'permission' => 'page-edit',
+                'requires' => [
+                    'FrontendForms',
+                    'PHP>=8.0.0',
+                    'ProcessWire>=3.0.195'
+                ],
+                'page' => [
+                    'name' => 'frontendcontact-table',
+                    'parent' => 'setup',
+                    'title' => __('FrontendContact Manager', __FILE__),
+                ],
+            ];
+        }
+
+        /**
+         * Submission list page
+         * @return string
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
+         */
+        public function execute(): string
+        {
+
+            if($this->action > 0)
+                return $this->renderSubmissionsTable();
+            return $this->_('You must enable saving messages as pages within the FrontendContact module configuration to use the FrontendContact Manager.');
+        }
+
+        /**
+         * Rendering the form to filter the messages by specific conditions
+         * @return string
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
+         */
+        protected function renderSubmissionsFilter(): string
+        {
+
+            $form = modules()->get('InputfieldForm');
+            $form->action = $this->wire('input')->url; // we submit on the same page
+            $form->method = 'post';
+            $form->attr('name+id', 'fcontact_filter_form');
+
+            $form->prependMarkup('<p>'.$this->_('Find a specific message based on specific criteria.').'</p>');
+
+            $fieldset = modules()->get('InputfieldFieldset');
+            $fieldset->label = $this->_('Filter');
+            $fieldset->columnWidth = '100';
+            $fieldset->icon = 'fcontact-filter';
+
+            // filter by question text
+            $f = modules()->get('InputfieldText');
+            $f->set('label', $this->_('Filter by subject'));
+            $f->attr('name+id', 'fcontact-subject');
+            $f->columnWidth = '50';
+            $f->notes = $this->_('Filter messages based on a specific word or phrase in the subject.');
+            $fieldset->add($f);
+
+            // filter by email address
+            $f = modules()->get('InputfieldText');
+            $f->set('label', $this->_('Filter by mail address'));
+            $f->attr('name+id', 'fcontact-mail');
+            $f->columnWidth = '50';
+            $f->notes = $this->_('Filter messages based on a specific word or phrase in the mail address.');
+            $fieldset->add($f);
+
+            // filter by first name
+            $f = modules()->get('InputfieldText');
+            $f->set('label', $this->_('Filter by first name'));
+            $f->attr('name+id', 'fcontact-firstname');
+            $f->columnWidth = '50';
+            $f->notes = $this->_('Filter messages based on a specific word or phrase in the first name.');
+            $fieldset->add($f);
+
+            // filter by last name
+            $f = modules()->get('InputfieldText');
+            $f->set('label', $this->_('Filter by last name'));
+            $f->attr('name+id', 'fcontact-lastname');
+            $f->columnWidth = '50';
+            $f->notes = $this->_('Filter messages based on a specific word or phrase in the last name.');
+            $fieldset->add($f);
+
+            // submit button
+            $f = modules()->get('InputfieldSubmit');
+            $f->attr('id+name', 'fcontact-submit-btn');
+            $f->attr('value', $this->_('Filter'));
+            $fieldset->add($f);
+
+            $form->add($fieldset);
+            return $form->render();
+
+        }
+
+        /**
+         * Get all messages matching the given selectors
+         * @return \ProcessWire\PageArray|null
+         * @throws \ProcessWire\WireException
+         */
+        protected function getAllSubmissions(): PageArray|null
+        {
+
+            $selectors = []; // default selector array
+
+            // filter by template
+            $selectors['template'] = 'template=frontend-contact-message';
+
+            if ($this->filtervalues && $this->filtervalues->count()) {
+
+                // filter by subject
+                $subName = 'fcontact-subject';
+                if ($this->filtervalues->$subName) {
+                    $subject = $this->wire('sanitizer')->selectorValue($this->filtervalues->$subName);
+                    $selectors['subject'] = 'title%=' . $subject;
+                }
+
+                // filter by mail address
+                $mailName = 'fcontact-mail';
+                if ($this->filtervalues->$mailName) {
+                    $mail = $this->wire('sanitizer')->selectorValue($this->filtervalues->$mailName);
+                    $selectors['mail'] = 'fcontact_email%=' . $mail;
+                }
+
+                // filter by first name
+                $firstnameName = 'fcontact-firstname';
+                if ($this->filtervalues->$firstnameName) {
+                    $firstname = $this->wire('sanitizer')->selectorValue($this->filtervalues->$firstnameName);
+                    $selectors['firstname'] = 'fcontact_firstname%=' . $firstname;
+                }
+
+                // filter by last name
+                $lastnameName = 'fcontact-lastname';
+                if ($this->filtervalues->$lastnameName) {
+                    $lastname = $this->wire('sanitizer')->selectorValue($this->filtervalues->$lastnameName);
+                    $selectors['lastname'] = 'fcontact_lastname%=' . $lastname;
+                }
+
+            }
+
+            // include all messages independent of status
+            $selectors[] = 'include=all';
+            return $this->wire('pages')->find(implode(',', $selectors));
+        }
+
+        /**
+         * Render the table containing all form messages via this module
+         * @return string
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
+         */
+        protected function renderSubmissionsTable(): string
+        {
+
+            $out = $this->renderSubmissionsFilter();
+            $submission_pages = $this->getAllSubmissions();
+
+            if (is_null($submission_pages)) {
+                return $this->_('No messages have been submitted.');
+            }
+
+            $start = ($this->wire('input')->pageNum - 1) * $this->items_per_page;
+            $submission_pages->setLimit($this->items_per_page);
+            $submission_pages->setStart($start);
+            // slice only if the number of pages is higher than the number of items per page
+            if ($submission_pages->count > $this->items_per_page) {
+                $viewPages = $submission_pages->slice($start, $this->items_per_page);
+                $counter = true;
+            } else {
+                $viewPages = $submission_pages;
+                $counter = false;
+            }
+
+            if ($viewPages->count) {
+
+                $table = $this->modules->get('MarkupAdminDataTable');
+                $table->encodeEntities = false;
+                $table->setEncodeEntities(false);
+                $table->headerRow([
+                    $this->_('#'),
+                    $this->_('Date of sending'),
+                    $this->_('Subject'),
+                    $this->_('Sender'),
+                    $this->_('E-mail'),
+                    $this->_('User')
+                ]);
+
+                foreach ($viewPages as $i => $p) {
+
+                    $number = $counter ? $start + $i + 1 : $i + 1;
+
+                    // only for multi-language site
+                    if ($this->languages) {
+                        $subject = $p->getLanguageValue($this->wire('languages')->getDefault()->id, 'title');
+                    } else {
+                        $subject = $p->title;
+                    }
+
+                    $subject = $subject != '' ? $subject : $this->_('n/a');
+
+                    $table->row(
+                        [
+                            $number,
+                            $p->createdStr,
+                            [$subject => $p->editUrl()],
+                            $p->fcontact_lastname . ' ' . $p->fcontact_firstname,
+                            $p->fcontact_email,
+                            $p->createdUser->name,
+                        ]
+                    );
+
+                }
+
+                // render the table with the questions
+                $out .= $table->render();
+
+                // render the pagination
+                $out .= $submission_pages->renderPager();
+
+            } else {
+                $out .= '<div id="no-results"><p>' . $this->_('There are no messages.') . '</p></div>';
+            }
+
+            return $out;
+        }
+
+        /**
+         * Define all fields for module configuration
+         * @param \ProcessWire\InputfieldWrapper $inputfields
+         * @return void
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
+         */
+        public function getModuleConfigInputfields(InputfieldWrapper $inputfields): void
+        {
+
+            // pagination number
+            $paginationnumber = $this->modules->get('InputfieldInteger');
+            $paginationnumber->label = $this->_('Pagination number for data tables');
+            $paginationnumber->name = 'input_paginationnumber';
+            $paginationnumber->inputType = 'number';
+            $paginationnumber->value = $this->input_paginationnumber;
+            $paginationnumber->min = 1;
+            $paginationnumber->defaultValue = 10;
+            $paginationnumber->description = $this->_('Please select how many entries should be displayed inside a data table per page.');
+            $paginationnumber->notes = $this->_('If the total number of entries inside the table is higher, the table will be paginated.');
+            $inputfields->add($paginationnumber);
+
+        }
+
+    }

@@ -124,3 +124,8 @@ Read more about this new feature [here](https://github.com/juergenweb/FrontendCo
 - **New module configuration added**
 
 A new configuration field to limit the file size of uploaded files globally added. Can be overwritten on each form via adding the validation rule "allowedFileSize" to the file upload field.
+
+## [1.3.7] 2024-11-19
+
+- **New module FrontendContact Manager added**
+

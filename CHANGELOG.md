@@ -129,3 +129,4 @@ A new configuration field to limit the file size of uploaded files globally adde
 
 - **New module FrontendContact Manager added**
 
+Read more about this new module [here](https://github.com/juergenweb/FrontendContact/blob/main/README.md#extra-module-frontendcontact-manager)

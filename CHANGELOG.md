@@ -130,3 +130,7 @@ A new configuration field to limit the file size of uploaded files globally adde
 - **New module FrontendContact Manager added**
 
 Read more about this new module [here](https://github.com/juergenweb/FrontendContact/blob/main/README.md#extra-module-frontendcontact-manager)
+
+- **Bug on checking $_Files array for checking of uploaded files fixed**
+
+There was a problem of checking for an empty $_Files array, because this array always contains at least one array key and this leads to it that the array is never empty. This has been fixed now by cleaning the array with the array_filter function.

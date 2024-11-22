@@ -42,11 +42,6 @@
                 $this->action = $this->frontendContactConfig['input_sub_action'];
             }
 
-            $headline = $this->_('List of all messages');
-            if($this->action == 0){
-               $headline .= ' ('.$this->_('disabled').')';
-            }
-            $this->headline($headline);
         }
 
         /**
@@ -85,6 +80,12 @@
          */
         public function execute(): string
         {
+
+            $headline = $this->_('List of all messages');
+            if($this->action == 0){
+                $headline .= ' ('.$this->_('disabled').')';
+            }
+            $this->headline($headline);
 
             if($this->action > 0)
                 return $this->renderSubmissionsTable();

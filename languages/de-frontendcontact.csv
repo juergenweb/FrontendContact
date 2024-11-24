@@ -1,4 +1,14 @@
 en,de,description,file,hash
+"A new message via contact form","Eine neue Nachricht über das Kontaktformular","set default subject string",site/modules/FrontendContact/ContactForm.php,4758f7b6eca42e3f45ef7fde662fc3a0
+"Request a callback","Ich möchte einen Rückruf",,site/modules/FrontendContact/ContactForm.php,934a5d07b81c24dbf292e3156b0bec9e
+"If you would like us to call you back, please check this box and enter your phone number in the appearing field below.","Wenn Sie möchten, dass wir Sie zurückrufen, aktivieren Sie bitte dieses Kästchen und geben Sie Ihre Telefonnummer in das unten erscheinende Feld ein.",,site/modules/FrontendContact/ContactForm.php,0a0aeb83db46e27ef0821d84f4b76a93
+Yes,Ja,,site/modules/FrontendContact/ContactForm.php,93cba07454f06a4a960172bbd6e2a435
+IP,=,,site/modules/FrontendContact/ContactForm.php,a12a3079e14ced46e69ba52b8a90b21a
+"The input field type of the class %s is not supported to save the value inside a custom field. Please take a look at the docs of FrontendContact which input types are supported for storage in the database.","Der Eingabefeldtyp der Klasse %s wird nicht unterstützt, um den Wert in einem benutzerdefinierten Feld zu speichern. Bitte werfen Sie einen Blick in die Dokumentation von FrontendContact, welche Eingabetypen für die Speicherung in der Datenbank unterstützt werden.",,site/modules/FrontendContact/ContactForm.php,5d89663bb32e394592065e7bac898202
+"The input field type of the class %s cannot be stored in a PW field of the type %s. Allowed types are: %s","Der Eingabefeldtyp der Klasse %s kann nicht in einem PW-Feld vom Typ %s gespeichert werden. Zulässige Typen sind: %s",,site/modules/FrontendContact/ContactForm.php,1fc94cba2c9a37c6070252b4e9974290
+"Contact message from %s","Nachricht von %s",,site/modules/FrontendContact/ContactForm.php,8c83256888633307bedbb66015b03a74
+"Email address for the recipient is missing, so the form will not be displayed.","Es ist keine Empfänger-E-Mail Adresse angegeben, daher wird das Formular auch nicht angegezeigt.",,site/modules/FrontendContact/ContactForm.php,adf97d7947b919115b6ed7e7ea7d93bf
+en,de,description,file,hash
 "Go to the module configuration page","Direkt zur Modul-Konfigurationsseite",,site/modules/FrontendContact/FrontendContact.module,de560a91f4e77491d6daefa3bcd92db8
 Gender,Anrede,,site/modules/FrontendContact/FrontendContact.module,019ec3132cdf8ee0f2e2a75cf5d3e459
 "First name",Vorname,,site/modules/FrontendContact/FrontendContact.module,20db0bfeecd8fe60533206a2b5e9891a
@@ -102,11 +112,3 @@ Fieldtype,Feldtyp,,site/modules/FrontendContact/FrontendContact.module,eeccef686
 "Some methods used in the example above are from the FrontendForms module and are explained in the %s of this module.","Einige der im obigen Beispiel verwendeten Methoden stammen aus dem Modul FrontendForms und werden in den %s zu diesem Modul erläutert.",,site/modules/FrontendContact/FrontendContact.module,f42c96435bca2eeca5dec2b9440f33bb
 "examples folder","examples Ordner",,site/modules/FrontendContact/FrontendContact.module,be472a74e2acc3a024841b1511e729aa
 "You will find more examples on GitHub inside the %s. Please study these examples on how to customize the contact form.","Weitere Beispiele finden Sie auf GitHub im %s. Bitte studieren Sie diese Beispiele, wie Sie das Kontaktformular anpassen können.",,site/modules/FrontendContact/FrontendContact.module,ff0644d502bf6cdc09a01552a6489936
-en,de,description,file,hash
-"A new message via contact form","Eine neue Nachricht über das Kontaktformular","set default subject string",site/modules/FrontendContact/ContactForm.php,4758f7b6eca42e3f45ef7fde662fc3a0
-"Request a callback","Ich möchte einen Rückruf",,site/modules/FrontendContact/ContactForm.php,934a5d07b81c24dbf292e3156b0bec9e
-"If you would like us to call you back, please check this box and enter your phone number in the appearing field below.","Wenn Sie möchten, dass wir Sie zurückrufen, aktivieren Sie bitte dieses Kästchen und geben Sie Ihre Telefonnummer in das unten erscheinende Feld ein.",,site/modules/FrontendContact/ContactForm.php,0a0aeb83db46e27ef0821d84f4b76a93
-Yes,Ja,,site/modules/FrontendContact/ContactForm.php,93cba07454f06a4a960172bbd6e2a435
-IP,=,,site/modules/FrontendContact/ContactForm.php,a12a3079e14ced46e69ba52b8a90b21a
-"Contact message from %s","Nachricht von %s",,site/modules/FrontendContact/ContactForm.php,8c83256888633307bedbb66015b03a74
-"Email address for the recipient is missing, so the form will not be displayed.","Es ist keine Empfänger-E-Mail Adresse angegeben, daher wird das Formular auch nicht angegezeigt.",,site/modules/FrontendContact/ContactForm.php,adf97d7947b919115b6ed7e7ea7d93bf

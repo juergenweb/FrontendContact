@@ -338,6 +338,8 @@ This module adds a new page under the setup navigation menu item and this page c
 
 You can search this table for a specific message by using certain filter criteria, so it should be a helper module for administrators. This module works only if you have selected to save messages as pages too.
 
+![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/frontendcontact-manager.png?raw=true)
+
 ## Multi-language
 This module is ready for usage in multi-language site.
 The module will be shipped with the German translation file (default is English).

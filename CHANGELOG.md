@@ -134,3 +134,9 @@ Read more about this new module [here](https://github.com/juergenweb/FrontendCon
 - **Bug on checking $_Files array for checking of uploaded files fixed**
 
 There was a problem of checking for an empty $_Files array, because this array always contains at least one array key and this leads to it that the array is never empty. This has been fixed now by cleaning the array with the array_filter function.
+
+## [1.3.8] 2024-11-24
+
+- **Support for saving custom fields value inside the database added**
+
+If you want to save the mails as pages too, it is now possible to the data of custom fields in the database. [Read more]()

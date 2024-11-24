@@ -274,7 +274,7 @@ To do this, you need to create a PW field for the specified custom field in the 
 
 Take a look at the table below to see which PW field type is suitable for your custom field:
 
-Custom field class | PW field type | 
+FrontendForms Custom field class | PW field type | 
 --- | --- | 
 InputWeek | FieldtypeText | 
 InputTel | FieldtypeText | 

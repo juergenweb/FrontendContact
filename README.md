@@ -323,7 +323,7 @@ $cf->saveField('extratext', 'pw_extratext');
 echo $form->render();
 ```
 
-The 2 parameters you have to add inside the parenthesis of the safeField() method are:
+The 2 parameters you have to add inside the parenthesis of the saveField() method are:
 
 * first parameter: the name attribute of the frontend custom field (in this case *extratext*)
 * second parameter: the name attribute of the PW field to save the data to the database (in this case *pw_extratext*)

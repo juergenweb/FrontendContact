@@ -318,7 +318,7 @@ $text->setLabel('Extra text');
 $form->addAfter($text, $cf->getFormElementByName('subject'));
 
 // this is the new mapping method, which is needed to save the value of the custom field to the appropriate PW field
-$cf->saveField('extratext', 'pw_extratext');
+$form->saveField('extratext', 'pw_extratext');
 
 echo $form->render();
 ```

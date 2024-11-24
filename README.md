@@ -326,8 +326,8 @@ echo $form->render();
 
 The 2 parameters you have to add inside the parenthesis of the safeField() method are:
 
-* first parameter: the name attribute of the frontend custom field
-* second parameter: the name attribute of the PW field to save the data to the database
+* first parameter: the name attribute of the frontend custom field (in this case *extratext*)
+* second parameter: the name attribute of the PW field to save the data to the database (in this case *pw_extratext*)
 
 Now, the value of the custom field will be stored in the database too.
 

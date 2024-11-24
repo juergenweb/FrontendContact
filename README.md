@@ -237,23 +237,22 @@ echo $form2->render();
 As you can see, you have to enter the id as parameter of the getForm() method of each form. If you do not enter the id, each form will have the default id "contact-form" which will be added by default if no id was set. This should not be the case, because the validation would not work properly.
 
 ## Save messages as pages
-The default task of a contact form is to send the form data as a mail. This module offers you the possibility to save the content of the form as a page too.
+The standard task of a contact form is to send the form data as an e-mail. However, this module also offers you the option of saving the content of the form as a page.
 
-The place for saving all pages is inside the admin tree under the parent page "Frontend Contact", which will be created automatically. 
+The place to save all pages is in the admin tree under the parent *Frontend Contact* page, which is created automatically. 
 
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/pages-in-the-admin.png?raw=true)
 
-In addition all fields for storing the data were also created automatically. You do not need to take care of it.
-Each child page represents a message sent via the form.
+In addition, all fields for saving the data are also created automatically. You don't have to worry about it. Each child page represents a message sent through the form.
 
-There is a configuration field inside the backend, where you can select to save messages as pages.
+There is a configuration field in the backend where you can choose whether to save messages as pages.
 
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/save-action.jpg?raw=true)
 
 
 ### Save custom fields in database too
 
-As you know, you can extend the contact form with custom fields. If you want to store the values of these fields inside the database too, you can do this by using the saveField() method.
+As you know, you can extend the contact form with custom fields. If you want to store the values of these fields inside the database too, you can do this by using the **saveField()** method.
 
 This method maps a custom field to a corresponding PW field within the frontend-contact-message template.
 

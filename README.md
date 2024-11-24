@@ -251,7 +251,6 @@ There is a configuration field inside the backend, where you can select to save 
 
 ![alt text](https://github.com/juergenweb/FrontendContact/blob/main/images/save-action.jpg?raw=true)
 
-*Limitations:* Only all standard fields of the form (gender, surname, lastname,...) can be saved inside a page. If you have added some additional fields, they cannot not be stored at the moment.
 
 ### Save custom fields in database too
 
@@ -331,6 +330,8 @@ The 2 parameters you have to add inside the parenthesis of the safeField() metho
 * second parameter: the name attribute of the PW field to save the data to the database
 
 Now, the value of the custom field will be stored in the database too.
+
+*Limitations:* Only the field types mentioned in the table can be stored inside the database.
 
 ## Extra module FrontendContact Manager
 

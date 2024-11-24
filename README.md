@@ -8,7 +8,7 @@ Only works in combination with the FrontendForms module - so please download thi
 A configurable module for ProcessWire for outputting one or more contact forms on your site based on the FrontendForms module.
 
 Please note: You have to install the FrontendForms module first, because this module relies on it.
-So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site.
+So go to https://github.com/juergenweb/FrontendForms first and install the FrontendForms module on your site or install it directly from the ProcessWire modules directory.
 
 ## Live example
 You can see the module in action on this page: https://www.schulfreund.at/kontakt/
@@ -20,7 +20,6 @@ With the FrontendForms module, which is the base for this module, you will be ab
 
 My intention to develop such a contact form module was to prevent the manual creation/copy everytime you need and contact form, to save a lot of time and to keep the template clean from a lot of code. But one goal was to keep the module very flexible, so that the form could be adapted, customized and enhanced to my needs. 
 The main goal was to add a complete working contactform with only one short line of code and this is possible with this module.
-
 
 ## Requirements
 - ProcessWire 3.0.195 or newer

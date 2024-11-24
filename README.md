@@ -302,7 +302,7 @@ Password | FieldtypeText |
 PasswordConfirmation | FieldtypeText, FieldtypePassword | 
 InputMonth | FieldtypeText | 
 
-As you can see, a custom field can be mapped to more than one type of PW field. It's up to you which one you want to prefer.
+As you can see, a custom field can sometimes be mapped to more than one type of PW field. It's up to you which one you want to prefer. Some input fields can only be mapped to one type of PW field.
 
 Taking a look in the table, you can see that the appropriate PW field for the given custom field of the class *InputText* has to be mapped to a PW field of the type *FieldtypeText*.
 

@@ -253,6 +253,85 @@ There is a configuration field inside the backend, where you can select to save 
 
 *Limitations:* Only all standard fields of the form (gender, surname, lastname,...) can be saved inside a page. If you have added some additional fields, they cannot not be stored at the moment.
 
+### Save custom fields in database too
+
+As you know, you can extend the contact form with custom fields. If you want the values of these fields inside the database too, you can do this by using the saveField() method.
+
+This method maps a custom field to an appropriate PW field inside the frontend-contact-message template. 
+
+Example: You want to add a custom field of the type *InputText* - a default text input field - to the form.
+
+```php
+$form = $modules->get('FrontendContact')->getForm();
+
+// create and add a new custom text field to the contact form
+$text = new \FrontendForms\InputText('extratext');
+$text->setLabel('Extra text');
+$form->addAfter($text, $cf->getFormElementByName('subject')); // this custom field will be displayed after
+
+echo $form->render();
+```
+
+Now you have added a new text input to the form, but the value of this field will not be stored inside the database at the moment.
+To do so, you have to create a PW field for the given custom field on the frontend and add this PW field to the backend template *frontend-contact-message*. You only have to take care the the PW field is suitable to store the value of the frontend custom field. I will not work if you want the store for example the value of a Select multiple inside a text field.
+
+Take a look at the table below, which PW field type is suiteable for your custom field:
+
+Custom field class | PW field type | 
+--- | --- | 
+InputWeek | FieldtypeText | 
+InputTel | FieldtypeText | 
+InputRange | FieldtypeText | 
+InputUrl | 'FieldtypeURL, FieldtypeText | 
+InputColor | FieldtypeText | 
+InputNumber | FieldtypeInteger | 
+InputTime | FieldtypeDatetime, FieldtypeText | 
+InputText | FieldtypeText | 
+Username | FieldtypeText | 
+Phone | FieldtypeText | 
+InputEmail | FieldtypeText, FieldtypeEmail | 
+Textarea | FieldtypeTextarea | 
+InputDate | FieldtypeText, FieldtypeDatetime | 
+InputDateTime | FieldtypeText, FieldtypeDatetime | 
+SelectMultiple | FieldtypeOptions | 
+Select | FieldtypeOptions | 
+InputCheckbox | FieldtypeCheckbox | 
+InputCheckboxMultiple | FieldtypeOptions | 
+InputRadio | FieldtypeOptions | 
+InputRadioMultiple | FieldtypeOptions | 
+InputPassword | FieldtypeText | 
+Password | FieldtypeText | 
+PasswordConfirmation | FieldtypeText, FieldtypePassword | 
+InputMonth | FieldtypeText | 
+
+As you can see, some custom field can be mapped to to more than one type of a PW field. It is up to you, which on you want to prefer.
+
+Taking a look in the table, you can see that the appropriate PW field for the given custom field of the class *InputText* has to be mapped to a PW field of the type *FieldtypeText*.
+
+The next step is to create this PW field and to add this new field to the template *frontend-contact-message* too.
+
+After you have done this, the last step is to map the custom field to the PW field by using the saveField() method, which will be appended to the form object.
+
+```php
+$form = $modules->get('FrontendContact')->getForm();
+
+$text = new \FrontendForms\InputText('extratext');
+$text->setLabel('Extra text');
+$form->addAfter($text, $cf->getFormElementByName('subject'));
+
+// this is the new mapping method, which is needed to save the value of the custom field to the appropriate PW field
+$cf->saveField('extratext', 'pw_extratext');
+
+echo $form->render();
+```
+
+The 2 parameters you have to add inside the parenthesis of the safeField() method are:
+
+* first parameter: the name attribute of the frontend custom field
+* second parameter: the name attribute of the PW field to save the data to the database
+
+Now, the value of the custom field will be stored in the database too.
+
 ## Extra module FrontendContact Manager
 
 This module includes an extra module called FrontendContact Manager which is optional and has to be installed manually.

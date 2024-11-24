@@ -22,6 +22,12 @@
         },
         "8c83256888633307bedbb66015b03a74": {
             "text": "Nachricht von %s"
+        },
+        "5d89663bb32e394592065e7bac898202": {
+            "text": "Der Eingabefeldtyp der Klasse %s wird nicht unterst\u00fctzt, um den Wert in einem benutzerdefinierten Feld zu speichern. Bitte werfen Sie einen Blick in die Dokumentation von FrontendContact, welche Eingabetypen f\u00fcr die Speicherung in der Datenbank unterst\u00fctzt werden."
+        },
+        "1fc94cba2c9a37c6070252b4e9974290": {
+            "text": "Der Eingabefeldtyp der Klasse %s kann nicht in einem PW-Feld vom Typ %s gespeichert werden. Zul\u00e4ssige Typen sind: %s"
         }
     }
 }

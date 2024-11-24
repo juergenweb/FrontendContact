@@ -31,6 +31,7 @@
     use FrontendForms\Surname;
     use FrontendForms\InputCheckbox;
     use ProcessWire\FrontendForms;
+    use ProcessWire\Page;
     use ProcessWire\WireMail;
     use ProcessWire\FrontendContact;
     use ProcessWire\WireException;
@@ -90,6 +91,37 @@
             'showPrivacy'
         ];
 
+        protected array $custom_fields = []; // contains all custom fields objects
+
+        // map FrontendForms fields to PW fields for storage inside the database
+        // define allowed field types and sanitizers
+        protected array $fieldsmapping = [
+            'InputWeek' => ['fieldtypes' => ['FieldtypeText' => 'text']], // week input type
+            'InputTel' => ['fieldtypes' => ['FieldtypeText' => 'text']], // telephone input type
+            'InputRange' => ['fieldtypes' => ['FieldtypeText' => 'text']], // range input type
+            'InputUrl' => ['fieldtypes' => ['FieldtypeURL' => 'httpUrl', 'FieldtypeText' => 'text']], // url input type
+            'InputColor' => ['fieldtypes' => ['FieldtypeText' => 'text']], // color input type
+            'InputNumber' => ['fieldtypes' => ['FieldtypeInteger' => 'int', 'FieldtypeText' => 'text']], // integer input type
+            'InputTime' => ['fieldtypes' => ['FieldtypeDatetime' => 'date', 'FieldtypeText' => 'text']], // time input type
+            'InputText' => ['fieldtypes' => ['FieldtypeText' => 'text']], // text input type
+            'Username' => ['fieldtypes' => ['FieldtypeText' => 'pageName']], // pre-defined input type for username
+            'Phone' => ['fieldtypes' => ['FieldtypeText' => 'text']], // pre-defined input type for phone number
+            'InputEmail' => ['fieldtypes' => ['FieldtypeText' => 'text', 'FieldtypeEmail' => 'email']], // email input type
+            'Textarea' => ['fieldtypes' => ['FieldtypeTextarea' => 'textarea']], // textarea input type
+            'InputDate' => ['fieldtypes' => ['FieldtypeText' => 'text', 'FieldtypeDatetime' => 'date']], // date input type
+            'InputDateTime' => ['fieldtypes' => ['FieldtypeText' => 'text', 'FieldtypeDatetime' => 'date']], // time input type
+            'SelectMultiple' => ['fieldtypes' => ['FieldtypeOptions' => '']], // input type multiple select
+            'Select' => ['fieldtypes' => ['FieldtypeOptions' => '']], // input type single select
+            'InputCheckbox' => ['fieldtypes' => ['FieldtypeCheckbox' => 'checkbox']], // input type single checkbox
+            'InputCheckboxMultiple' => ['fieldtypes' => ['FieldtypeOptions' => '']], // input type checkbox multiple
+            'InputRadio' => ['fieldtypes' => ['FieldtypeOptions' => '']], // input type single radio
+            'InputRadioMultiple' => ['fieldtypes' => ['FieldtypeOptions' => '']], // input type multiple radio
+            'InputPassword' => ['fieldtypes' => ['FieldtypeText' => 'text', 'FieldtypePassword' => 'text']], // input type password
+            'Password' => ['fieldtypes' => ['FieldtypeText' => 'text', 'FieldtypePassword' => 'text']], // input type password
+            'PasswordConfirmation' => ['fieldtypes' => ['FieldtypeText' => 'text', 'FieldtypePassword' => 'text']], // input type password
+            'InputMonth' => ['fieldtypes' => ['FieldtypeText' => 'text']], // input type month
+        ];
+
         /**
          * @throws WireException
          * @throws Exception
@@ -105,7 +137,6 @@
             $this->frontendcontact_config['input_phone_required'] = 0;
             $this->frontendcontact_config['input_log_submission'] = 0;
             $this->frontendcontact_config['input_sub_action'] = 0;
-
 
             // get module configuration data from FrontendContact module and create properties of each setting
             foreach ($this->wire('modules')->getConfig('FrontendContact') as $key => $value) {
@@ -147,9 +178,7 @@
             $this->frontendcontact_config['input_message_required'] = true;
             $this->frontendcontact_config['input_privacy_required'] = true;
 
-
         }
-
 
         /**
          * Create the callback checkbox object
@@ -168,28 +197,28 @@
         /**
          * Magic method used to set the required status, add or remove a field or to get the field object on the fly
          * The $methodList array will be used for allowed method calls
-         * @param $func
-         * @param $params
+         * @param $method
+         * @param $arguments
          * @return bool|mixed|object
          */
-        public function __call($func, $params)
+        public function __call($method, $arguments)
         {
 
-            if (in_array($func, $this->methodList)) {
-                $startsWith = substr($func, 0, 3);
+            if (in_array($method, $this->methodList)) {
+                $startsWith = substr($method, 0, 3);
 
-                $param = (!isset($params[0])) ? false : $params[0];
+                $param = (!isset($arguments[0])) ? false : $arguments[0];
 
                 switch ($startsWith) {
                     case('sho'):
 
-                        $className = str_replace('show', '', $func);
+                        $className = str_replace('show', '', $method);
                         $fieldName = $this->generateConfigFieldname($className, 'show');
 
                         $this->frontendcontact_config[$fieldName] = $param;
                         break;
                     case('req'):
-                        $className = str_replace('required', '', $func);
+                        $className = str_replace('required', '', $method);
                         $fieldName = $this->generateConfigFieldname($className, 'required');
                         $this->frontendcontact_config[$fieldName] = $param;
                         break;
@@ -202,13 +231,13 @@
 
         /**
          * Alias function for the WireMail function subject() to set the subject for the mail on per-form base
-         * @param string $string
+         * @param string $subject
          * @return ContactForm
          */
-        public function subject(string $string): self
+        public function subject(string $subject): self
         {
             $m = $this->getMail();
-            $m->subject($string);
+            $m->subject($subject);
             return $this;
         }
 
@@ -458,7 +487,7 @@
                         // add rule for max upload file size
                         $field->setRule('allowedFileSize', $this->frontendcontact_config['input_filemaxuploadsize']);
                     }
-                    //check if message should be save as a page
+                    //check if a message should be saved as a page
                     if ($this->frontendcontact_config['input_sub_action'] > 0) {
                         // add extension restrictions to it
                         $fileupload_field = $this->wire('fields')->get('fcontact_files');
@@ -476,23 +505,22 @@
         }
 
         /**
-         * Add the mapped user data to the values array if set
+         * Add the mapped user data to the "values-array" if set
          * @param array $values
-         * @param array $fields
          * @param string $mapped_field_name
-         * @param string $field_name
          * @param string $form_field_name
          * @return array
          * @throws \ProcessWire\WireException
          * @throws \ProcessWire\WirePermissionException
          */
-        protected function addMappedValueToPlaceholders(array $values, array $fields, string $mapped_field_name, string $field_name, string $form_field_name): array
+        protected function addMappedValueToPlaceholders(array $values, string $mapped_field_name, string $form_field_name): array
         {
             // add the firstname from the user profile if mapped to a field
             $mappedNameField = $this->frontendcontact_config[$mapped_field_name];
             if ($mappedNameField != 'none') {
                 $nameField = $this->wire('fields')->get($mappedNameField)->name;
                 if ($this->wire('user')->$nameField) {
+                    $value = '';
                     if (!is_string($this->wire('user')->$nameField)) {
                         if ($this->wire('user')->$nameField->className == 'SelectableOptionArray') {
                             $value = $this->wire('user')->$nameField->title;
@@ -514,25 +542,50 @@
          */
         protected function createDataPlaceholder(): array
         {
-            $values = $this->getValues();
+            $values = $this->getValues(); // all POST values
+
+            // check if datetime elements are inside the form
+            $datetimeElements = $this->getFormElementsByClass('InputDateTime');
+            if ($datetimeElements) {
+                foreach ($datetimeElements as $datetimeElement) {
+                    $name_attribute = $datetimeElement->getAttribute('name');
+                    $value = $values[$name_attribute];
+                    // replace all letters with whitespace
+                    $value = str_replace(['T', 'Z'], ' ', $value);
+                    $values[$name_attribute] = $value;
+                }
+            }
+
+            $radioElements = $this->getFormElementsByClass('InputRadio');
+            if ($radioElements) {
+                foreach ($radioElements as $radioElement) {
+                    $name_attribute = $radioElement->getAttribute('name');
+                    $value = $values[$name_attribute];
+                    // replace all letters with whitespace
+                    if ($value == 'on') {
+                        $values[$name_attribute] = 1;
+                    }
+                }
+            }
+
             $fields = FrontendContact::$formFields;
 
             // get the position of the email field
 
             if ($this->wire('user')->isLoggedin()) {
 
-                // add email if user is logged in
+                // add email if a user is logged in
                 $key = array_search('Email', $fields);
                 $values = array_merge(array_slice($values, 0, $key), [$this->getID() . '-email' => $this->wire('user')->email], array_slice($values, $key));
 
                 // add the gender from the user profile if mapped to a field
-                $values = $this->addMappedValueToPlaceholders($values, $fields, 'input_gender_userfield_mapped', 'Gender', 'gender');
+                $values = $this->addMappedValueToPlaceholders($values, 'input_gender_userfield_mapped', 'gender');
 
                 // add the firstname from the user profile if mapped to a field
-                $values = $this->addMappedValueToPlaceholders($values, $fields, 'input_name_userfield_mapped', 'Name', 'name');
+                $values = $this->addMappedValueToPlaceholders($values, 'input_name_userfield_mapped', 'name');
 
                 // add the lastname from the user profile if mapped to a field
-                $values = $this->addMappedValueToPlaceholders($values, $fields, 'input_surname_userfield_mapped', 'Surname', 'surname');
+                $values = $this->addMappedValueToPlaceholders($values, 'input_surname_userfield_mapped', 'surname');
 
             }
 
@@ -544,11 +597,20 @@
             $placeholder = '';
             foreach ($values as $key => $value) {
                 $name = str_replace($this->getID() . '-', '', $key);
-                // do not allow array values ($_FILES)
-                if (is_string($value)) {
-                    $valueTag = ($name === 'message') ? 'div' : 'span';
-                    $placeholder .= '<div id="' . $key . '" class="bodypart"><span class="label">' . $this->getMailPlaceholders()[strtoupper($name . 'label')] . '</span>: <' . $valueTag . ' class="value">' . $value . '</' . $valueTag . '></div>';
+                $valueTag = 'span';
+                if (is_array($value)) {
+
+                    // do not allow multidimensional arrays like $_FILES
+                    if (count($value) == count($value, COUNT_RECURSIVE)) {
+                        $value = implode(', ', $value);
+                    } else {
+                        $value = '';
+                    }
+
+                } else {
+                    if ($name === 'message') $valueTag = 'div';
                 }
+                $placeholder .= '<div id="' . $key . '" class="bodypart"><span class="label">' . $this->getMailPlaceholders()[strtoupper($name . 'label')] . '</span>: <' . $valueTag . ' class="value">' . $value . '</' . $valueTag . '></div>';
             }
             // add IP address as last value
             $placeholder .= '<div id="ip" class="bodypart"><span class="label">' . $this->_('IP') . '</label>: <span class="value">' . $this->wire('session')->getIP() . '</span></div>';
@@ -559,12 +621,60 @@
         }
 
         /**
+         * Save a custom form field value to a pw_field
+         * @param string $form_field_name
+         * @param string $pw_field_name
+         * @return self
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
+         * @throws \Exception
+         */
+        public function saveField(string $form_field_name, string $pw_field_name): self
+        {
+            $form_field_name = trim($form_field_name);
+            $pw_field_name = $this->wire('sanitizer')->fieldName($pw_field_name);
+
+            $pw_field = $this->wire('fields')->get($pw_field_name);
+
+            if ($pw_field) {
+
+                $form_field = $this->getFormelementByName($form_field_name);
+                if ($form_field) {
+
+                    $pw_field_type = substr(strrchr(get_class($pw_field->type), '\\'), 1);
+                    $form_field_type = substr(strrchr(get_class($form_field), '\\'), 1);
+
+                    // check if this FrontendForms input type is supported for storage in the database
+                    if (!array_key_exists($form_field_type, $this->fieldsmapping)) {
+                        // throw an exception message
+                        throw new Exception(sprintf($this->_('The input field type of the class %s is not supported to save the value inside a custom field. Please take a look at the docs of FrontendContact which input types are supported for storage in the database.'), '"' . $form_field_type . '"'));
+                    }
+
+                    // check if this FrontendForms input can be linked to the given PW fieldtype
+                    if (!array_key_exists($pw_field_type, $this->fieldsmapping[$form_field_type]['fieldtypes'])) {
+                        $allowedTypes = implode(', ', array_keys($this->fieldsmapping[$form_field_type]['fieldtypes']));
+                        // throw an exception message
+                        throw new Exception(sprintf($this->_('The input field type of the class %s cannot be stored in a PW field of the type %s. Allowed types are: %s'), '"' . $form_field_type . '"', '"' . $pw_field_type . '"', $allowedTypes));
+                    }
+
+                    // check if this field is part of the contact form page template
+                    $template = $this->wire('templates')->get('frontend-contact-message');
+                    if ($template && $template->hasField($pw_field_name)) {
+                        // add the field to the custom fields array
+                        $this->custom_fields[$form_field_name] = $pw_field;
+                    }
+                }
+            }
+            return $this;
+        }
+
+        /**
          * Method to send the email
          * This method set a placeholder variable to each form value, and it includes email (body and mail) templates
          * before sending
+         * @param int $pageID
          * @return void
-         * @throws WireException
-         * @throws Exception
+         * @throws \ProcessWire\WireException
          */
         public function sendEmail(int $pageID): void
         {
@@ -637,7 +747,8 @@
             }
 
             // use HTML mail template or not
-            if ($this->get('input_emailTemplate') != 'none') {
+            $mail_type = $this->frontendcontact_config['input_emailtype'];
+            if ($mail_type != 'none') {
                 // Add the HTML body property to the Mail object
                 Form::setBody($this->mail, $this->getMailPlaceholder('allvalues'), $this->frontendcontact_config['input_mailmodule']);
             } else {
@@ -667,7 +778,9 @@
 
         /**
          * Function to save the email as a page inside the admin tree
-         * @return void
+         * @return int
+         * @throws \ProcessWire\WireException
+         * @throws \ProcessWire\WirePermissionException
          */
         protected function saveEmail(): int
         {
@@ -680,26 +793,26 @@
                 // get the form data that has been submitted
                 $data = $this->createDataPlaceholder();
 
-                // grab all uploaded files if there are one
+                // grab all uploaded files if there are some
                 $uploaded_filenames = [];
                 if (array_key_exists($this->getID() . '-fileuploadmultiple', $data)) {
                     $uploaded_filenames = $data[$this->getID() . '-fileuploadmultiple']; // array of all uploaded filenames
                 }
 
                 // create a new Page instance
-                $p = new \ProcessWire\Page();
+                $p = new Page();
 
                 // set the template and parent (required)
                 $p->template = $this->wire('templates')->get('frontend-contact-message');
                 $p->parent = $this->wire('pages')->get($frontendcontact_page->id);
 
                 // populate the page's fields with sanitized data
-                // the page will sanitize it's own data, but this way no assumptions are made
+                // the page will sanitize its own data, but this way no assumptions are made
                 $p->fcontact_email = $this->wire('sanitizer')->email($data[$this->getID() . '-email']);
                 if (array_key_exists($this->getID() . '-subject', $data)) {
                     $title_value = $this->wire('sanitizer')->text($data[$this->getID() . '-subject']);
                 }
-                $title_value = $title_value ? $title_value : sprintf($this->_('Contact message from %s'), $p->fcontact_email);;
+                $title_value = $title_value ?? sprintf($this->_('Contact message from %s'), $p->fcontact_email);
 
                 $p->title = $title_value;
                 $p->name = $this->wire('sanitizer')->pageName($p->title . '-' . time());
@@ -716,6 +829,67 @@
                 if (array_key_exists($this->getID() . '-message', $data))
                     $p->fcontact_message = $this->wire('sanitizer')->textarea($data[$this->getID() . '-message']);
 
+                // check for extra fields
+                if ($this->custom_fields) {
+
+                    foreach ($this->custom_fields as $form_field_name => $pw_custom_field) {
+
+                        // get type of FrontendForms field
+                        $form_field = $this->getFormelementByName($form_field_name);
+                        if ($form_field) {
+
+                            $form_field_type = substr(strrchr(get_class($form_field), '\\'), 1);
+                            $pw_field_type = substr(strrchr(get_class($pw_custom_field->type), '\\'), 1);
+                            $fields_mapping = $this->fieldsmapping;
+
+                            // check if the field type exists in array keys
+                            if (array_key_exists($form_field_type, $fields_mapping)) {
+
+                                // check if this form field can be mapped to the given PW field
+                                if (array_key_exists($pw_field_type, $fields_mapping[$form_field_type]['fieldtypes'])) {
+
+                                    // grab the sanitizer for the given fieldtype
+                                    $sanitizer = $fields_mapping[$form_field_type]['fieldtypes'][$pw_field_type];
+
+                                    // normalize form field name by adding form ID as prefix if not present
+                                    if (!str_starts_with($form_field_name, $this->getID())) {
+                                        $form_field_name = $this->getID() . '-' . $form_field_name;
+                                    }
+
+                                    if (array_key_exists($form_field_name, $data)) {
+
+                                        if ($sanitizer) {
+                                            if (is_array($data[$form_field_name])) {
+                                                // TODO: sanitize array values
+                                                foreach ($data[$form_field_name] as $value) {
+
+                                                }
+                                            }
+
+                                            $field_value = $this->wire('sanitizer')->$sanitizer($data[$form_field_name]);
+                                        } else {
+                                            $field_value = $data[$form_field_name];
+                                        }
+
+                                        if ($field_value) {
+
+                                            // finally, save the value to the database
+                                            $pw_field_name = $pw_custom_field->name;
+                                            $p->$pw_field_name = $field_value;
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
                 if ($p->save()) {
 
                     // run only if "save as page" or is selected
@@ -777,7 +951,7 @@
                 // add special data-attributes to the callback checkbox
                 $this->callback->setAttribute('data-phone-id', $this->getID() . '-' . $phoneField->getID());
                 $this->callback->setAttribute('data-callbackdesc-id', $this->getID() . '-' . $this->callback->getID() . '-desc');
-                // add an id to the description of the callback checkbox for Javascript manipulation (hiding)
+                // add an id to the description of the callback checkbox for JavaScript manipulation (hiding)
                 $this->callback->getDescription()->setAttribute('id', $this->getID() . '-' . $this->callback->getID() . '-desc');
 
             }

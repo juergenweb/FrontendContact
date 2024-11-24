@@ -265,7 +265,7 @@ $form = $modules->get('FrontendContact')->getForm();
 // create and add a new custom text field to the contact form
 $text = new \FrontendForms\InputText('extratext');
 $text->setLabel('Extra text');
-$form->addAfter($text, $cf->getFormElementByName('subject')); // this custom field will be displayed after the subject
+$form->addAfter($text, $form->getFormElementByName('subject')); // this custom field will be displayed after the subject
 
 echo $form->render();
 ```
@@ -315,7 +315,7 @@ $form = $modules->get('FrontendContact')->getForm();
 
 $text = new \FrontendForms\InputText('extratext');
 $text->setLabel('Extra text');
-$form->addAfter($text, $cf->getFormElementByName('subject'));
+$form->addAfter($text, $form->getFormElementByName('subject'));
 
 // this is the new mapping method, which is needed to save the value of the custom field to the appropriate PW field
 $form->saveField('extratext', 'pw_extratext');

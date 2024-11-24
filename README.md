@@ -347,4 +347,3 @@ in the module for other users.
 
 ## To-Do
 * More testing
-* Adding support for saving custom fields in pages too

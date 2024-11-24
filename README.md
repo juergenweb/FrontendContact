@@ -255,9 +255,9 @@ There is a configuration field inside the backend, where you can select to save 
 
 ### Save custom fields in database too
 
-As you know, you can extend the contact form with custom fields. If you want the values of these fields inside the database too, you can do this by using the saveField() method.
+As you know, you can extend the contact form with custom fields. If you want to store the values of these fields inside the database too, you can do this by using the saveField() method.
 
-This method maps a custom field to an appropriate PW field inside the frontend-contact-message template. 
+This method maps a custom field to a corresponding PW field within the frontend-contact-message template.
 
 Example: You want to add a custom field of the type *InputText* - a default text input field - to the form.
 
@@ -267,15 +267,15 @@ $form = $modules->get('FrontendContact')->getForm();
 // create and add a new custom text field to the contact form
 $text = new \FrontendForms\InputText('extratext');
 $text->setLabel('Extra text');
-$form->addAfter($text, $cf->getFormElementByName('subject')); // this custom field will be displayed after
+$form->addAfter($text, $cf->getFormElementByName('subject')); // this custom field will be displayed after the subject
 
 echo $form->render();
 ```
 
-Now you have added a new text input to the form, but the value of this field will not be stored inside the database at the moment.
-To do so, you have to create a PW field for the given custom field on the frontend and add this PW field to the backend template *frontend-contact-message*. You only have to take care the the PW field is suitable to store the value of the frontend custom field. I will not work if you want the store for example the value of a Select multiple inside a text field.
+Now you've added a new text input to the form, but the value of that field isn't currently stored in the database.
+To do this, you need to create a PW field for the specified custom field in the frontend and add that PW field to the *frontend-contact-message* backend template. You just need to make sure that the PW field is suitable for storing the value of the custom frontend field. It won't work if you want to store the value of a Select multiple inside a text field, for example.
 
-Take a look at the table below, which PW field type is suiteable for your custom field:
+Take a look at the table below to see which PW field type is suitable for your custom field:
 
 Custom field class | PW field type | 
 --- | --- | 
@@ -304,13 +304,13 @@ Password | FieldtypeText |
 PasswordConfirmation | FieldtypeText, FieldtypePassword | 
 InputMonth | FieldtypeText | 
 
-As you can see, some custom field can be mapped to to more than one type of a PW field. It is up to you, which on you want to prefer.
+As you can see, a custom field can be mapped to more than one type of PW field. It's up to you which one you want to prefer.
 
 Taking a look in the table, you can see that the appropriate PW field for the given custom field of the class *InputText* has to be mapped to a PW field of the type *FieldtypeText*.
 
-The next step is to create this PW field and to add this new field to the template *frontend-contact-message* too.
+The next step is to create this PW field and add it to the template *frontend-contact-message*.
 
-After you have done this, the last step is to map the custom field to the PW field by using the saveField() method, which will be appended to the form object.
+After you've done that, the final step is to map the custom field to the PW field that will be appended to the form object using the saveField() method.
 
 ```php
 $form = $modules->get('FrontendContact')->getForm();

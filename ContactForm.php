@@ -439,14 +439,6 @@
                 $field = new $class(strtolower($className));
                 $this->{$propName} = $field;
 
-                if ($className === 'Subject') {
-                    $field->hideIf([
-                        'name' => $this->getID() . '-gender', // name of the select field
-                        'operator' => 'is', // this is the operator
-                        'value' => 'Frau' // the value must not be empty to show the firstname field
-                    ]);
-                }
-
                 if ($className === 'Phone') {
 
                     // add the checkbox first if set

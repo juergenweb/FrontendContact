@@ -140,3 +140,9 @@ There was a problem of checking for an empty $_Files array, because this array a
 - **Support for saving custom fields value inside the database added**
 
 If you want to save the mails as pages too, it is now possible to the data of custom fields in the database. [Read more](https://github.com/juergenweb/FrontendContact?tab=readme-ov-file#save-custom-fields-in-database-too)
+
+## [1.3.9] 2024-12-17
+
+- **Test-code removed**
+
+A code for testing was accidentally inside the ContactForm.php. This code has been removed now.

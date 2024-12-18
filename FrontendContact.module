@@ -118,10 +118,10 @@
                 'summary' => 'Simple configurable contact form for ProcessWire based on the FrontendForms module.',
                 'author' => "Jürgen Kern",
                 'href' => 'https://github.com/juergenweb/FrontendContact',
-                'version' => '1.3.9',
+                'version' => '1.3.10',
                 'singular' => true,
                 'autoload' => true,
-                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.2.19']
+                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.2.26']
             ];
         }
 
@@ -921,18 +921,14 @@
 
             // choose whether to use an email template or not
             if ($this->frontendForms->getEmailTemplates()) {
+
                 $emailTemplate = $this->wire()->modules->get('InputfieldSelect');
                 $emailTemplate->label = $this->_('Select an email template');
                 $emailTemplate->attr('name', 'input_emailTemplate');
-                // create options
-                $templates = [
-                    'inherit' => $this->_('inherit from FrontendForms settings'),
-                    'none' => $this->_('no HTML template (plain text only)')
-                ];
-                foreach ($this->frontendForms->getEmailTemplates() as $template) {
-                    $templates[$template] = ucfirst($template);
-                }
-                $emailTemplate->addOptions($templates);
+                $emailTemplate->attr('class', 'ff-imagepicker');
+
+                $this->frontendForms->createEmailTemplatesOptions($emailTemplate, true);
+
                 $emailTemplate->attr('value', $this->input_emailTemplate);
                 $emailTemplate->required = 1;
                 $emailTemplate->description = $this->_('Select if you want to use a HTML template for the emails.');

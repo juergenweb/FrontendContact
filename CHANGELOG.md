@@ -146,3 +146,9 @@ If you want to save the mails as pages too, it is now possible to the data of cu
 - **Test-code removed**
 
 A code for testing was accidentally inside the ContactForm.php. This code has been removed now.
+
+## [1.3.10] 2024-12-18
+
+- **Image picker select added**
+
+The default input select field for selecting the email template has been replaced by a nice image picker select like in FrontendForms.

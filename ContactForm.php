@@ -968,7 +968,7 @@
                 $alert = new Alert();
                 $alert->setText($this->_('Email address for the recipient is missing, so the form will not be displayed.'));
                 $alert->setCSSClass('alert_warningClass');
-                return $alert->___render();
+                return $alert->render();
             }
 
             // set required status do fields
@@ -977,7 +977,7 @@
             // map user data as value to the form fields if a user is logged in
             $this->setMappedDataToField();
 
-            if ($this->___isValid()) {
+            if ($this->isValid()) {
 
                 switch ($this->frontendcontact_config['input_sub_action']) {
                     case(0):

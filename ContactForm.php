@@ -768,6 +768,7 @@
             }
         }
 
+
         /**
          * Function to save the email as a page inside the admin tree
          * @return int
@@ -929,6 +930,7 @@
          * @throws WireException
          * @throws Exception
          */
+
         public function render(): string
         {
 
@@ -977,7 +979,7 @@
             // map user data as value to the form fields if a user is logged in
             $this->setMappedDataToField();
 
-            if ($this->isValid()) {
+            if ($this->___isValid()) {
 
                 switch ($this->frontendcontact_config['input_sub_action']) {
                     case(0):
@@ -997,8 +999,10 @@
 
             }
 
+
             return parent::render();
 
         }
+
 
     }

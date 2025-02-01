@@ -152,3 +152,10 @@ A code for testing was accidentally inside the ContactForm.php. This code has be
 - **Image picker select added**
 
 The default input select field for selecting the email template has been replaced by a nice image picker select like in FrontendForms.
+
+
+## [1.3.11] 2025-02-01
+
+- **Prepared for new hookings**
+
+The module needs to be updated to work with the FrontendForms version 2.2.28. This version includes a lot of changes to make a lot of method hookable.

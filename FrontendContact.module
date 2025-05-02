@@ -118,10 +118,10 @@
                 'summary' => 'Simple configurable contact form for ProcessWire based on the FrontendForms module.',
                 'author' => "Jürgen Kern",
                 'href' => 'https://github.com/juergenweb/FrontendContact',
-                'version' => '1.3.11',
+                'version' => '1.3.12',
                 'singular' => true,
                 'autoload' => true,
-                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.2.28']
+                'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.2.31']
             ];
         }
 
@@ -340,9 +340,12 @@
             // run only on InputfieldEmail and InputfieldImprint
             if (($field->className === 'InputfieldEmail') || ($field->className === 'InputfieldImprint')) {
                 // check if a PW field has been selected as the default mail field
-                if ($this->input_emailtype === 'pwfield') {
+
+                if ($this->wire('input')->post('input_emailtype') === 'pwfield') {
+
                     // get the selected PW inputfield from the module configuration
                     $fieldName = explode('_', $this->input_defaultPWField_to)[1];
+
                     // check if it is the same field as the one processed
                     if ($fieldName === $field->name) {
                         // check if field has a value, otherwise output a warning

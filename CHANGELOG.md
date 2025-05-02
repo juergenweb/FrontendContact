@@ -159,3 +159,9 @@ The default input select field for selecting the email template has been replace
 - **Prepared for new hookings**
 
 The module needs to be updated to work with the FrontendForms version 2.2.28. This version includes a lot of changes to make a lot of method hookable.
+
+## [1.3.12] 2025-05-02
+
+- **Bug on email type validation fixed**
+
+According to the [issue](https://processwire.com/talk/topic/28442-frontendcontact-module-for-creating-one-or-more-contact-forms-on-the-frontend/?do=findComment&comment=248662) as posted in the forum by Claus, this bug has been fixed now

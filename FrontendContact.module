@@ -882,15 +882,17 @@
             }
 
             // add options from FieldtypeEmail
-            $emailFields = $this->wire('fields')->find('type=FieldtypeEmail, name!=email');
+            $emailFields = $this->wire('fields')->find('type=FieldtypeEmail,name!=fcontact_email');
 
             foreach ($emailFields as $field) {
                 $fieldName = $field->name;
                 // find templates using this field
                 $template_has_emailfield = wire('fields')->get($fieldName)->getFieldgroups()->implode('|', 'name');
-                $pages_has_emailfield = wire('pages')->find("template=$template_has_emailfield, has_parent!=2");
+                $pages_has_emailfield = wire('pages')->find("template=$template_has_emailfield,id!=40");
+
                 foreach ($pages_has_emailfield as $p) {
                     //check if the page field contains a value
+
                     if ($p->$fieldName) {
                         $pwemailfields[$p->id . '_' . $fieldName] = $p->$fieldName . '[' . $this->_('Page title') . ': ' . $p->title . ', '
                             . $this->_('Page-ID') . ': ' . $p->id . ', '

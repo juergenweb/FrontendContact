@@ -201,8 +201,6 @@
 
             }
 
-            // include all messages independent of status
-            $selectors[] = 'include=all';
             return $this->wire('pages')->find(implode(',', $selectors));
         }
 

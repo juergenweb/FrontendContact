@@ -165,3 +165,13 @@ The module needs to be updated to work with the FrontendForms version 2.2.28. Th
 - **Bug on email type validation fixed**
 
 According to the [issue](https://processwire.com/talk/topic/28442-frontendcontact-module-for-creating-one-or-more-contact-forms-on-the-frontend/?do=findComment&comment=248662) as posted in the forum by Claus, this bug has been fixed now
+
+## [1.3.13] 2025-08-12
+
+- **Bug on selection email address of a stored user fixed**
+  There was a problem on selecting the email address of a user stored in the database as the receiver of the mails. This is fixed now.
+  
+- **Bug on showing message after putting it to trash fixed**
+  After a message (email) was deleted, it was still visible in the contact manager list, even if it was in the trash. This has been fixed now.
+
+

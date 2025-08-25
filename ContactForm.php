@@ -694,7 +694,7 @@ class ContactForm extends Form
         $data = $this->createDataPlaceholder();
 
         // send the form data to the sender too
-        if ($this->getValue('sendcopy')) {
+        if ($this->getValue('sendcopy') && $this->getValue('email')) {
             $this->mail->to($this->getValue('email'));
         }
 

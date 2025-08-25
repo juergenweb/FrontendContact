@@ -661,21 +661,6 @@ class ContactForm extends Form
     }
 
     /**
-     * Get the domain only from host url
-     * @param $url
-     * @return false|string
-     */
-    protected function getDomainFrom($url)
-    {
-        $pieces = parse_url($url);
-        $domain = isset($pieces['host']) ? $pieces['host'] : $pieces['path'];
-        if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
-            return $regs['domain'];
-        }
-        return false;
-    }
-
-    /**
      * Method to send the email
      * This method set a placeholder variable to each form value, and it includes email (body and mail) templates
      * before sending
@@ -761,8 +746,7 @@ class ContactForm extends Form
         $this->mail->sendAttachments($this, $keep); // for sending attachments
 
         // set the sender address using the current domain !!important
-        $domain =  $this->getDomainFrom($this->wire('input')->httpHostUrl());
-        $this->mail->from('noreply@'.$domain);
+        $this->mail->from('noreply@'.$this->wire('config')->httpHost);
 
         if (!$this->mail->send()) {
             // output an error message that the mail could not be sent
@@ -1014,5 +998,6 @@ class ContactForm extends Form
         return parent::render();
 
     }
+
 
 }

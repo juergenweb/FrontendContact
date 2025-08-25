@@ -180,6 +180,7 @@ According to the [issue](https://processwire.com/talk/topic/28442-frontendcontac
 
 - **Use email address containing the domain as sender email address**
   
-  Related to a problem of sending emails from a shared host as written in the support forum [here](https://processwire.com/talk/topic/31416-problem-sending-mails-on-a-shared-host-using-the-wiremail-class-solved/), I have changed the sender email address to noreply@mydomain.com, where mydomain.com will be replaced by the current domain name. This prevents the mail from beeing not sent on some share hosts.
+  Related to a problem of sending emails from a shared host as written in the support forum [here](https://processwire.com/talk/topic/31416-problem-sending-mails-on-a-shared-host-using-the-wiremail-class-solved/), I have changed the sender email address to noreply@mydomain.com, where mydomain.com will be replaced by the current domain name. This prevents mails from beeing not sent on some share hosts.
+
 
 

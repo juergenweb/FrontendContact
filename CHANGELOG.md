@@ -174,4 +174,8 @@ According to the [issue](https://processwire.com/talk/topic/28442-frontendcontac
 - **Bug on showing message after putting it to trash fixed**
   After a message (email) was deleted, it was still visible in the contact manager list, even if it was in the trash. This has been fixed now.
 
+## [1.3.14] 2025-08-25
+
+- **Use email address containing the domain as sender email address**
+  Related to a problem of sending emails from a shared host as written in the support forum [here](https://processwire.com/talk/topic/31416-problem-sending-mails-on-a-shared-host-using-the-wiremail-class-solved/), I have changed the sender email address to noreply@mydomain.com, where mydomain.com will be replaced by the current domain name. This prevents the mail from beeing not sent on some share hosts.
 

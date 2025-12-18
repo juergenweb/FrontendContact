@@ -395,7 +395,7 @@ class ContactForm extends Form
      */
     protected function setShowRequiredFields(): void
     {
-
+        $formID = $this->getAttribute('id');
         foreach ($this->getFormElements() as $field) {
 
             $configFieldNameRequired = $this->generateConfigFieldname($field->className(), 'required');
@@ -415,6 +415,15 @@ class ContactForm extends Form
                             $field->removeRule('required');
                         }
                     }
+                    // add requiredIfNotEmpty validator to phone field if checkbox is enabled
+                    if($field->getAttribute('name') === $formID.'-phone'){
+                        // check if checkbox for callback is enabled
+                        if($this->getFormelementByName($formID.'-callback')) {
+                            $field->removeRule('required'); // if required is enabled
+                            $field->setRule('requiredIfEqual', 'callback', 'Yes');
+                        }
+                    }
+
                 }
             } else {
                 // remove the field from the form

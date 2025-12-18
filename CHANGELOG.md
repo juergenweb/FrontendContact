@@ -182,5 +182,10 @@ According to the [issue](https://processwire.com/talk/topic/28442-frontendcontac
   
   Related to a problem of sending emails from a shared host as written in the support forum [here](https://processwire.com/talk/topic/31416-problem-sending-mails-on-a-shared-host-using-the-wiremail-class-solved/), I have changed the sender email address to noreply@mydomain.com, where mydomain.com will be replaced by the current domain name. This prevents mails from beeing not sent on some share hosts.
 
+## [1.3.15] 2025-12-18
+
+- **New validation rule added to the phone field**
+  
+Now, if you enable the diesplay of the checkbox for the "callback", then the phone field will be required automatically, if the checkbox is checked. This can be done by using the new "requiredIfEqual" validator. The HTML5 required attribute will be added/removed via JS depending on the checkbox status.
 
 

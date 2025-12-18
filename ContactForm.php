@@ -420,7 +420,7 @@ class ContactForm extends Form
                         // check if checkbox for callback is enabled
                         if($this->getFormelementByName($formID.'-callback')) {
                             $field->removeRule('required'); // if required is enabled
-                            $field->setRule('requiredIfEqual', 'callback', 'Yes');
+                            $field->setRule('requiredIfEqual', 'callback', $this->_('Yes'));
                         }
                     }
 

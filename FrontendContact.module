@@ -118,10 +118,10 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
             'summary' => 'Simple configurable contact form for ProcessWire based on the FrontendForms module.',
             'author' => "Jürgen Kern",
             'href' => 'https://github.com/juergenweb/FrontendContact',
-            'version' => '1.3.14',
+            'version' => '1.3.15',
             'singular' => true,
             'autoload' => true,
-            'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.2.31']
+            'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'FrontendForms>=2.3.9']
         ];
     }
 
@@ -1196,5 +1196,6 @@ class FrontendContact extends WireData implements Module, ConfigurableModule
 
 
 }
+
 
 

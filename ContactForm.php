@@ -755,7 +755,9 @@ class ContactForm extends Form
         $this->mail->sendAttachments($this, $keep); // for sending attachments
 
         // set the sender address using the current domain !!important
-        $this->mail->from('noreply@'.$this->wire('config')->httpHost);
+        $host = $this->wire('config')->httpHost;
+        if($host === 'localhost') $host = 'localhost.com';
+        $this->mail->from('noreply@'.$host);
 
         if (!$this->mail->send()) {
             // output an error message that the mail could not be sent

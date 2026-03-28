@@ -188,4 +188,8 @@ According to the [issue](https://processwire.com/talk/topic/28442-frontendcontac
   
 Now, if you enable the diesplay of the checkbox for the "callback", then the phone field will be required automatically, if the checkbox is checked. This can be done by using the new "requiredIfEqual" validator. The HTML5 required attribute will be added/removed via JS depending on the checkbox status.
 
+## [1.3.16] 2026-03-28
 
+- **Hostname-bug on localhost fixed**
+  
+If you are using this module on localhost, then localhost is the name of your host, but this hostname is not accepted by WireMail so it has been changed to "localhost.com" instead of "localhost" to send mails properly on localhost installations.

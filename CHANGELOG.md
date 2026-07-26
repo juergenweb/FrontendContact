@@ -193,3 +193,9 @@ Now, if you enable the diesplay of the checkbox for the "callback", then the pho
 - **Hostname-bug on localhost fixed**
   
 If you are using this module on localhost, then localhost is the name of your host, but this hostname is not accepted by WireMail so it has been changed to "localhost.com" instead of "localhost" to send mails properly on localhost installations.
+
+## [1.3.17] 2026-07-26
+
+- **XSS issue fixed**
+  
+An issue concerning XSS attacks in attributes is fixed now. You need to update FrontendForms to the latest version too.

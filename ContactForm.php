@@ -467,7 +467,7 @@ class ContactForm extends Form
 
                     // add the data-conditional-rules attr manually
                     $conditions = json_encode($desc->getConditions());
-                    $desc->setAttribute('data-conditional-rules', htmlspecialchars($conditions));
+                    $desc->setAttribute('data-conditional-rules', $conditions);
 
                     // add the condition to show the phone field
                     $field->showIf([

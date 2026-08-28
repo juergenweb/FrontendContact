@@ -202,11 +202,11 @@ An issue concerning XSS attacks in attributes is fixed now. You need to update F
 
 ## 2026-08-28
 
-- **.gitattributes file added**
+**.gitattributes file added**
   
 Missing gitattributes file has been added now.
 
-- **Changes in FrontendContact.module**
+**Changes in FrontendContact.module**
 
 * Fixed permission typo: 'profil-edit' → 'profile-edit'
 * Fixed checkForFrontendContactEmailField() to read $this->input_emailtype instead of raw POST input, plus null-safety on explode()
@@ -219,7 +219,7 @@ Missing gitattributes file has been added now.
 * Converted CRLF → LF, PSR-12 formatting cleanup (trailing blank lines, spacing)
 * New configuration field to add the sender email address added 
 
-- **Changes in FrontendContactManager**
+**Changes in FrontendContactManager**
 
 * Fixed bare Functions API calls (modules()->get(...)) → $this->wire('modules')->get(...) (7 occurrences)
 * Fixed constructor to actually load the module's own configuration
@@ -229,7 +229,7 @@ Missing gitattributes file has been added now.
 * Fixed a systematic +4-space indentation bug across the whole file
 * Converted CRLF → LF, PSR-12 formatting cleanup
 
-- **Changes in ContactForm.php**
+**Changes in ContactForm.php**
 
 * File upload extension whitelist: moved the allowedFileExt rule out of a conditional so it always applies, regardless of input_sub_action — previously the extension whitelist was skipped entirely in the default "send as mail" mode, allowing uploads of any file type as attachments
 * HTML injection in mail body: rewrote createDataPlaceholder() to register each form value as a named FrontendForms mail placeholder and run everything through allSanitized() / wirePopulateStringTags() instead of concatenating raw, unescaped user input into the HTML mail body

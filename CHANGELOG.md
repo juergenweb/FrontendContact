@@ -205,3 +205,34 @@ An issue concerning XSS attacks in attributes is fixed now. You need to update F
 - **.gitattributes file added**
   
 Missing gitattributes file has been added now.
+
+- **Changes in FrontendContact.module**
+
+* Fixed permission typo: 'profil-edit' → 'profile-edit'
+* Fixed checkForFrontendContactEmailField() to read $this->input_emailtype instead of raw POST input, plus null-safety on explode()
+* Fixed $this->warnings('clear all') → $this->warnings('clear') (2 occurrences)
+* Fixed hardcoded id!=40 → has_parent!=2 in the email-field selector query
+* Added missing input_filemaxuploadsize default value and property declaration
+* Added class-level docblock and missing method docblocks; added : void return type to clearAllCache()
+* Removed an orphaned/duplicate docblock
+* Fixed a single-line if missing braces
+* Converted CRLF → LF, PSR-12 formatting cleanup (trailing blank lines, spacing)
+* New configuration field to add the sender email address added 
+
+- **Changes in FrontendContactManager**
+
+* Fixed bare Functions API calls (modules()->get(...)) → $this->wire('modules')->get(...) (7 occurrences)
+* Fixed constructor to actually load the module's own configuration
+* Removed $table->encodeEntities = false / setEncodeEntities(false) — was disabling HTML-escaping of user-submitted data in the admin table (security fix)
+* Fixed getModuleinfo() → getModuleInfo()
+* Fixed getAllSubmissions() return type and removed dead null-check
+* Fixed a systematic +4-space indentation bug across the whole file
+* Converted CRLF → LF, PSR-12 formatting cleanup
+
+- **Changes in ContactForm.php**
+
+* File upload extension whitelist: moved the allowedFileExt rule out of a conditional so it always applies, regardless of input_sub_action — previously the extension whitelist was skipped entirely in the default "send as mail" mode, allowing uploads of any file type as attachments
+* HTML injection in mail body: rewrote createDataPlaceholder() to register each form value as a named FrontendForms mail placeholder and run everything through allSanitized() / wirePopulateStringTags() instead of concatenating raw, unescaped user input into the HTML mail body
+* Tag mismatch bug: fixed a stray <span class="label">...</label> mismatch that caused a DOMDocument::loadHTML() warning
+* E-mail header injection (CRLF injection): added a sanitizeHeaderValue() helper that strips \r, \n, \0, applied to the Reply-To, From-Name, and Subject header values built from user input
+* Dead/broken code path: removed a conditional in sendEmail() that mistakenly branched on input_emailtype (which controls the recipient-address source, not HTML/text mode) — the condition was always true, and the unreachable else branch would have bypassed FrontendForms' template pipeline and delivered mail with raw unrendered HTML markup****

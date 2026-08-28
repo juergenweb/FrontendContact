@@ -199,3 +199,9 @@ If you are using this module on localhost, then localhost is the name of your ho
 - **XSS issue fixed**
   
 An issue concerning XSS attacks in attributes is fixed now. You need to update FrontendForms to the latest version too.
+
+## 2026-08-28
+
+- **.gitattributes file added**
+  
+Missing gitattributes file has been added now.

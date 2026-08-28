@@ -228,6 +228,7 @@ Missing gitattributes file has been added now.
 * Fixed getAllSubmissions() return type and removed dead null-check
 * Fixed a systematic +4-space indentation bug across the whole file
 * Converted CRLF → LF, PSR-12 formatting cleanup
+* New permission *frontendcontact-view* added to be able to see all data inside the FrontendContactManager. This permission must be added to roles.
 
 **Changes in ContactForm.php**
 

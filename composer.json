@@ -1,0 +1,17 @@
+{
+    "name": "juergenweb/frontendcontact",
+    "description": "Dev dependencies for running the FrontendContact test suite.",
+    "type": "project",
+    "license": "MIT",
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FrontendContact\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

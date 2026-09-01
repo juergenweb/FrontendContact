@@ -1,0 +1,442 @@
+<?php
+
+namespace ProcessWire;
+
+/**
+ * A custom admin page module for the FrontendContact module
+ */
+class FrontendContactManager extends Process implements Module, ConfigurableModule
+{
+
+    protected WireInputData|null $filtervalues = null; // post data after the filter form has been submitted
+    protected int $items_per_page = 10; // default number of questions to show inside the table, if there are more questions -> pagination will be added
+    protected array $frontendContactConfig = []; // array containing all configuration values of FrontendContact.module
+    protected int $action = 0; // default action after form submission
+
+    /**
+     * Constructor method which runs during class initialization
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->frontendContactConfig = wire('modules')->getConfig('FrontendContact');
+
+        // load this module's own configuration values as properties (e.g. input_paginationnumber)
+        foreach ($this->wire('modules')->getConfig($this) as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
+    /**
+     * Function to run before all modules have been initialized
+     * @return void
+     * @throws \ProcessWire\WireException
+     */
+    public function init(): void
+    {
+        // set post values if the filter form has been submitted
+        if ($this->wire('input')) {
+            $this->filtervalues = $this->wire('input')->post;
+        }
+
+        // set config values if present
+        if ($this->input_paginationnumber) {
+            $this->items_per_page = $this->input_paginationnumber;
+        }
+
+        if (array_key_exists('input_sub_action', $this->frontendContactConfig)) {
+            $this->action = $this->frontendContactConfig['input_sub_action'];
+        }
+    }
+
+    /**
+     * Create the module info
+     * @return array
+     */
+    public static function getModuleInfo(): array
+    {
+        return [
+            'title' => __('FrontendContact Manager', __FILE__),
+            'summary' => __('List all messages and filter them according to specific criteria.', __FILE__),
+            'author' => 'Jürgen Kern',
+            'version' => '1.2.0',
+            'icon' => 'envelope',
+            'permanent' => false,
+            'autoload' => true,
+            // Dedicated permission for accessing the FrontendContact Manager admin page,
+            // instead of the generic "page-edit" permission. Submitted contact form
+            // messages regularly contain personal data (name, e-mail, phone, message
+            // text), so access should not be tied to the broad, commonly-assigned
+            // page-edit permission - it should be an explicit, opt-in grant per role.
+            //
+            // The "permissions" entry below is kept so PW's own module-install screen
+            // still lists/offers it, but that offer alone turned out to not reliably
+            // create the permission in practice (it only appears as a checkbox during a
+            // genuinely fresh install, and is easy to miss or not shown again on a
+            // subsequent update/refresh of an already-installed module). ___install()
+            // and ___upgrade() below therefore also create it directly if it is
+            // missing, so this no longer depends on an admin noticing and confirming
+            // that checkbox. It still needs to be assigned to the desired role(s)
+            // afterwards under Access > Roles - that part cannot be automated safely,
+            // since only a site owner can decide who should have this access.
+            'permission' => 'frontendcontact-view',
+            'permissions' => [
+                'frontendcontact-view' => __('View submitted messages in the FrontendContact Manager', __FILE__),
+            ],
+            'requires' => [
+                'FrontendForms',
+                'PHP>=8.0.0',
+                'ProcessWire>=3.0.195'
+            ],
+            'page' => [
+                'name' => 'frontendcontact-table',
+                'parent' => 'setup',
+                'title' => __('FrontendContact Manager', __FILE__),
+            ],
+        ];
+    }
+
+    /**
+     * Runs once when this module is installed.
+     * @return void
+     */
+    public function ___install(): void
+    {
+        parent::___install();
+        $this->ensureFrontendContactViewPermissionExists();
+    }
+
+    /**
+     * Runs when an already-installed copy of this module is upgraded to a newer
+     * version (i.e. the version number returned by getModuleInfo() above increased
+     * since it was last installed). ProcessWire calls this automatically - typically
+     * the next time the module is loaded/refreshed after the version bump - so simply
+     * deploying a newer version of this file and visiting Modules > Refresh is enough
+     * to pick this up, no manual reinstall needed.
+     * @param string|int $fromVersion
+     * @param string|int $toVersion
+     * @return void
+     */
+    public function ___upgrade($fromVersion, $toVersion): void
+    {
+        $this->ensureFrontendContactViewPermissionExists();
+    }
+
+    /**
+     * Make sure the "frontendcontact-view" permission (declared in getModuleInfo()
+     * above) actually exists, creating it if necessary. See the comment above the
+     * "permissions" key in getModuleInfo() for why this is done explicitly here
+     * instead of relying solely on PW's own install-time offer to create it.
+     * @return void
+     */
+    protected function ensureFrontendContactViewPermissionExists(): void
+    {
+        $permissionName = 'frontendcontact-view';
+        $permission = $this->wire('permissions')->get($permissionName);
+
+        if ($permission && $permission->id) {
+            // already exists - nothing to do
+            return;
+        }
+
+        $permission = $this->wire('permissions')->add($permissionName);
+        $permission->title = $this->_('View submitted messages in the FrontendContact Manager');
+        $this->wire('permissions')->save($permission);
+    }
+
+    /**
+     * Submission list page
+     * @return string
+     * @throws \ProcessWire\WireException
+     * @throws \ProcessWire\WirePermissionException
+     */
+    public function execute(): string
+    {
+        $headline = $this->_('List of all messages');
+        if ($this->action == 0) {
+            $headline .= ' (' . $this->_('disabled') . ')';
+        }
+        $this->headline($headline);
+
+        if ($this->action > 0) {
+            return $this->renderSubmissionsTable();
+        }
+        return $this->_('You must enable saving messages as pages within the FrontendContact module configuration to use the FrontendContact Manager.');
+    }
+
+    /**
+     * Rendering the form to filter the messages by specific conditions
+     * @return string
+     * @throws \ProcessWire\WireException
+     * @throws \ProcessWire\WirePermissionException
+     */
+    protected function renderSubmissionsFilter(): string
+    {
+        $form = $this->wire('modules')->get('InputfieldForm');
+        $form->action = $this->wire('input')->url; // we submit on the same page
+        $form->method = 'post';
+        $form->attr('name+id', 'fcontact_filter_form');
+
+        $form->prependMarkup('<p>' . $this->_('Find a specific message based on specific criteria.') . '</p>');
+
+        $fieldset = $this->wire('modules')->get('InputfieldFieldset');
+        $fieldset->label = $this->_('Filter');
+        $fieldset->columnWidth = '100';
+        $fieldset->icon = 'fcontact-filter';
+
+        // filter by question text
+        $f = $this->wire('modules')->get('InputfieldText');
+        $f->set('label', $this->_('Filter by subject'));
+        $f->attr('name+id', 'fcontact-subject');
+        $f->columnWidth = '50';
+        $f->notes = $this->_('Filter messages based on a specific word or phrase in the subject.');
+        $fieldset->add($f);
+
+        // filter by email address
+        $f = $this->wire('modules')->get('InputfieldText');
+        $f->set('label', $this->_('Filter by mail address'));
+        $f->attr('name+id', 'fcontact-mail');
+        $f->columnWidth = '50';
+        $f->notes = $this->_('Filter messages based on a specific word or phrase in the mail address.');
+        $fieldset->add($f);
+
+        // filter by first name
+        $f = $this->wire('modules')->get('InputfieldText');
+        $f->set('label', $this->_('Filter by first name'));
+        $f->attr('name+id', 'fcontact-firstname');
+        $f->columnWidth = '50';
+        $f->notes = $this->_('Filter messages based on a specific word or phrase in the first name.');
+        $fieldset->add($f);
+
+        // filter by last name
+        $f = $this->wire('modules')->get('InputfieldText');
+        $f->set('label', $this->_('Filter by last name'));
+        $f->attr('name+id', 'fcontact-lastname');
+        $f->columnWidth = '50';
+        $f->notes = $this->_('Filter messages based on a specific word or phrase in the last name.');
+        $fieldset->add($f);
+
+        // submit button
+        $f = $this->wire('modules')->get('InputfieldSubmit');
+        $f->attr('id+name', 'fcontact-submit-btn');
+        $f->attr('value', $this->_('Filter'));
+        $fieldset->add($f);
+
+        $form->add($fieldset);
+        return $form->render();
+    }
+
+    /**
+     * Get all messages matching the given selectors
+     * @return \ProcessWire\PageArray
+     * @throws \ProcessWire\WireException
+     */
+    protected function getAllSubmissions(): PageArray
+    {
+        $filters = []; // already-sanitized filter values, keyed by filter name
+
+        if ($this->filtervalues && $this->filtervalues->count()) {
+
+            // filter by subject
+            $subName = 'fcontact-subject';
+            if ($this->filtervalues->$subName) {
+                $filters['subject'] = $this->wire('sanitizer')->selectorValue($this->filtervalues->$subName);
+            }
+
+            // filter by mail address
+            $mailName = 'fcontact-mail';
+            if ($this->filtervalues->$mailName) {
+                $filters['mail'] = $this->wire('sanitizer')->selectorValue($this->filtervalues->$mailName);
+            }
+
+            // filter by first name
+            $firstnameName = 'fcontact-firstname';
+            if ($this->filtervalues->$firstnameName) {
+                $filters['firstname'] = $this->wire('sanitizer')->selectorValue($this->filtervalues->$firstnameName);
+            }
+
+            // filter by last name
+            $lastnameName = 'fcontact-lastname';
+            if ($this->filtervalues->$lastnameName) {
+                $filters['lastname'] = $this->wire('sanitizer')->selectorValue($this->filtervalues->$lastnameName);
+            }
+        }
+
+        $selectors = $this->buildSubmissionSelectors($filters);
+
+        return $this->wire('pages')->find(implode(',', $selectors));
+    }
+
+    /**
+     * Assemble the PW selector array for getAllSubmissions() out of already-sanitized
+     * filter values. This is the pure selector-assembly logic - no wire() calls, no
+     * sanitizing - so it can be unit tested in isolation, independently of whether the
+     * sanitizer calls themselves are correct.
+     * @param array<string,string> $filters - subset of keys 'subject', 'mail',
+     *        'firstname', 'lastname', containing only the filters actually set by the
+     *        user, each value already run through $sanitizer->selectorValue()
+     * @return array<string,string>
+     */
+    protected function buildSubmissionSelectors(array $filters): array
+    {
+        $selectors = [];
+
+        // always filter by template, regardless of the other filters
+        $selectors['template'] = 'template=frontend-contact-message';
+
+        if (array_key_exists('subject', $filters)) {
+            $selectors['subject'] = 'title%=' . $filters['subject'];
+        }
+        if (array_key_exists('mail', $filters)) {
+            $selectors['mail'] = 'fcontact_email%=' . $filters['mail'];
+        }
+        if (array_key_exists('firstname', $filters)) {
+            $selectors['firstname'] = 'fcontact_firstname%=' . $filters['firstname'];
+        }
+        if (array_key_exists('lastname', $filters)) {
+            $selectors['lastname'] = 'fcontact_lastname%=' . $filters['lastname'];
+        }
+
+        return $selectors;
+    }
+
+    /**
+     * Calculate the zero-based row offset for the current pagination page.
+     * Pure math, no wire() calls - unit-testable in isolation.
+     * @param int $pageNum - 1-based page number, as returned by $input->pageNum
+     * @param int $itemsPerPage
+     * @return int
+     */
+    protected function calculatePaginationStart(int $pageNum, int $itemsPerPage): int
+    {
+        return ($pageNum - 1) * $itemsPerPage;
+    }
+
+    /**
+     * Decide whether the result set needs to be sliced for the current page, i.e.
+     * whether there are more matching submissions than fit on one page.
+     * Pure comparison, no wire() calls - unit-testable in isolation.
+     * @param int $totalCount
+     * @param int $itemsPerPage
+     * @return bool
+     */
+    protected function shouldSliceSubmissions(int $totalCount, int $itemsPerPage): bool
+    {
+        return $totalCount > $itemsPerPage;
+    }
+
+    /**
+     * Calculate the displayed row number (1-based) for a submission at the given index
+     * within the current page.
+     * Pure math, no wire() calls - unit-testable in isolation.
+     * @param int $index - 0-based index within the (possibly sliced) list being rendered
+     * @param int $start - the pagination start offset, as returned by calculatePaginationStart()
+     * @param bool $useOffset - whether the result set was actually sliced (true), in
+     *        which case $index is relative to the current page and needs $start added;
+     *        false means $index already runs across the full, unsliced result set
+     * @return int
+     */
+    protected function calculateRowNumber(int $index, int $start, bool $useOffset): int
+    {
+        return $useOffset ? $start + $index + 1 : $index + 1;
+    }
+
+    /**
+     * Render the table containing all form messages via this module
+     * @return string
+     * @throws \ProcessWire\WireException
+     * @throws \ProcessWire\WirePermissionException
+     */
+    protected function renderSubmissionsTable(): string
+    {
+        $out = $this->renderSubmissionsFilter();
+        $submission_pages = $this->getAllSubmissions();
+
+        if (!$submission_pages->count) {
+            return $this->_('No messages have been submitted.');
+        }
+
+        $start = $this->calculatePaginationStart($this->wire('input')->pageNum, $this->items_per_page);
+        $submission_pages->setLimit($this->items_per_page);
+        $submission_pages->setStart($start);
+        // slice only if the number of pages is higher than the number of items per page
+        if ($this->shouldSliceSubmissions($submission_pages->count, $this->items_per_page)) {
+            $viewPages = $submission_pages->slice($start, $this->items_per_page);
+            $counter = true;
+        } else {
+            $viewPages = $submission_pages;
+            $counter = false;
+        }
+
+        if ($viewPages->count) {
+            $table = $this->modules->get('MarkupAdminDataTable');
+            // keep entity encoding enabled (default) since several columns contain
+            // unescaped, user-submitted data from the public contact form
+            $table->headerRow([
+                $this->_('#'),
+                $this->_('Date of sending'),
+                $this->_('Subject'),
+                $this->_('Sender'),
+                $this->_('E-mail'),
+                $this->_('User')
+            ]);
+
+            foreach ($viewPages as $i => $p) {
+                $number = $this->calculateRowNumber($i, $start, $counter);
+
+                // only for multi-language site
+                if ($this->languages) {
+                    $subject = $p->getLanguageValue($this->wire('languages')->getDefault()->id, 'title');
+                } else {
+                    $subject = $p->title;
+                }
+
+                $subject = $subject != '' ? $subject : $this->_('n/a');
+
+                $table->row(
+                    [
+                        $number,
+                        $p->createdStr,
+                        [$subject => $p->editUrl()],
+                        $p->fcontact_lastname . ' ' . $p->fcontact_firstname,
+                        $p->fcontact_email,
+                        $p->createdUser->name,
+                    ]
+                );
+            }
+
+            // render the table with the questions
+            $out .= $table->render();
+
+            // render the pagination
+            $out .= $submission_pages->renderPager();
+
+        } else {
+            $out .= '<div id="no-results"><p>' . $this->_('There are no messages.') . '</p></div>';
+        }
+
+        return $out;
+    }
+
+    /**
+     * Define all fields for module configuration
+     * @param \ProcessWire\InputfieldWrapper $inputfields
+     * @return void
+     * @throws \ProcessWire\WireException
+     * @throws \ProcessWire\WirePermissionException
+     */
+    public function getModuleConfigInputfields(InputfieldWrapper $inputfields): void
+    {
+        // pagination number
+        $paginationnumber = $this->modules->get('InputfieldInteger');
+        $paginationnumber->label = $this->_('Pagination number for data tables');
+        $paginationnumber->name = 'input_paginationnumber';
+        $paginationnumber->inputType = 'number';
+        $paginationnumber->value = $this->input_paginationnumber;
+        $paginationnumber->min = 1;
+        $paginationnumber->defaultValue = 10;
+        $paginationnumber->description = $this->_('Please select how many entries should be displayed inside a data table per page.');
+        $paginationnumber->notes = $this->_('If the total number of entries inside the table is higher, the table will be paginated.');
+        $inputfields->add($paginationnumber);
+    }
+}
